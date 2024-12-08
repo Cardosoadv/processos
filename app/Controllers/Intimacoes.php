@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Libraries\Auditoria\AuditoriaRecebimentoIntimacoes;
 use App\Libraries\ConverterData;
 use App\Libraries\ReceberIntimacoes;
 use App\Models\IntimacoesAdvogadosModel;
@@ -32,7 +33,7 @@ class Intimacoes extends BaseController
     public function parseIntimacao(array $data, $filename){
 
         $intimacoesModel = new IntimacoesModel();
-        
+        $usuario_id = user_id();
         $nomeArquivo = $filename;
         $statusRecebimentoIntimacao = $data['message'];
         $numeroIntimacoesRecebidas = $data['count'];
@@ -68,15 +69,15 @@ class Intimacoes extends BaseController
             }            
         }
     $data = [
-        'statusRecebimentoIntimacao' => $statusRecebimentoIntimacao,
-        'numeroIntimacoesRecebidas' => $numeroIntimacoesRecebidas,
-        'numeroIntimacoesRepetidas' => $numeroIntimacoesRepetidas,
-        'numeroIntimacoesProcessadas' => $numeroIntimacoesProcessadas,
+        'status_recebimento_intimacao' => $statusRecebimentoIntimacao,
+        'numero_intimacoes_recebidas' => $numeroIntimacoesRecebidas,
+        'numero_intimacoes_repetidas' => $numeroIntimacoesRepetidas,
+        'numero_intimacoes_processadas' => $numeroIntimacoesProcessadas,
         'nomeArquivo' => $nomeArquivo,
+        'usuario_id' => $usuario_id,
     ];
-    echo '<pre>';
-    print_r($data);
-
+    $auditoriaRecebimentoIntimacoes = new AuditoriaRecebimentoIntimacoes();
+    $auditoriaRecebimentoIntimacoes->registraProcessamentoIntimacoes($data);
 }
 
     private function salvarProcessos($processos){
