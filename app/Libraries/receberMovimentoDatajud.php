@@ -2,8 +2,8 @@
 
 namespace App\Libraries;
 
-use App\Controllers\Intimacoes;
-use Exception;
+use App\Models\ProcessosMovimentosModel;
+
 
 class ReceberMovimentos{
 
@@ -49,30 +49,34 @@ class ReceberMovimentos{
         }
 
         // Acessando os dados
-        echo "Número do processo: " . $resultados->hits->hits[0]->_source->numeroProcesso.PHP_EOL;
-        echo "Classe do processo: " . $resultados->hits->hits[0]->_source->classe->nome.PHP_EOL;
-        echo "Número do processo: " . $resultados->hits->hits[0]->_source->id.PHP_EOL;
+        $numeroProcesso = $resultados->hits->hits[0]->_source->numeroProcesso;
         
         // Acessando os movimentos
         $movimentos = $resultados->hits->hits[0]->_source->movimentos;
         
         foreach ($movimentos as $movimento) {
 
-            echo '<pre>';
-            echo $movimento->nome.PHP_EOL;
-            echo $movimento->dataHora.PHP_EOL;  
+            $nome = $movimento->nome;
+            $dataHoraMovimento = $movimento->dataHora;  
             
             if(! empty($movimento->complementosTabelados)){
 
                 foreach($movimento->complementosTabelados as $complementos){
                     
-                    echo '<pre>';
-                    echo $complementos->nome;
-                    echo $complementos->descricao;
+                    $complementoNome = $complementos->nome;
+                    $compleentoDescricao = $complementos->descricao;
                 }
             }
-
         }
-        var_dump($resultados);
+        $data = [
+            'numero_processo'           => $numeroProcesso,
+            'nome'                      => $nome,
+            'descricao'                 => 'null',
+            'descricao_complemento'     => $compleentoDescricao,
+            'nome_complemento'          => $complementoNome,
+            'dataHora'                  => $dataHoraMovimento,
+        ];
+        $processosMovimentosModel = new ProcessosMovimentosModel();
+        $processosMovimentosModel->insert($data);
     }
 }

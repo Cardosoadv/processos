@@ -7,7 +7,7 @@ use CodeIgniter\Database\Migration;
 class ProcessosMovimentos extends Migration
 {
     public function up()
-    {
+    { 
         $this->forge->addField([
             'id_movimento'              => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
             'numero_processo'           => ['type' => 'varchar', 'constraint'=>50, 'null' => true],
