@@ -50,7 +50,6 @@ class Processos extends Migration
             'deleted_at'                => ['type' => 'datetime', 'null' => true],
         ]);
         $this->forge->addPrimaryKey('id_intimacao');
-        $this->forge->addForeignKey('numero_processo', 'processos', 'numero_processo', '', '', 'FK_intimacoes_numero_processo');
         $this->forge->createTable('intimacoes');
 
         $this->forge->addField([      
@@ -61,7 +60,6 @@ class Processos extends Migration
 
         ]);
         $this->forge->addPrimaryKey('id_pk');
-        $this->forge->addForeignKey('comunicacao_id', 'intimacoes', 'id_intimacao', '', '', 'FK_intimacoes_destinatario');
         $this->forge->createTable('intimacoes_destinatario');
 
 
@@ -78,15 +76,11 @@ class Processos extends Migration
 
         ]);
         $this->forge->addPrimaryKey('id_pk');
-        $this->forge->addForeignKey('comunicacao_id', 'intimacoes', 'id_intimacao', '', '', 'FK_intimacoes_advogados');
         $this->forge->createTable('intimacoes_advogados');
     }
 
     public function down()
     {
-        $this->forge->dropForeignKey('numero_processo', 'FK_intimacoes_numero_processo');
-        $this->forge->dropForeignKey('intimacoes_destinatario', 'FK_intimacoes_destinatario');
-        $this->forge->dropForeignKey('intimacoes_advogados', 'FK_intimacoes_advogados');
         $this->forge->dropTable('processos');
         $this->forge->dropTable('intimacoes_destinatario');
         $this->forge->dropTable('intimacoes_advogados');
