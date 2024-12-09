@@ -11,10 +11,9 @@ class ReceberIntimacoes{
 
         /**
      * Função para buscar as intimações no DJEN
-     * @param string $oab
-     * @param string $ufOab
+     * @param array $params
      */
-        public function getIntimacoes($params){
+        public function getIntimacoes(array | string $params){
 
         $apiUrl = 'https://hcomunicaapi.cnj.jus.br/api/v1/comunicacao';
         
@@ -63,9 +62,6 @@ class ReceberIntimacoes{
     /**
      * Generate a unique filename for the JSON file
      * 
-     * @param string $oab Lawyer's OAB number
-     * @param string $ufOab OAB state
-     * @return string Filename path
      */
     private function generateFilename() {
         
@@ -78,7 +74,7 @@ class ReceberIntimacoes{
         
         // Generate filename with timestamp
         $timestamp = date('YmdHis');
-        $filename = "{$storagePath}/{$timestamp}.json";
+        $filename = "{$storagePath}/Intimacoes_{$timestamp}.json";
         
         return $filename;
     }

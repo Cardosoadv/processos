@@ -16,9 +16,10 @@ class ProcessosMovimentosModel extends Model
             'id_movimento',
             'numero_processo',
             'nome',
-            'descricao',
             'descricao_complemento',
             'nome_complemento',
+            'codigo',
+            'valor',
             'dataHora',
             'created_at',
             'updated_at',
@@ -32,7 +33,7 @@ class ProcessosMovimentosModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
