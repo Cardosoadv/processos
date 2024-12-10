@@ -38,6 +38,9 @@ class ReceberIntimacoes{
         } else {
             // Processa a resposta da API
             $data = json_decode($response, true);
+            if(empty($data)||empty($data['status'])){
+                return;
+            }
 
             //Checa se a requisição foi bem sucedida
             if ($data['status']==="success"){

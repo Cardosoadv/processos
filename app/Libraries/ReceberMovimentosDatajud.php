@@ -74,10 +74,6 @@ class ReceberMovimentosDatajud{
                     $complementoCodigo = $complementos->codigo;
                     $complementoValor = $complementos->valor;
 
-
-
-
-
                     $data = [
                         'numero_processo'           => $numeroProcesso,
                         'nome'                      => $nome,

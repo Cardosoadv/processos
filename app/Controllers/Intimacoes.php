@@ -40,7 +40,9 @@ class Intimacoes extends BaseController
         $numeroIntimacoesRepetidas = 0;
         $numeroIntimacoesProcessadas = 0;
 
-
+        if ($numeroIntimacoesRecebidas === 0){
+            return;
+        }
         //Percorre os itens da intimação
         foreach($data['items'] as $items){
             
