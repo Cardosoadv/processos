@@ -39,12 +39,17 @@ class ReceberIntimacoes{
         // Verifica se houve algum erro
         if(curl_errno($ch)){
             echo 'Erro na requisição: ' . curl_error($ch);
+            // Fecha a sessão cURL
+            curl_close($ch);    
+            return;
         } else {
             // Processa a resposta da API
             $data = json_decode($response, true);
             if(empty($data)||empty($data['status'])){
                 return;
             }
+            // Fecha a sessão cURL
+            curl_close($ch);    
 
             //Checa se a requisição foi bem sucedida
             if ($data['status']==="success"){
@@ -62,8 +67,7 @@ class ReceberIntimacoes{
                 return view('testes',$s); 
             }
         }
-        // Fecha a sessão cURL
-        curl_close($ch);
+
     }
 
     /**
