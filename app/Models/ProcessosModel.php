@@ -55,4 +55,16 @@ class ProcessosModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getProcesso(string $parte){
+        $query = $this->db->table('intimacoes_destinatario as d')
+        ->join('intimacoes as i', 'd.comunicacao_id = i.id_intimacao', 'left')
+        ->join('processos as p', 'p.numero_processo = i.numero_processo', 'left')
+        ->select('p.numero_processo')
+        ->where('d.nome', $parte)
+        ->distinct()
+        ->get();
+        return $query->getResultArray();
+    }
+
 }

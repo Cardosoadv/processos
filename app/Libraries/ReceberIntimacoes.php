@@ -9,25 +9,29 @@ class ReceberIntimacoes{
 
         private $intimacoes;
 
-        /**
+    /**
      * Função para buscar as intimações no DJEN
      * @param array $params
      */
         public function getIntimacoes(array | string $params){
 
-        $apiUrl = 'https://hcomunicaapi.cnj.jus.br/api/v1/comunicacao';
+        $apiUrl = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
         
         // Construindo a URL com os parâmetros
         $query = http_build_query($params);
         $apiUrl .= '?' . $query;
 
-        
         // Iniciando a sessão cURL
         $ch = curl_init();
         
         // Configurando as opções da requisição
         curl_setopt($ch, CURLOPT_URL, $apiUrl);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'User-Agent: insomnia/10.1.1'
+        ));
         
         // Executa a requisição e obtém a resposta
         $response = curl_exec($ch);

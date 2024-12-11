@@ -72,5 +72,14 @@ class IntimacoesModel extends Model
         return $query->getRowArray() !== null;
     }
 
+    public function getProcessoMovimentadoPeriodo($dataInicial, $dataFinal){
+        $dtInicial = date('Y-m-d', strtotime($dataInicial));
+        $dtFinal = date('Y-m-d', strtotime($dataFinal));
+        $data = $this->where('data_disponibilizacao >=',$dtInicial)
+        ->where('data_disponibilizacao <=',$dtFinal)
+        ->get()->getResultArray();
+        return $data;
+    }
+
 
 }
