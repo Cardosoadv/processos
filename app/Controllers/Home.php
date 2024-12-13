@@ -8,7 +8,8 @@ class Home extends BaseController
     {
         $data = [
             'permission' => ['processos'=>true, 'intimacoes'=>true, 'movimentos'=>true],
-            'img'       =>  'vazio.png'
+            'img'       =>  'vazio.png',
+            'titulo'    => 'Dashboard'
         ];
         return view('dashboard', $data);
     }
