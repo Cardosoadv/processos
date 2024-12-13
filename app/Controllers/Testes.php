@@ -10,10 +10,10 @@ class Testes extends BaseController
 {
     public function index()
     {
-        $intimascoesModel = new IntimacoesModel();
-        $processoMovimentados = $intimascoesModel->getProcessoMovimentadoPeriodo('2024-01-01','2024-12-31');
-        echo '<pre>';
-        print_r($processoMovimentados);
-        echo '</pre>';        
+        $data = [
+            'permission' => ['processos'=>true, 'intimacoes'=>true, 'movimentos'=>true],
+            'img'       =>  'vazio.png'
+        ];
+        return view('dashboard', $data);        
     }
 }

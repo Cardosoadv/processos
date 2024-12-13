@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Libraries\ReceberIntimacoes;
+use App\Libraries\ReceberMovimentosDatajud;
 use App\Models\ProcessosMonitoradosModel;
 
 class Monitorar extends BaseController
@@ -16,9 +17,25 @@ class Monitorar extends BaseController
         
     }
     
+    public function ReceberMovimentos(){
+
+        $receberMovimentosDatajud = new ReceberMovimentosDatajud();
+        $processosMonitoradosModel = new ProcessosMonitoradosModel();
+
+        $processosMonitorados = $processosMonitoradosModel->findAll();
+
+        foreach ($processosMonitorados as $processo){
+            $numeroProcesso = preg_replace('/[^0-9]/', '', $processo['numero_processo']);
+            $receberMovimentosDatajud->receberMovimentos($numeroProcesso);
+        }
+    }
+
+
     public function MonitorarProcessos(){
 
         $processosMonitoradosModel = new ProcessosMonitoradosModel();
+        $receberIntimacoes = new ReceberIntimacoes();
+
         $processosMonitorados = $processosMonitoradosModel->findAll();
 
         foreach ($processosMonitorados as $processo){
@@ -26,7 +43,6 @@ class Monitorar extends BaseController
             $params = [
                 'numeroProcesso' => $numeroProcesso,
             ];
-            $receberIntimacoes = new ReceberIntimacoes();
             $receberIntimacoes->getIntimacoes($params);
         }
     }

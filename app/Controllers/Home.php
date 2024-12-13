@@ -6,7 +6,11 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('welcome_message');
+        $data = [
+            'permission' => ['processos'=>true, 'intimacoes'=>true, 'movimentos'=>true],
+            'img'       =>  'vazio.png'
+        ];
+        return view('dashboard', $data);
     }
 
     
