@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"d4e3ce7e1119a9b1ae45559980d3431a1d4804d3","show":0,"cover":null,"title":["King James Version + Strong's (KJV+S)"],"author":[],"description":""}|*/?>

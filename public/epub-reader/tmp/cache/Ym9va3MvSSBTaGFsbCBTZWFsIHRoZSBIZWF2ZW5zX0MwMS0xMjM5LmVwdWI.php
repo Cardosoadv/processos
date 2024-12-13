@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"d65ddeedd83c9cc552a8bbf08f4d5cc6d1501e21","show":0,"cover":"CoverDesign.jpg","title":{"0":"I Shall Seal the Heavens"},"author":{"0":"Er Gen"},"description":""}|*/?>
