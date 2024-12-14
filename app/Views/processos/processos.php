@@ -8,7 +8,8 @@
 
 
 <!--begin::Body-->
-<body class="layout-fixed sidebar-expand-lg bg-body-tertiary"><!--begin::App Wrapper-->
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+  <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <?= $this->include('template/nav') ?>
     <?= $this->include('template/sidebar') ?>
@@ -32,7 +33,8 @@
         <div class="container-fluid">
           <!--begin::Row-->
           <div class="row">
-            <div class="col-9"> 
+            <div class="col-9">
+               
               <!-- Início do Formulário -->
               <form action="" method="get">
                 <div class="input-group mb-3">
@@ -52,29 +54,7 @@
                 }
                 ?>
                 <div class="mt-3">
-                  <table class="table table-bordered" id="clientes-list">
-                    <thead>
-                      <tr>
-                        <th>Processo</th>
-                        <th>Cliente</th>
-                        <th>Ação</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php if ($processos) : ?>
-                        <?php foreach ($processos as $processo) : ?>
-                          <tr>
-                            <td><?php echo $processo['nome']; ?></td>
-                            <td><?php echo $processo['acao']; ?></td>
-                            <td>
-                              <a class="btn btn-primary btn-sm" href="<?php echo base_url('processos/consultar/' . $processo['id_processo']); ?>">Editar</a>
-                              <a href="<?php echo base_url('processos/delete/' . $processo['id_processo']); ?>" class="btn btn-danger btn-sm">Deletar</a>
-                            </td>
-                          </tr>
-                        <?php endforeach; ?>
-                      <?php endif; ?>
-                    </tbody>
-                  </table>
+                  <?= $table ?>
                 </div>
               </div>
             </div><!-- Fim do Formulário -->
