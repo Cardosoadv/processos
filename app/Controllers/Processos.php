@@ -3,17 +3,15 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\ProcessosModel;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class Processos extends BaseController
 {
+
     public function index()
     {
         $data = [
             'img'       =>  'vazio.png',
             'titulo'    => 'Processos',
-            
         ];
 
         $table = new \CodeIgniter\View\Table();
@@ -51,4 +49,27 @@ class Processos extends BaseController
         $data['table'] = $table->generate();
         return view('processos/processos', $data);
     }
+
+    /**
+     * Retorna os processos movimentados em $dias
+     * @param string $dias número de dias a serem consultados
+     * @return json com os processos movimentados
+     */
+    public function ProcessosMovimentados($dias){
+        $hoje = date('Y-m-d', time());
+        $semanaPassada = date('Y-m-d', strtotime('-'.$dias.' days'));
+        $processosMovimentadosModel = model('ProcessosMovimentosModel');
+        $processosMovimentados = $processosMovimentadosModel->getProcessoMovimentadoPeriodo($semanaPassada, $hoje);
+        return $this->response->setJSON($processosMovimentados);
+    }
+
+    public function editarPorNumerodeProcesso(string $numeroProcesso){
+
+        $processosModel = model('ProcessosModel');
+        $processo = $processosModel->where('numero_processo', $numeroProcesso)->find()->first();
+        return $this->response->redirect->to(base_url('processos/editar/' . $processo['id_processo']));
+        
+    }
+
+
 }

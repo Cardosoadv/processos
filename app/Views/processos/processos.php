@@ -59,7 +59,12 @@
               </div>
             </div><!-- Fim do Formulário -->
             <div class="col-3"><!-- Inicio SideBar do Formulario -->
-              <h1>Sidebar</h1>
+              <h3>Ultimos Processos Movimentados</h3>
+<div id="processoMovimentados"></div>
+
+
+
+
 
             </div> <!-- Fim do SideBar do Formulario -->
           </div> <!-- Fim do Row -->
@@ -72,5 +77,58 @@
     <?= $this->include('template/modals/change_user_img.php') ?>
     <?= $this->include('template/footer') ?>
 </body><!--end::Body-->
+
+<script>
+function buscarProcesso() {
+  fetch("<?=base_url('processos/processosmovimentados/360')?>") // Faz a requisição GET
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Erro na requisição: ${response.status}`); // Trata erros de requisição
+      }
+      return response.json(); // Converte a resposta para JSON
+    })
+    .then(data => {
+      // Manipula os dados recebidos (data)
+      const processoMovimentadosDiv = document.getElementById('processoMovimentados');
+      processoMovimentadosDiv.innerHTML = ''; // Limpa o conteúdo atual da div
+
+      // Exemplo de como exibir os dados. Adapte conforme a estrutura do seu JSON.
+      if (data && Array.isArray(data)) { // Verifica se data existe e é um array
+        data.forEach(item => {
+          const paragrafo = document.createElement('p');
+          paragrafo.textContent = `Número do Processo: ${item.numero_processo}, Descrição: ${item.nome || 'Sem descrição'}`, `Data: ${item.dataHora || 'Sem descrição'}`; // Exemplo: acessando 'id' e 'descricao'
+          processoMovimentadosDiv.appendChild(paragrafo);
+        });
+      } else if (data && typeof data === 'object') { // Se for um objeto
+          for (const key in data) {
+              const paragrafo = document.createElement('p');
+              paragrafo.textContent = `${key}: ${data[key]}`;
+              processoMovimentadosDiv.appendChild(paragrafo);
+          }
+      } else {
+          processoMovimentadosDiv.textContent = "Nenhum dado encontrado ou formato inválido.";
+      }
+
+
+    })
+    .catch(error => {
+      // Trata erros durante o processo (ex: erro de rede, erro no JSON)
+      console.error('Erro:', error);
+      const processoMovimentadosDiv = document.getElementById('processoMovimentados');
+      processoMovimentadosDiv.textContent = 'Erro ao carregar informações.';
+    });
+}
+
+// Chama a função para buscar os dados assim que a página carrega
+window.onload = buscarProcesso;
+
+// Ou, se preferir um botão para disparar a requisição:
+// const botaoBuscar = document.createElement('button');
+// botaoBuscar.textContent = 'Buscar Processo';
+// botaoBuscar.addEventListener('click', buscarProcesso);
+// document.body.appendChild(botaoBuscar);
+
+</script>
+
 
 </html>
