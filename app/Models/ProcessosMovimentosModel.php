@@ -55,4 +55,15 @@ class ProcessosMovimentosModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    public function getProcessoMovimentadoPeriodo($dataInicial, $dataFinal){
+        $dtInicial = date('Y-m-d', strtotime($dataInicial));
+        $dtFinal = date('Y-m-d', strtotime($dataFinal));
+        $data = $this->where('dataHora >=',$dtInicial)
+                     ->where('dataHora <=',$dtFinal)
+                     ->get()->getResultArray();
+        return $data;
+    }
+
 }

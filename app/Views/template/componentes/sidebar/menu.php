@@ -2,8 +2,15 @@
 /**
  * Lógica necessária ao funcionamento do menu lateral
  */
+
+use App\Libraries\Permissions;
+
 $uri = service('uri');
 $active = $uri->getSegment(1);
+
+$permitions = new Permissions();
+$permission = $permitions->permission();
+
 ?>
 
 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">

@@ -11,14 +11,10 @@ class Processos extends BaseController
     public function index()
     {
         $data = [
-            'permission' => ['processos'=>true, 'intimacoes'=>true, 'movimentos'=>true],
             'img'       =>  'vazio.png',
-            'titulo'    => 'Dashboard',
+            'titulo'    => 'Processos',
             
         ];
-
-
-
 
         $table = new \CodeIgniter\View\Table();
 
