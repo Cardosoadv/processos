@@ -96,8 +96,18 @@ function buscarProcesso() {
       if (data && Array.isArray(data)) { // Verifica se data existe e é um array
         data.forEach(item => {
           const paragrafo = document.createElement('p');
-          paragrafo.textContent = `Número do Processo: ${item.numero_processo}, Descrição: ${item.nome || 'Sem descrição'}`, `Data: ${item.dataHora || 'Sem descrição'}`; // Exemplo: acessando 'id' e 'descricao'
-          processoMovimentadosDiv.appendChild(paragrafo);
+
+// Construindo o link para o número do processo
+const linkProcesso = document.createElement('a');
+linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`; // Substitua pela URL correta
+linkProcesso.textContent = item.numero_processo;
+
+// Construindo o parágrafo com o link
+paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}`, `Data: ${item.dataHora || 'Sem descrição'}`;
+
+// Adicionando o parágrafo à div
+processoMovimentadosDiv.appendChild(paragrafo);
+
         });
       } else if (data && typeof data === 'object') { // Se for um objeto
           for (const key in data) {

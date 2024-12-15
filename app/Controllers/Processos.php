@@ -66,9 +66,15 @@ class Processos extends BaseController
     public function editarPorNumerodeProcesso(string $numeroProcesso){
 
         $processosModel = model('ProcessosModel');
-        $processo = $processosModel->where('numero_processo', $numeroProcesso)->find()->first();
-        return $this->response->redirect->to(base_url('processos/editar/' . $processo['id_processo']));
-        
+        $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
+        return redirect()->to(base_url('processos/editar/' . $processo['id_processo']));
+    }
+
+    public function editar(int $id){
+
+        $processosModel = model('ProcessosModel');
+        $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
+        return redirect()->to(base_url('processos/editar/' . $processo['id_processo']));
     }
 
 

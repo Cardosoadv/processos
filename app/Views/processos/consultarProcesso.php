@@ -2,80 +2,70 @@
 <html lang="pt-BR"><!--begin::Head-->
 
 <head>
-  <title>Conselhos | Consulta Processo</title><!--begin::Primary Meta Tags-->
+  <title><?= $titulo ?></title><!--begin::Primary Meta Tags-->
   <?= $this->include('template/header') ?>
-
 </head><!--end::Head-->
-<!--begin::Body-->
 
-<body class="layout-fixed sidebar-expand-lg bg-body-tertiary"><!--begin::App Wrapper-->
+
+<!--begin::Body-->
+<body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
+  <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <?= $this->include('template/nav') ?>
     <?= $this->include('template/sidebar') ?>
 
     <!--begin::App Main-->
-    <main class="app-main"><!--begin::App Content Header-->
-      <div class="app-content-header"><!--begin::Container-->
-        <div class="container-fluid"><!--begin::Row-->
+    <main class="app-main">
+      <!--begin::App Content Header-->
+      <div class="app-content-header">
+        <!--begin::Container-->
+        <div class="container-fluid">
+          <!--begin::Row-->
+          <?= $this->include('template/componentes/breadcrumbs') ?>
+          <!--end::Row-->
+        </div>
+        <!--end::Container-->
+      </div><!--end::App Content Header-->
+      
+      <!--begin::App Content-->
+      <div class="app-content">
+        <!--begin::Container-->
+        <div class="container-fluid">
+          <!--begin::Row-->
           <div class="row">
-            <div class="col-sm-6">
-              <h3 class="mb-0">Consulta Processo</h3>
-            </div>
-            <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-end">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">
-                  Consulta Processo
-                </li>
-              </ol>
-            </div>
-          </div><!--end::Row-->
-        </div><!--end::Container-->
-      </div><!--end::App Content Header--><!--begin::App Content-->
-      <div class="app-content"><!--begin::Container-->
-        <div class="container-fluid"><!--begin::Row-->
-          <div class="row">
-            <div class="col-8"> <!-- Início do Formulário -->
-              <!-- Início -->
-              <div class="container mt-4">
-                <?php
-                if (isset($_SESSION['msg'])) {
-                  echo '<div class="callout callout-info">';
-                  echo $_SESSION['msg'];
-                  echo '</div>';
-                }
-                ?>
-                <div class="mt-3"><!-- inicio formulário -->
+            <div class="col-9">
+
+<!-- inicio formulário -->
                   <form method="post" id="form_processo" name="form_processo" action="<?= site_url('/processos/atualizar/') . $processo['id_processo'] ?>" enctype="multipart/form-data">
                     <input type="hidden" name="id_processo" class="form-control" value="<?= $processo['id_processo'] ?>">
                     <div class="form-group col-5">
                       <label>Nome do Processo</label>
-                      <input type="text" name="nome" class="form-control" value="<?= $processo['nome'] ?>">
+                      <input type="text" name="nome" class="form-control" value="">
                     </div>
                     <div class="form-group col-5">
                       <label>Ação</label>
-                      <input type="text" name="acao" class="form-control" value="<?= $processo['acao'] ?>">
+                      <input type="text" name="acao" class="form-control" value="">
                     </div>
                     <div class="form-group">
                       <label>Numero do Processo</label>
-                      <input type="text" id="numeroProcesso" name="numero" class="form-control" value="<?= $processo['numero'] ?>" onchange="mask(this)">
+                      <input type="text" id="numeroProcesso" name="numero" class="form-control" value="<?= $processo['numero_processo'] ?>" onchange="mask(this)">
                     </div>
                     <div class="row mt-3">
                       <div class="form-group">
                         <label>Juízo</label>
-                        <input type="text" name="juizo" class="form-control" value="<?= $processo['juizo'] ?>">
+                        <input type="text" name="juizo" class="form-control" value="">
                       </div>
                       <div class="form-group col-3">
                         <label>Valor da Causa</label>
-                        <input type="number" step="0.01" name="vlr_causa" class="form-control" value="<?= $processo['vlr_causa'] ?>">
+                        <input type="number" step="0.01" name="vlr_causa" class="form-control" value="">
                       </div>
                       <div class="form-group col-3">
                         <label>Data Distribuição</label>
-                        <input type="date" name="dt_distribuicao" class="form-control" value="<?= $processo['dt_distribuicao'] ?>">
+                        <input type="date" name="dt_distribuicao" class="form-control" value="">
                       </div>
                       <div class="form-group col-3">
                         <label>Valor da Condenação</label>
-                        <input type="number" step="0.01" name="vlr_condenacao" class="form-control" value="<?= $processo['vlr_condenacao'] ?>">
+                        <input type="number" step="0.01" name="vlr_condenacao" class="form-control" value="">
                       </div>
                     </div>
                     <div class="row mt-3">
