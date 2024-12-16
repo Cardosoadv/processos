@@ -34,13 +34,13 @@
         <div class="container-fluid">
           <!--begin::Row-->
           <div class="row">
-            <div class="col-9">
+            <div class="col-8">
               <!-- inicio formulário -->
               <?= $this->include('template/componentes/processos/formulario') ?>
               <!-- Fim do Formulário -->
             </div>
-          </div>
-          <div class="col-4"><!-- Inicio SideBar do Formulario -->
+            <div class="col-4">
+            <!-- Inicio SideBar do Formulario -->
             <div><!--begin::Accordion-->
               <div class="card card-primary card-outline mb-4"><!--begin::Header-->
                 <div class="card-header">

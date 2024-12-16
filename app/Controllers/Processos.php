@@ -77,5 +77,16 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/editar/' . $processo['id_processo']));
     }
 
+    public function consultarProcesso(int $id=null){
+        $processosModel = model('ProcessosModel');
+        $data = [
+            'titulo'    => 'Consultar Processo',
+            'anotacoes' => [ 'anotacoes' => [] ],
+        ];
+        $data['img'] = 'vazio.png';
+        $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
+        return view('processos/consultarProcesso', $data);
+    }
+
 
 }

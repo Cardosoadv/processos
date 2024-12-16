@@ -32,10 +32,11 @@
     </div>
     <div class="row mt-3">
         <div class="form-group">
-            <label>Comentários</label>
-            <textarea class="form-control" name="comentario" aria-label="Comentários"></textarea>
+            <label>Comentário</label>
+            <textarea class="form-control" name="comentario" aria-label="Comentário">
+                <?= $processo['comentario'] ?? '' ?>
+            </textarea>
         </div>
-    </div>
     </div>
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Salvar</button>
