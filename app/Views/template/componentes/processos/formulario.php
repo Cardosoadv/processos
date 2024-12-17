@@ -1,4 +1,4 @@
-<form method="post" id="form_processo" name="form_processo" action="<?= site_url('/processos/atualizar/') . $processo['id_processo'] ?>" enctype="multipart/form-data">
+<form method="post" id="form_processo" name="form_processo" action="<?= site_url('testes/testes') ?>" enctype="multipart/form-data">
     <input type="hidden" name="id_processo" class="form-control" value="<?= $processo['id_processo'] ?? '' ?>">
         
     <div class="row mb-3">
@@ -31,7 +31,13 @@
         <div class="col py-3">
             <label>Polo Ativo</label>
             <div class="form-group">
-                <input type="text" class="form-control py-2" name="" >
+            <?php if($poloAtivo):?>
+                <?php foreach ($poloAtivo as $ativo):?>
+                    <input type="text" class="form-control mt-2" name="ativo[]" value="<?= $ativo['nome'] ?? '' ?>">                        
+                <?php endforeach; ?>
+            <?php else:?>
+                <input type="text" class="form-control mt-2" name="poloAtivo[]" value="">
+            <?php endif; ?>
 
             </div>
         </div>
@@ -39,8 +45,15 @@
         <div class="col py-3">
             <label>Polo Passivo</label>
             <div class="form-group">
-                <input type="text" class="form-control py-2" name="">
 
+                <?php if($poloPassivo):?>
+                    <?php foreach ($poloPassivo as $passivo):?>
+                        <input type="text" class="form-control mt-2" name="poloPassivo[]" value="<?php echo $passivo[$i]['nome'] ?>">
+                        <?= $passivo['nome'] ?>
+                    <?php endforeach; ?>
+                <?php else:?>
+                    <input type="text" class="form-control mt-2" name="poloPassivo[]" value="">   
+                <?php endif; ?>
             </div>
         </div>
 

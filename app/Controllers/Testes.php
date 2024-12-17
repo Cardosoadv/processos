@@ -19,35 +19,14 @@ class Testes extends BaseController
     }
 
 
-    public function partes(){
-        
-    $partes = model('ProcessosPartesModel')
-    ->select('nome')
-    ->findAll();
-        foreach ($partes as $parte){
-            echo '<pre>';
-            print_r($parte);
-            $intimacoesDestinatarios = model('IntimacoesDestinatariosModel')
-            ->select(['polo', 'comunicacao_id'])
-            ->where('nome', $parte['nome'])
-            ->get()->getResultArray();
-            print_r($intimacoesDestinatarios);
-            foreach( $intimacoesDestinatarios as $intimacoesDestinatario){
-                $intimacoes = model('IntimacoesModel')
-                ->select('numero_processo')
-                ->where('id_intimacao', $intimacoesDestinatario['comunicacao_id'])
-                ->get()->getResultArray();
-                print_r($intimacoes);
-                $processo = model('ProcessosModel')
-                ->select('id_processo')
-                ->where('numero_processo', $intimacoes[0]['numero_processo'])
-                ->get()
-                ->getRowArray();
-                print_r($processo);
-            }
-                
-            
-        }
+    public function testes(){
+        $data = [
+            'titulo'    => 'Consultar Processo',
+            'anotacoes' => [ 'anotacoes' => [] ],
+            'data'      => [],
+        ];
+        $data['img'] = 'vazio.png';
+        return view('testes', $data);
     }
 
 }
