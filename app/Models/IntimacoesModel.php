@@ -81,5 +81,15 @@ class IntimacoesModel extends Model
         return $data;
     }
 
+    public function joinTabelasProcesso(){
+        $data = $this->db
+        ->table('intimacoes_destinatario as d')
+        ->join('intimacoes as i', 'd.comunicacao_id = i.id_intimacao', 'left')
+        ->join('processos as p', 'p.numero_processo = i.numero_processo', 'left');
+        return $data->get()->getResultArray();
+    }
+
+
+
 
 }

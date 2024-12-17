@@ -27,11 +27,22 @@
     </div>
 
     <div class="row mt-3 border rounded">
-        <label>Partes</label>
+        <center><h3>Partes</h3></center>
+        <div class="col py-3">
+            <label>Polo Ativo</label>
+            <div class="form-group">
+                <input type="text" class="form-control py-2" name="" >
 
-        <div class="form-group">
-            <label>Ativo</label>
-            <input type="text" name="">
+            </div>
+        </div>
+        
+        <div class="col py-3">
+            <label>Polo Passivo</label>
+            <div class="form-group">
+                <input type="text" class="form-control py-2" name="">
+
+            </div>
+        </div>
 
 
     </div>

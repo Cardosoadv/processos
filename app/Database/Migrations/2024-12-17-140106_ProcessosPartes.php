@@ -11,7 +11,6 @@ class ProcessosPartes extends Migration
         $this->forge->addField([
             'id_parte'                  => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
             'nome'                      => ['type' => 'varchar', 'constraint'=>150],
-            'polo'                      => ['type' => 'varchar', 'constraint'=>5],
             'cliente'                   => ['type' => 'tinyint', 'default' => 0],
             'created_at'                => ['type' => 'datetime', 'null' => true],
             'updated_at'                => ['type' => 'datetime', 'null' => true],
@@ -23,6 +22,7 @@ class ProcessosPartes extends Migration
         $this->forge->addField([
             'id_parte'                  => ['type' => 'int', 'constraint' => 11],
             'id_processo'               => ['type' => 'int', 'constraint' => 11],
+            'polo'                      => ['type' => 'varchar', 'constraint'=>5],
         ]);
         $this->forge->createTable('processos_partes_dos_processos');
 

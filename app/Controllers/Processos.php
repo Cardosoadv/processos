@@ -79,12 +79,16 @@ class Processos extends BaseController
 
     public function consultarProcesso(int $id=null){
         $processosModel = model('ProcessosModel');
+        $partesProcessoModel = model('ProcessosPartesModel');
         $data = [
             'titulo'    => 'Consultar Processo',
             'anotacoes' => [ 'anotacoes' => [] ],
         ];
         $data['img'] = 'vazio.png';
         $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
+        //$data['parte'] = $partesProcessoModel->getParteProcesso($id);
+        $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
+        $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
         return view('processos/consultarProcesso', $data);
     }
 
