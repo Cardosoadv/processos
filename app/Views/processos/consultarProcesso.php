@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><!--begin::Head-->
+<html lang="pt-BR">
 
+<!--begin::Head-->
 <head>
   <title><?= $titulo ?></title><!--begin::Primary Meta Tags-->
   <?= $this->include('template/header') ?>
@@ -8,33 +9,38 @@
 
 
 <!--begin::Body-->
-
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-  <!--begin::App Wrapper-->
+  
+<!--begin::App Wrapper-->
   <div class="app-wrapper">
     <?= $this->include('template/nav') ?>
     <?= $this->include('template/sidebar') ?>
 
     <!--begin::App Main-->
     <main class="app-main">
+
       <!--begin::App Content Header-->
       <div class="app-content-header">
+
         <!--begin::Container-->
         <div class="container-fluid">
+
           <!--begin::Row-->
           <?= $this->include('template/componentes/breadcrumbs') ?>
           <!--end::Row-->
-        </div>
-        <!--end::Container-->
+        </div><!--end::Container-->
       </div><!--end::App Content Header-->
 
       <!--begin::App Content-->
       <div class="app-content">
+
         <!--begin::Container-->
         <div class="container-fluid">
+
           <!--begin::Row-->
           <div class="row">
             <div class="col-8">
+
               <!-- inicio formulário -->
               <?= $this->include('template/componentes/processos/formulario') ?>
               <!-- Fim do Formulário -->
@@ -83,12 +89,16 @@
   </div><!--end::Container-->
   </div><!--end::App Content-->
   </main><!--end::App Main-->
-
   <?= $this->include('template/modals/change_user_img.php') ?>
   <?= $this->include('template/modals/anotacao.php') ?>
   <?= $this->include('template/footer') ?>
 
 
+  <script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
+  <script src="<?= base_url('public/main.js')?>">
+  </script>
+
+		
 
 </body><!--end::Body-->
 <script>
