@@ -63,18 +63,25 @@ class Processos extends BaseController
         return $this->response->setJSON($processosMovimentados);
     }
 
+    /**
+     * Este função apenas redireciona para o editar por id
+     */
     public function editarPorNumerodeProcesso(string $numeroProcesso){
 
         $processosModel = model('ProcessosModel');
         $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
-        return redirect()->to(base_url('processos/editar/' . $processo['id_processo']));
+        return redirect()->to(base_url('processos/consultarprocesso/' . $processo['id_processo']));
     }
 
+    //TODO criar metodo de edição cumulado com novo processo
+    /**
+     * Editar por $Id
+     * Esta função que irá salvar os dados do processo no db
+     * @param int $id
+     */
     public function editar(int $id){
 
-        $processosModel = model('ProcessosModel');
-        $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
-        return redirect()->to(base_url('processos/editar/' . $processo['id_processo']));
+        
     }
 
     public function consultarProcesso(int $id=null){
@@ -86,13 +93,10 @@ class Processos extends BaseController
         ];
         $data['img'] = 'vazio.png';
         $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
-        //$data['parte'] = $partesProcessoModel->getParteProcesso($id);
         $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
         $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
         return view('processos/consultarProcesso', $data);
     }
-
-    
 
 
 }

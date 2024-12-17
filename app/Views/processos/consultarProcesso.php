@@ -47,7 +47,8 @@
             </div>
             <div class="col-4">
             <!-- Inicio SideBar do Formulario -->
-            <div><!--begin::Accordion-->
+            <div>
+              <!--begin::Accordion-->
               <div class="card card-primary card-outline mb-4"><!--begin::Header-->
                 <div class="card-header">
                   <div class="card-title">Anotações</div>
@@ -81,7 +82,8 @@
                   </div>
                 </div>
               </div><!--end::Body-->
-            </div><!--end::Accordion-->
+            </div>
+            <!--end::Accordion-->
           </div> <!-- Fim do SideBar do Formulario -->
         </div> <!-- Fim do Row -->
       </div>
