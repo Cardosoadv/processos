@@ -79,8 +79,17 @@
 </body><!--end::Body-->
 
 <script>
+
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+}
+
 function buscarProcesso() {
-  fetch("<?=base_url('processos/processosmovimentados/360')?>") // Faz a requisição GET
+  fetch("<?=base_url('processos/processosmovimentados/30')?>") // Faz a requisição GET
     .then(response => {
       if (!response.ok) {
         throw new Error(`Erro na requisição: ${response.status}`); // Trata erros de requisição
@@ -103,7 +112,7 @@ linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item
 linkProcesso.textContent = item.numero_processo;
 
 // Construindo o parágrafo com o link
-paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}`, `Data: ${item.dataHora || 'Sem descrição'}`;
+paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}, Data: ${formatDate(item.dataHora) || 'Sem descrição'}`;
 
 // Adicionando o parágrafo à div
 processoMovimentadosDiv.appendChild(paragrafo);
@@ -118,8 +127,6 @@ processoMovimentadosDiv.appendChild(paragrafo);
       } else {
           processoMovimentadosDiv.textContent = "Nenhum dado encontrado ou formato inválido.";
       }
-
-
     })
     .catch(error => {
       // Trata erros durante o processo (ex: erro de rede, erro no JSON)
@@ -131,13 +138,6 @@ processoMovimentadosDiv.appendChild(paragrafo);
 
 // Chama a função para buscar os dados assim que a página carrega
 window.onload = buscarProcesso;
-
-// Ou, se preferir um botão para disparar a requisição:
-// const botaoBuscar = document.createElement('button');
-// botaoBuscar.textContent = 'Buscar Processo';
-// botaoBuscar.addEventListener('click', buscarProcesso);
-// document.body.appendChild(botaoBuscar);
-
 </script>
 
 

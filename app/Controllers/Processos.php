@@ -15,25 +15,23 @@ class Processos extends BaseController
         ];
 
         $table = new \CodeIgniter\View\Table();
-
-
         $processosModel = model('ProcessosModel');
         $processos = $processosModel
                 ->findAll();
-
-        $table->setHeading(['Numero Processo', 'Tribunal', 'Orgão', 'Ações']);        
+        //Seta os titulos da tabela
+        $table->setHeading(['Numero Processo', 'Tribunal', 'Orgão', 'Ações']);
+        //Define o template da tabela        
         $template = [
                         'table_open' => '<table class="table table-hover">',
-                        'cell_start'  => '<td class="col-md-3">', // Define a largura da primeira coluna como 3/12 do container
-                        'cell_alt_start' => '<td class="col">', // Deixa as outras colunas com largura automática
+                        'cell_start'  => '<td class="col-md-4">', // Define a largura da primeira coluna como 3/12 do container
+                        'cell_alt_start' => '<td class="col-md-4">', // Deixa as outras colunas com largura automática
                     ];
-                
         $table->setTemplate($template);   
-        
+        //Adiciona as linhas na tabela
         foreach ($processos as $processo) {
             $table->addRow([
                 $processo['numeroprocessocommascara'],
-                $processo['siglaTribunal'],
+                ['data' => $processo['siglaTribunal'], 'class' =>'col'], //Ajusta a largura desta coluna.
                 $processo['nomeOrgao'],
                 '<div class="btn-group">
                     <a href="' . base_url('processos/editar/' . $processo['id_processo']) . '" class="btn btn-primary">
@@ -45,7 +43,7 @@ class Processos extends BaseController
                 </div>'
             ]);
         }
-
+        //Gera a tabela
         $data['table'] = $table->generate();
         return view('processos/processos', $data);
     }
@@ -89,14 +87,25 @@ class Processos extends BaseController
         $partesProcessoModel = model('ProcessosPartesModel');
         $data = [
             'titulo'    => 'Consultar Processo',
-            'anotacoes' => [ 'anotacoes' => [] ],
         ];
         $data['img'] = 'vazio.png';
         $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
         $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
         $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
+        $data['anotacoes'] = model('ProcessosAnotacoesModel')->where('processo_id', $id)->get()->getResultArray();
         return view('processos/consultarProcesso', $data);
     }
+
+    /**
+     * Receber e salvar as anotoções do processo
+     */
+    public function adicionarAnotacao(){
+        $processosAnotacoesModel = model('ProcessosAnotacoesModel');
+        $data = $this->request->getPost();
+        $processosAnotacoesModel->insert($data);
+        return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
+    }
+
 
 
 }

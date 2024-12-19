@@ -23,22 +23,24 @@
                     <div class="row mt-3">
                     <div class="form-group col">
                         <label>Anotação</label>
-                        <textarea name="anotacao" id="anotacao" style="width: 100%;" rows="20"></textarea>
+                        <textarea name="anotacao" id="anotacao-editor" style="width: 100%;">
+                        
+                        </textarea>
                     </div>    
             </div>
             <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-secondary" name="close" data-bs-dismiss="modal">Fechar</button>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="privacidade" id="inlineCheckbox1" value="1" checked>
-                    <label class="form-check-label" for="inlineCheckbox1">Público</label>
+                    <label class="form-check-label" for="inlineCheckbox1">Privado</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="privacidade" id="inlineCheckbox2" value="2">
-                    <label class="form-check-label" for="inlineCheckbox2">Privado</label>
+                    <label class="form-check-label" for="inlineCheckbox2">Envolvidos</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="privacidade" id="inlineCheckbox3" value="3">
-                    <label class="form-check-label" for="inlineCheckbox3">Envolvidos</label>
+                    <label class="form-check-label" for="inlineCheckbox3">Público</label>
                 </div>
                 <button type="submit" class="btn btn-primary">Salvar</button>
                 </form>

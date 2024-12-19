@@ -21,7 +21,7 @@ class Testes extends BaseController
 
     public function testes(){
         $data = [
-            'titulo'    => 'Consultar Processo',
+            'titulo'    => 'Testes',
             'anotacoes' => [ 'anotacoes' => [] ],
             'data'      => [],
         ];

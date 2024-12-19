@@ -4,26 +4,20 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class ProcessosMovimentosModel extends Model
+class ProcessosAnotacoesModel extends Model
 {
-    protected $table            = 'processos_movimentos';
-    protected $primaryKey       = 'id_movimento';
+    protected $table            = 'processos_anotacao';
+    protected $primaryKey       = 'id_anotacao';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [
-            'id_movimento',
-            'numero_processo',
-            'nome',
-            'descricao_complemento',
-            'nome_complemento',
-            'codigo',
-            'valor',
-            'dataHora',
-            'created_at',
-            'updated_at',
-            'deleted_at',
+    protected $allowedFields    = [ 
+        'id_anotacao',
+        'titulo',
+        'anotacao',
+        'privacidade', // 1 - Privado, 2 - Envolvidos, 3 - Público
+        'processo_id',
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -33,7 +27,7 @@ class ProcessosMovimentosModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -55,16 +49,4 @@ class ProcessosMovimentosModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-
-    public function getProcessoMovimentadoPeriodo($dataInicial, $dataFinal){
-        $dtInicial = date('Y-m-d', strtotime($dataInicial));
-        $dtFinal = date('Y-m-d', strtotime($dataFinal));
-        $data = $this->where('dataHora >=',$dtInicial)
-                     ->where('dataHora <=',$dtFinal)
-                     ->orderBy('dataHora', 'DESC')
-                     ->get()->getResultArray();
-        return $data;
-    }
-
 }

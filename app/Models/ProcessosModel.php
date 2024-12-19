@@ -24,6 +24,11 @@ class ProcessosModel extends Model
         'status',
         'numeroprocessocommascara',
         'risco',
+        'dataDistribuicao',
+        'valorCausa',
+        'resultado', //'Não Finalizado', 'Sucesso', 'Sucesso Parcial'
+        'valorCondenacao',
+        'comentario',
     ];
 
     protected bool $allowEmptyInserts = false;
