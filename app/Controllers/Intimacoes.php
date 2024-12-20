@@ -88,8 +88,11 @@ class Intimacoes extends BaseController
         $id = $processosModel->where('numero_processo', $processos['numero_processo'])
                             ->findColumn('id_processo');
 
+						if($id==!null){
+								$data['id_processo'] = $id;
+}
+
         $data = [
-            'id_processo'                => $id,
             'siglaTribunal'              => $processos['siglaTribunal'],
             'nomeOrgao'                  => $processos['nomeOrgao'],
             'numero_processo'            => $processos['numero_processo'],
