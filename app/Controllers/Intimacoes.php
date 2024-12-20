@@ -59,6 +59,7 @@ class Intimacoes extends BaseController
                 foreach($items['destinatarios'] as $itemsDestinatario){
                     //Salva ou atualiza o destinatário no db
                     $this->salvarDestinatarios($itemsDestinatario);
+																//TODO Criar rotina salvar partes do processo!
                     
                 }
                 //Percorre a lista de advogados salvando cada uma no db
