@@ -55,8 +55,10 @@ class ProcessosPartesModel extends Model
         ->where('polo', $polo)
         ->get()->getResultArray();
         return $parte;
+    }
 
-
+    public function salvarParteDoProcesso(array $parteDoProcesso){
+        $this->db->table('processos_partes_dos_processos')->insert($parteDoProcesso);
     }
 
 }

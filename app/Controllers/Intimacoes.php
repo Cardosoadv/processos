@@ -51,7 +51,7 @@ class Intimacoes extends BaseController
             if ($intimacoesModel->intimacaoJaExiste($items['id']) === false){
                 
                 //Verifica se existe e salva ou atualiza o processo no db
-                $this->salvarProcessos($items);
+                $idProcesso = $this->salvarProcessos($items);
 
                 //Salva ou atualiza a intimação no db
                 $this->salvarIntimacao($items);
@@ -61,6 +61,7 @@ class Intimacoes extends BaseController
                     //Salva ou atualiza o destinatário no db
                     $this->salvarDestinatarios($itemsDestinatario);
 					//TODO Criar rotina salvar partes do processo!
+                    $this->salvarPartes($itemsDestinatario, $idProcesso);
                     
                 }
                 //Percorre a lista de advogados salvando cada uma no db
@@ -90,9 +91,9 @@ class Intimacoes extends BaseController
         $id = $processosModel->where('numero_processo', $processos['numero_processo'])
                             ->findColumn('id_processo');
 
-						if($id==!null){
-								$data['id_processo'] = $id;
-}
+			if($id ===!null){
+				return $id;
+            }
 
         $data = [
             'siglaTribunal'              => $processos['siglaTribunal'],
@@ -108,6 +109,7 @@ class Intimacoes extends BaseController
         ];
         
         $processosModel->save($data);
+        return $processosModel->getInsertID();
     }
 
     private function salvarIntimacao($intimacao){
@@ -144,7 +146,10 @@ class Intimacoes extends BaseController
         $intimacoesDestinatariosModel->save($data);
     }
 
-    private function salvarPartes($parte){
+    /**
+     * Salva as partes do processo
+     */
+    private function salvarPartes(array $parte, int $idProcesso){
 
         $processosPartesModel = new ProcessosPartesModel();
 
@@ -152,21 +157,21 @@ class Intimacoes extends BaseController
                                 ->findColumn('id_parte') != null){
             $data = [
                     'nome'               => $parte['nome'],
-                    'polo'               => $parte['polo'],
-                    'comunicacao_id'     => $parte['comunicacao_id'],
             ];
             $processosPartesModel->insert($data);
-            $idParteProcesso = $processosPartesModel->getInsertID();
+            $idParteProcesso = $processosPartesModel->where('nome', $parte['nome'])
+            ->findColumn('id_parte');
         }else{
             $idParteProcesso = $processosPartesModel->where('nome', $parte['nome'])
                                                     ->findColumn('id_parte');
         }
-            
-                            
+            $parteProcesso = [
+                'id_parte'      => $idParteProcesso,
+                'id_processo'   => $idProcesso,
+                'polo'          => $parte['polo'],
+            ];
+            $processosPartesModel->salvarParteDoProcesso($parteProcesso);
     }
-
-
-        
 
     private function salvarAdvogados($advogado){
 
@@ -184,6 +189,4 @@ class Intimacoes extends BaseController
         ];
         $intimacoesAdvogadosModel->save($data);
     }
-
-
 }
