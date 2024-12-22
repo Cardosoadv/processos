@@ -22,13 +22,16 @@ class Monitorar extends BaseController
         $receberMovimentosDatajud = new ReceberMovimentosDatajud();
         $processosMonitoradosModel = new ProcessosMonitoradosModel();
 
-        $processosMonitorados = $processosMonitoradosModel->findAll();
+        $processosMonitorados = $processosMonitoradosModel->orderBy('ultima_checagem', 'ASC')->limit(30)->findAll();
 
         foreach ($processosMonitorados as $processo){
+            $tribunal = substr($processo['numero_processo'],16,4);
             $numeroProcesso = preg_replace('/[^0-9]/', '', $processo['numero_processo']);
-            $receberMovimentosDatajud->receberMovimentos($numeroProcesso);
-            $processosMonitoradosModel->update($processo['id_monitoramento'], ['ultima_checagem' => date('Y-m-d H:i:s')]);
+            $data = $receberMovimentosDatajud->receberMovimentos($tribunal, $numeroProcesso);
+            $data['ultima_checagem'] = date('Y-m-d H:i:s');
+            $processosMonitoradosModel->update($processo['id_monitoramento'], $data);
         }
+        Echo "Movimentos Recebidos";
     }
 
     public function MonitorarProcessos(){

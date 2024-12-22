@@ -16,7 +16,12 @@ class ProcessosMonitoradosModel extends Model
         'id_monitoramento',
         'numero_processo',
         'usuario_id',
+        'numero_movimentos',
+        'movimentos_salvos',
+        'movimentos_ignorados',
+        'json_filename',    
         'ultima_checagem',
+        'erro',
     ];
 
     protected bool $allowEmptyInserts = false;

@@ -60,5 +60,8 @@ class ProcessosPartesModel extends Model
     public function salvarParteDoProcesso(array $parteDoProcesso){
         $this->db->table('processos_partes_dos_processos')->insert($parteDoProcesso);
     }
+    public function deletarParteDoProcesso(int $idProcesso){
+        $this->db->table('processos_partes_dos_processos')->delete('id_processo', $idProcesso);
+    }
 
 }

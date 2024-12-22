@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\ProcessosPartesModel;
 
 class Processos extends BaseController
 {
@@ -82,9 +83,84 @@ class Processos extends BaseController
             //TODO metodo para salvar novo processo
         }else{
             //TODO metodo para editar processo
+            $poloAtivo = $this->request->getPost('poloAtivo');
+            $poloPassivo = $this->request->getPost('poloPassivo');
+            
+            $data = [
+                'id_processo'                   => $this->request->getPost('id_processo'),
+                'tipoDocumento'                 => $this->request->getPost('tipoDocumento'),
+                'siglaTribunal'                 => $this->request->getPost('siglaTribunal'),
+                'nomeOrgao'                     => $this->request->getPost('nomeOrgao'),
+                'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
+                'tribunal_id'                   => $this->request->getPost('tribunal_id'),
+                'orgao_id'                      => $this->request->getPost('orgao_id'),
+                'dt_distribuicao'               => $this->request->getPost('dt_distribuicao'),
+                'vlr_causa'                     => $this->request->getPost('vlr_causa'),
+                'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
+                'comentario'                    => $this->request->getPost('comentario'),
+            ];
+            $partesProcessoModel = model('ProcessosPartesModel');
+            $partesProcessoModel->deletarParteDoProcesso($data['id_processo']);
+            foreach ($poloAtivo as $ativo) {
+
+                $parte = [
+                    'nome' => $ativo,
+                    'polo' => 'A',
+                ];
+                $this->salvarPartes($parte, $data['id_processo']);
+            }
+            foreach ($poloPassivo as $passivo) {
+
+                $parte = [
+                    'nome' => $passivo,
+                    'polo' => 'P',
+                ];
+                $this->salvarPartes($parte, $data['id_processo']);
+            }
+            $processosModel = model('ProcessosModel');
+            $processosModel->update($data);
+
+            return redirect()->to(base_url('processos/consultarprocesso/' . $data['id_processo']));
+
         }
 
         
+    }
+
+    /**
+     * Insere uma parte no processo
+     * @param array $parte [strig nome, string polo]
+     * @param int $idProcesso - ID do processo
+     * @return void
+     */
+    public function salvarPartes(array $parte, int $idProcesso){
+        $processosPartesModel = new ProcessosPartesModel();
+
+        // Confere se a parte já existe.
+        $jaExisteParte = $processosPartesModel->where('nome', $parte['nome'])->first();
+
+        if ($jaExisteParte) {
+            // Se a Parte já existe, recurera sua ID.
+            $idParteProcesso = $jaExisteParte['id_parte'];
+        } else {
+            // Se a Parte não existe, insira um novo record.
+            $data = [
+                'nome' => $parte['nome'],
+            ];
+            $processosPartesModel->insert($data);
+
+            // Reupera o ID da parte inserida.
+            $idParteProcesso = $processosPartesModel->insertID();
+        }
+
+        $parteProcesso = [
+            'id_parte'    => $idParteProcesso,
+            'id_processo' => $idProcesso,
+            'polo'        => $parte['polo'],
+        ];
+
+        // Assuming salvarParteDoProcesso handles potential duplicates based on id_parte and id_processo
+        $processosPartesModel->salvarParteDoProcesso($parteProcesso);
     }
 
     /**

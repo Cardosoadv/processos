@@ -7,10 +7,29 @@ use Exception;
  
 class ReceberMovimentosDatajud{
 
-    public function receberMovimentos($numeroProcesso){
+    public function receberMovimentos(string $tribunal, string $numeroProcesso){
 
-        $url = "https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search";
-        
+        $url = null;
+
+        // Mapeamento de tribunais para URLs da API
+        $tribunais = [
+            '8.13' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search", // TJMG
+            '8.07' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjdft/_search",// TJDFT
+            '8.26' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjsp/_search", // TJSP
+            '5.03' => "https://api-publica.datajud.cnj.jus.br/api_publica_trt3/_search", // TRT3
+            '4.01' => "https://api-publica.datajud.cnj.jus.br/api_publica_trf1/_search", // TRF1
+            '4.06' => "https://api-publica.datajud.cnj.jus.br/api_publica_trf6/_search", // TRF6
+        ];
+
+    
+        if (array_key_exists($tribunal, $tribunais)) {
+            $url = $tribunais[$tribunal];
+        } else {
+            // Tribunal não encontrado
+            error_log("Tribunal não encontrado: tribunal={$tribunal}");
+            return null; // Retorna null em caso de erro
+        }
+
         $ch = curl_init();
 
         $APIkEY = getenv('API_KEY'); 
@@ -42,11 +61,15 @@ class ReceberMovimentosDatajud{
         $response = curl_exec($ch);
         curl_close($ch);
         $resultados = json_decode($response);
-        echo '<pre>';
-        print_r($resultados);
 
         if (empty($resultados->hits->hits[0])) {
-            return ['erro' => "Erro! Não foi possível encontrar dados do processo. Isso pode acontecer porque ele é sigiloso ou está tramitando em outro tribunal."];
+            $data = [
+                'erro' => "Erro! Não foi possível encontrar dados do processo. Isso pode acontecer porque ele é sigiloso ou está tramitando em outro tribunal.",
+                'numero_movimentos' => 0,
+                'movimentos_salvos' => 0,
+                'movimentos_ignorados' => 0,
+            ];            
+            return $data;
             die;
         }
 
@@ -61,6 +84,9 @@ class ReceberMovimentosDatajud{
         
         // Acessando os movimentos
         $movimentos = $resultados->hits->hits[0]->_source->movimentos;
+        $numeroMovimentos = count($movimentos);
+        $movimentosSalvos = 0;
+        $movimentosIgnorados = 0;
         
         foreach ($movimentos as $movimento) {
 
@@ -93,10 +119,21 @@ class ReceberMovimentosDatajud{
                         ->where('dataHora', $dataHoraMovimento)->get()->getRowArray() === null
                         ){
                             $processosMovimentosModel->insert($data);
+                            $movimentosSalvos++;
+                        }else{
+                            $movimentosIgnorados++;
                         }
                 }
             }
         }
+
+        return $data = [
+            'json_filename'         => $filename,
+            'numero_movimentos'     => $numeroMovimentos,
+            'movimentos_salvos'     => $movimentosSalvos,
+            'movimentos_ignorados'  => $movimentosIgnorados,
+            'erro'                  => null,
+        ];
         
     }
 

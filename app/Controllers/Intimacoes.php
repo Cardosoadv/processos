@@ -61,8 +61,8 @@ class Intimacoes extends BaseController
                     //Salva ou atualiza o destinatário no db
                     $this->salvarDestinatarios($itemsDestinatario);
 					//TODO Criar rotina salvar partes do processo!
-                    $this->salvarPartes($itemsDestinatario, $idProcesso);
-                    
+                    $processosController = new Processos();
+                    $processosController->salvarPartes($itemsDestinatario, $idProcesso);
                 }
                 //Percorre a lista de advogados salvando cada uma no db
                 foreach($items['destinatarioadvogados'] as $itemsAdvogados){
