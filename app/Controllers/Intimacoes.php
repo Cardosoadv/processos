@@ -10,6 +10,7 @@ use App\Models\IntimacoesAdvogadosModel;
 use App\Models\IntimacoesDestinatariosModel;
 use App\Models\IntimacoesModel;
 use App\Models\ProcessosModel;
+use App\Models\ProcessosPartesModel;
 
 class Intimacoes extends BaseController
 {
@@ -59,7 +60,7 @@ class Intimacoes extends BaseController
                 foreach($items['destinatarios'] as $itemsDestinatario){
                     //Salva ou atualiza o destinatário no db
                     $this->salvarDestinatarios($itemsDestinatario);
-																//TODO Criar rotina salvar partes do processo!
+					//TODO Criar rotina salvar partes do processo!
                     
                 }
                 //Percorre a lista de advogados salvando cada uma no db
@@ -142,6 +143,30 @@ class Intimacoes extends BaseController
         ];
         $intimacoesDestinatariosModel->save($data);
     }
+
+    private function salvarPartes($parte){
+
+        $processosPartesModel = new ProcessosPartesModel();
+
+        if($processosPartesModel->where('nome', $parte['nome'])
+                                ->findColumn('id_parte') != null){
+            $data = [
+                    'nome'               => $parte['nome'],
+                    'polo'               => $parte['polo'],
+                    'comunicacao_id'     => $parte['comunicacao_id'],
+            ];
+            $processosPartesModel->insert($data);
+            $idParteProcesso = $processosPartesModel->getInsertID();
+        }else{
+            $idParteProcesso = $processosPartesModel->where('nome', $parte['nome'])
+                                                    ->findColumn('id_parte');
+        }
+            
+                            
+    }
+
+
+        
 
     private function salvarAdvogados($advogado){
 
