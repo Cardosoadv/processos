@@ -27,9 +27,9 @@ class Monitorar extends BaseController
         foreach ($processosMonitorados as $processo){
             $numeroProcesso = preg_replace('/[^0-9]/', '', $processo['numero_processo']);
             $receberMovimentosDatajud->receberMovimentos($numeroProcesso);
+            $processosMonitoradosModel->update($processo['id_monitoramento'], ['ultima_checagem' => date('Y-m-d H:i:s')]);
         }
     }
-
 
     public function MonitorarProcessos(){
 

@@ -84,32 +84,37 @@ class Intimacoes extends BaseController
     $auditoriaRecebimentoIntimacoes = new AuditoriaRecebimentoIntimacoes();
     $auditoriaRecebimentoIntimacoes->registraProcessamentoIntimacoes($data);
 }
+private function salvarProcessos($processos)
+{
+    $processosModel = new ProcessosModel();
 
-    private function salvarProcessos($processos){
-        $processosModel = new ProcessosModel();
+    // Verifica se já existe um processo com o mesmo número.
+    $jaExisteProcesso = $processosModel->where('numero_processo', $processos['numero_processo'])->first();
 
-        $id = $processosModel->where('numero_processo', $processos['numero_processo'])
-                            ->findColumn('id_processo');
+    if ($jaExisteProcesso) {
+        // Processo já existe, retorna o ID existente.
+        return $jaExisteProcesso['id_processo'];
+    }
 
-			if($id ===!null){
-				return $id;
-            }
+    $data = [
+        'siglaTribunal'            => $processos['siglaTribunal'],
+        'nomeOrgao'                => $processos['nomeOrgao'],
+        'numero_processo'          => $processos['numero_processo'],
+        'link'                     => $processos['link'],
+        'tipoDocumento'            => $processos['tipoDocumento'],
+        'codigoClasse'             => $processos['codigoClasse'],
+        'ativo'                    => $processos['ativo'],
+        'status'                   => $processos['status'],
+        'risco'                    => $processos['risco'] ?? 'Possível', // Operador de coalescência nula (??) já está correto.
+        'numeroprocessocommascara' => $processos['numeroprocessocommascara'],
+    ];
 
-        $data = [
-            'siglaTribunal'              => $processos['siglaTribunal'],
-            'nomeOrgao'                  => $processos['nomeOrgao'],
-            'numero_processo'            => $processos['numero_processo'],
-            'link'                       => $processos['link'],
-            'tipoDocumento'              => $processos['tipoDocumento'],
-            'codigoClasse'               => $processos['codigoClasse'],
-            'ativo'                      => $processos['ativo'],
-            'status'                     => $processos['status'],
-            'risco'                      => $processos['risco'] ?? 'Possível',
-            'numeroprocessocommascara'   => $processos['numeroprocessocommascara'],
-        ];
-        
-        $processosModel->save($data);
-        return $processosModel->getInsertID();
+    // Usa o método insert() para inserir os dados.
+    $processosModel->insert($data);
+
+    // Retorna o ID do processo inserido.
+    return $processosModel->insertID();
+
     }
 
     private function salvarIntimacao($intimacao){
@@ -147,46 +152,52 @@ class Intimacoes extends BaseController
     }
 
     /**
-     * Salva as partes do processo
+     * Salva as partes do processo.
      */
-    private function salvarPartes(array $parte, int $idProcesso){
-
+    private function salvarPartes(array $parte, int $idProcesso)
+    {
         $processosPartesModel = new ProcessosPartesModel();
 
-        if($processosPartesModel->where('nome', $parte['nome'])
-                                ->findColumn('id_parte') != null){
+        // Confere se a parte já existe.
+        $jaExisteParte = $processosPartesModel->where('nome', $parte['nome'])->first();
+
+        if ($jaExisteParte) {
+            // Se a Parte já existe, recurera sua ID.
+            $idParteProcesso = $jaExisteParte['id_parte'];
+        } else {
+            // Se a Parte não existe, insira um novo record.
             $data = [
-                    'nome'               => $parte['nome'],
+                'nome' => $parte['nome'],
             ];
             $processosPartesModel->insert($data);
-            $idParteProcesso = $processosPartesModel->where('nome', $parte['nome'])
-            ->findColumn('id_parte');
-        }else{
-            $idParteProcesso = $processosPartesModel->where('nome', $parte['nome'])
-                                                    ->findColumn('id_parte');
+
+            // Reupera o ID da parte inserida.
+            $idParteProcesso = $processosPartesModel->insertID();
         }
-            $parteProcesso = [
-                'id_parte'      => $idParteProcesso,
-                'id_processo'   => $idProcesso,
-                'polo'          => $parte['polo'],
-            ];
-            $processosPartesModel->salvarParteDoProcesso($parteProcesso);
-    }
 
-    private function salvarAdvogados($advogado){
-
-        $intimacoesAdvogadosModel = new IntimacoesAdvogadosModel();
-        $data = [
-                
-            'id'                => $advogado['id'],
-            'comunicacao_id'    => $advogado['comunicacao_id'],
-            'advogado_id'       => $advogado['advogado']['id'],    
-            'advogado_nome'     => $advogado['advogado']['nome'],
-            'advogado_oab'      => $advogado['advogado']['numero_oab'],
-            'advogado_oab_uf'   => $advogado['advogado']['uf_oab'],
-            'created_at'        => $advogado['created_at'],
-            'updated_at'        => $advogado['updated_at'],
+        $parteProcesso = [
+            'id_parte'    => $idParteProcesso,
+            'id_processo' => $idProcesso,
+            'polo'        => $parte['polo'],
         ];
-        $intimacoesAdvogadosModel->save($data);
+
+        // Assuming salvarParteDoProcesso handles potential duplicates based on id_parte and id_processo
+        $processosPartesModel->salvarParteDoProcesso($parteProcesso);
     }
+        private function salvarAdvogados($advogado){
+
+            $intimacoesAdvogadosModel = new IntimacoesAdvogadosModel();
+            $data = [
+                    
+                'id'                => $advogado['id'],
+                'comunicacao_id'    => $advogado['comunicacao_id'],
+                'advogado_id'       => $advogado['advogado']['id'],    
+                'advogado_nome'     => $advogado['advogado']['nome'],
+                'advogado_oab'      => $advogado['advogado']['numero_oab'],
+                'advogado_oab_uf'   => $advogado['advogado']['uf_oab'],
+                'created_at'        => $advogado['created_at'],
+                'updated_at'        => $advogado['updated_at'],
+            ];
+            $intimacoesAdvogadosModel->save($data);
+        }
 }

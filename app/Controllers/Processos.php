@@ -7,8 +7,7 @@ use App\Controllers\BaseController;
 class Processos extends BaseController
 {
 
-    public function index()
-    {
+    public function index(){
         $data = [
             'img'       =>  'vazio.png',
             'titulo'    => 'Processos',
@@ -34,7 +33,7 @@ class Processos extends BaseController
                 ['data' => $processo['siglaTribunal'], 'class' =>'col'], //Ajusta a largura desta coluna.
                 $processo['nomeOrgao'],
                 '<div class="btn-group">
-                    <a href="' . base_url('processos/editar/' . $processo['id_processo']) . '" class="btn btn-primary">
+                    <a href="' . base_url('processos/consultarprocesso/' . $processo['id_processo']) . '" class="btn btn-primary">
                         <i class="fas fa-edit"></i> Editar
                     </a>
                     <a href="' . base_url('processos/excluir/' . $processo['id_processo']) . '" class="btn btn-danger">
@@ -77,11 +76,21 @@ class Processos extends BaseController
      * Esta função que irá salvar os dados do processo no db
      * @param int $id
      */
-    public function editar(int $id){
+    public function salvar(int $id=null){
+
+        if($id === null){
+            //TODO metodo para salvar novo processo
+        }else{
+            //TODO metodo para editar processo
+        }
 
         
     }
 
+    /**
+     * Exibe os dados individuais do processo
+     * @param int $id
+     */
     public function consultarProcesso(int $id=null){
         $processosModel = model('ProcessosModel');
         $partesProcessoModel = model('ProcessosPartesModel');

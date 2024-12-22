@@ -4,7 +4,7 @@ namespace App\Libraries;
 
 use App\Models\ProcessosMovimentosModel;
 use Exception;
-
+ 
 class ReceberMovimentosDatajud{
 
     public function receberMovimentos($numeroProcesso){
@@ -42,6 +42,8 @@ class ReceberMovimentosDatajud{
         $response = curl_exec($ch);
         curl_close($ch);
         $resultados = json_decode($response);
+        echo '<pre>';
+        print_r($resultados);
 
         if (empty($resultados->hits->hits[0])) {
             return ['erro' => "Erro! Não foi possível encontrar dados do processo. Isso pode acontecer porque ele é sigiloso ou está tramitando em outro tribunal."];
