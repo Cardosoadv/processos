@@ -6,8 +6,7 @@ use App\Controllers\BaseController;
 
 class Testes extends BaseController
 {
-    public function index()
-    {
+    public function index() {
         $permission['processos']    = (auth()->user()->can('module.processos'));
         $permission['pessoas']      = (auth()->user()->can('module.pessoas'));
         $permission['tarefas']      = (auth()->user()->can('module.tarefas'));
@@ -20,13 +19,10 @@ class Testes extends BaseController
 
 
     public function testes(){
-        $data = [
-            'titulo'    => 'Testes',
-            'anotacoes' => [ 'anotacoes' => [] ],
-            'data'      => [],
-        ];
-        $data['img'] = 'vazio.png';
-        return view('testes', $data);
+        $partesProcessosModel = model('ProcessosPartesModel');
+        $partes = $partesProcessosModel->deletarParteDoProcesso(1);
+        echo '<pre>';
+        var_dump($partes);
     }
 
 }

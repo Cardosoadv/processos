@@ -79,52 +79,103 @@ class Processos extends BaseController
      */
     public function salvar(int $id=null){
 
+        $partesProcessoModel = model('ProcessosPartesModel');
+        $processosModel = model('ProcessosModel');
+
         if($id === null){
-            //TODO metodo para salvar novo processo
-        }else{
-            //TODO metodo para editar processo
-            $poloAtivo = $this->request->getPost('poloAtivo');
-            $poloPassivo = $this->request->getPost('poloPassivo');
+            //Metódo para salvar novo processo
+
+            //Binding de campos do formulário
+            $poloAtivo = $this->request->getPost('poloAtivo[]');
+            $poloPassivo = $this->request->getPost('poloPassivo[]');
+            $data = [
+                'tipoDocumento'                 => $this->request->getPost('tipoDocumento'),
+                'nomeOrgao'                     => $this->request->getPost('nomeOrgao'),
+                'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
+                'dataDistribuicao'               => $this->request->getPost('dataDistribuicao'),
+                'valorCausa'                     => $this->request->getPost('valorCausa'),
+                'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
+                'comentario'                    => $this->request->getPost('comentario'),
+            ];
             
+            //Salvando Polo Ativo
+            foreach ($poloAtivo as $ativo) {
+
+                if($ativo === '' || $ativo === null){
+                    continue;
+                }
+                $parte = [
+                    'nome' => $ativo,
+                    'polo' => 'A',
+                ];
+                $this->salvarPartes($parte, $id);
+            }
+            //Salvando Polo Passivo
+            foreach ($poloPassivo as $passivo) {
+
+                if($passivo === '' || $passivo === null){
+                    continue;
+                }
+                $parte = [
+                    'nome' => $passivo,
+                    'polo' => 'P',
+                ];
+                $this->salvarPartes($parte, $id);
+            }
+            //Salvando Processo
+            $processosModel->insert($data);
+            //Recuperando ID do processo para redirecionar para a página de consulta
+            $id = $processosModel->insertID();
+            return redirect()->to(base_url('processos/consultarprocesso/' . $id));
+
+        }else{
+            //Método para editar processo
+
+            //Binding de campos do formulário
+            $poloAtivo = $this->request->getPost('poloAtivo[]');
+            $poloPassivo = $this->request->getPost('poloPassivo[]');
             $data = [
                 'id_processo'                   => $this->request->getPost('id_processo'),
                 'tipoDocumento'                 => $this->request->getPost('tipoDocumento'),
                 'siglaTribunal'                 => $this->request->getPost('siglaTribunal'),
                 'nomeOrgao'                     => $this->request->getPost('nomeOrgao'),
                 'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
-                'tribunal_id'                   => $this->request->getPost('tribunal_id'),
-                'orgao_id'                      => $this->request->getPost('orgao_id'),
-                'dt_distribuicao'               => $this->request->getPost('dt_distribuicao'),
-                'vlr_causa'                     => $this->request->getPost('vlr_causa'),
+                'dataDistribuicao'               => $this->request->getPost('dataDistribuicao'),
+                'valorCausa'                     => $this->request->getPost('valorCausa'),
                 'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
                 'comentario'                    => $this->request->getPost('comentario'),
             ];
-            $partesProcessoModel = model('ProcessosPartesModel');
-            $partesProcessoModel->deletarParteDoProcesso($data['id_processo']);
+            //Limpa as partes do processo
+            $partesProcessoModel->deletarParteDoProcesso($id);
+
+            //Salva Polo Ativo do processo
             foreach ($poloAtivo as $ativo) {
 
+                if($ativo === '' || $ativo === null){
+                    continue;
+                }
                 $parte = [
                     'nome' => $ativo,
                     'polo' => 'A',
                 ];
-                $this->salvarPartes($parte, $data['id_processo']);
+                $this->salvarPartes($parte, $id);
             }
+            //Salva Polo Passivo do processo
             foreach ($poloPassivo as $passivo) {
 
+                if($passivo === '' || $passivo === null){
+                    continue;
+                }
                 $parte = [
                     'nome' => $passivo,
                     'polo' => 'P',
                 ];
-                $this->salvarPartes($parte, $data['id_processo']);
+                $this->salvarPartes($parte, $id);
             }
-            $processosModel = model('ProcessosModel');
-            $processosModel->update($data);
-
-            return redirect()->to(base_url('processos/consultarprocesso/' . $data['id_processo']));
-
+            //Atualiza o processo e redireciona para a página de consulta
+            $processosModel->update($id, $data);
+            return redirect()->to(base_url('processos/consultarprocesso/' . $id));
         }
-
-        
     }
 
     /**

@@ -20,7 +20,7 @@ function addPassivo() {
 </script>
 
 
-<form method="post" id="form_processo" name="form_processo" action="<?= site_url('processos/salvar') ?>" enctype="multipart/form-data">
+<form method="post" id="form_processo" name="form_processo" action="<?= site_url('processos/salvar') ?>/<?= $processo['id_processo']?>" enctype="multipart/form-data">
     <input type="hidden" name="id_processo" class="form-control" value="<?= $processo['id_processo'] ?? '' ?>">
         
     <div class="row mb-3">
@@ -56,7 +56,7 @@ function addPassivo() {
                 <div class="form-group">
                 <?php if($poloAtivo):?>
                     <?php foreach ($poloAtivo as $ativo):?>
-                        <input type="text" class="form-control mt-2" name="ativo[]" value="<?= $ativo['nome'] ?? '' ?>">                        
+                        <input type="text" class="form-control mt-2" name="poloAtivo[]" value="<?= $ativo['nome'] ?? '' ?>">                        
                     <?php endforeach; ?>
                 <?php else:?>
                     <input type="text" class="form-control mt-2" name="poloAtivo[]" value="">
@@ -95,12 +95,12 @@ function addPassivo() {
 
         <div class="form-group col">
             <label>Data Distribuição</label>
-            <input type="date" name="dt_distribuicao" class="form-control" value="<?= $processo['dataDistribuicao'] ?? '' ?>">
+            <input type="date" name="dataDistribuicao" class="form-control" value="<?= $processo['dataDistribuicao'] ?? '' ?>">
         </div>
 
         <div class="form-group col">
             <label>Valor da Causa</label>
-            <input type="number" step="0.01" name="vlr_causa" class="form-control" value="<?= $processo['valorCausa'] ?? '' ?>">
+            <input type="number" step="0.01" name="valorCausa" class="form-control" value="<?= $processo['valorCausa'] ?? '' ?>">
         </div>
 
         <div class="form-group col">
