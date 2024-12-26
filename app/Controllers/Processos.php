@@ -238,6 +238,9 @@ class Processos extends BaseController
         return view('processos/consultarProcesso', $data);
     }
 
+    /**
+     * Inserir novo processo
+     */
     public function novo(){
         $data = [
             'titulo'    => 'Novo Processo',
