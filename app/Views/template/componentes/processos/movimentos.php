@@ -18,7 +18,7 @@
                     <tbody>
                         <tr>
                             <td><?= date('d/m/Y', strtotime($movimentos['dataHora'])) ?></td>
-                            <td><?= $movimento['nome'] ?></td>
+                            <td><?= $movimentos['nome'] ?></td>
                         </tr>
                     </tbody>
                 <?php endforeach; ?>

@@ -184,7 +184,7 @@ class Processos extends BaseController
     /**
      * Insere uma parte no processo
      * @param array $parte [strig nome, string polo]
-     * @param int $idProcesso - ID do processo
+     * @param int $idProcesso ID do processo
      * @return void
      */
     public function salvarPartes(array $parte, int $idProcesso){
@@ -233,8 +233,9 @@ class Processos extends BaseController
         $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
         $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
         $data['anotacoes'] = model('ProcessosAnotacoesModel')->where('processo_id', $id)->get()->getResultArray();
-        $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->get()->getResultArray();
-        $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->get()->getResultArray();
+        $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
+        $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
+        $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
         return view('processos/consultarProcesso', $data);
     }
 
@@ -258,7 +259,5 @@ class Processos extends BaseController
         $processosAnotacoesModel->insert($data);
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
     }
-
-
 
 }

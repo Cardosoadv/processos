@@ -28,6 +28,11 @@
           <!--begin::Row-->
           <?= $this->include('template/componentes/breadcrumbs') ?>
           <!--end::Row-->
+
+          <!-- Nova seção de etiquetas -->
+          <?= $this->include('template/componentes/processos/etiquetas') ?>
+          <!-- Fim da seção de etiquetas -->
+
         </div><!--end::Container-->
       </div><!--end::App Content Header-->
 
@@ -76,13 +81,36 @@
   </main><!--end::App Main-->
   <?= $this->include('template/modals/change_user_img.php') ?>
   <?= $this->include('template/modals/anotacao.php') ?>
+  <?= $this->include('template/modals/badge.php') ?>
   <?= $this->include('template/footer') ?>
 
 
   <script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
   <script src="<?= base_url('public/main.js')?>">
   </script>
-
+<script>
+        // Adicione este código junto com o JavaScript existente
+        function addNewTag() {
+            const tagName = document.getElementById('tagName').value;
+            const tagColor = document.getElementById('tagColor').value;
+            
+            if (tagName) {
+                const tagsContainer = document.querySelector('.d-flex.flex-wrap.gap-2');
+                const newTag = document.createElement('span');
+                newTag.className = `badge ${tagColor}`;
+                newTag.textContent = tagName;
+                
+                // Inserir antes do botão de adicionar
+                const addButton = tagsContainer.querySelector('.btn-outline-secondary');
+                tagsContainer.insertBefore(newTag, addButton);
+                
+                // Fechar o modal e limpar o formulário
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addTagModal'));
+                modal.hide();
+                document.getElementById('tagForm').reset();
+            }
+        }
+    </script>
 		
 
 </body><!--end::Body-->

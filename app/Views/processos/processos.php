@@ -1,190 +1,164 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><!--begin::Head-->
-
+<html lang="pt-BR">
 <head>
-  <title><?= $titulo ?></title><!--begin::Primary Meta Tags-->
-  <?= $this->include('template/header') ?>
-</head><!--end::Head-->
+    <title><?= $titulo ?></title>
+    <?= $this->include('template/header') ?>
+</head>
 
-
-<!--begin::Body-->
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-  <!--begin::App Wrapper-->
-  <div class="app-wrapper">
-    <?= $this->include('template/nav') ?>
-    <?= $this->include('template/sidebar') ?>
+    <div class="app-wrapper">
+        <?= $this->include('template/nav') ?>
+        <?= $this->include('template/sidebar') ?>
 
-    <!--begin::App Main-->
-    <main class="app-main">
-      <!--begin::App Content Header-->
-      <div class="app-content-header">
-        <!--begin::Container-->
-        <div class="container-fluid">
-          <!--begin::Row-->
-          <?= $this->include('template/componentes/breadcrumbs') ?>
-          <!--end::Row-->
-        </div>
-        <!--end::Container-->
-      </div><!--end::App Content Header-->
-      
-      <!--begin::App Content-->
-      <div class="app-content">
-        <!--begin::Container-->
-        <div class="container-fluid">
-          <!--begin::Row-->
-          <div class="row">
-            <div class="col-9">
-              
-              <!-- Início do Formulário -->
-              <form action="" method="get">
-                <div class="input-group mb-3">
-                  <input type="text" name="s" class="form-control" placeholder="Pesquisar..." aria-label="Pequisar" aria-describedby="button-addon2">
-                  <button class="btn btn-outline-secondary" type="submit" id="search">Pesquisar</button>
+        <main class="app-main">
+            <div class="app-content-header">
+                <div class="container-fluid">
+                    <?= $this->include('template/componentes/breadcrumbs') ?>
                 </div>
-              </form>
-              <div class="container mt-4">
-                <div class="d-flex justify-content-end">
-                  <a class="btn btn-success mb-2" href="<?php echo base_url('processos/novo/'); ?>">Novo Pocesso</a>
+            </div>
+            
+            <div class="app-content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Main Content Column -->
+                        <div class="col-lg-9">
+                            <!-- Search Form -->
+                            <form action="" method="get" class="mb-3">
+                                <div class="input-group">
+                                    <input 
+                                        type="text" 
+                                        name="s" 
+                                        class="form-control" 
+                                        placeholder="Pesquisar..." 
+                                        aria-label="Pesquisar">
+                                    <button class="btn btn-outline-secondary" type="submit">
+                                        Pesquisar
+                                    </button>
+                                </div>
+                            </form>
+
+                            <!-- Action Button and Messages -->
+                            <div class="container">
+                                <div class="d-flex justify-content-end mb-3">
+                                    <a href="<?= base_url('processos/novo/') ?>" 
+                                       class="btn btn-success">
+                                        Novo Processo
+                                    </a>
+                                </div>
+
+                                <?php if (isset($_SESSION['msg'])): ?>
+                                    <div class="callout callout-info">
+                                        <?= $_SESSION['msg'] ?>
+                                    </div>
+                                <?php endif; ?>
+
+                                <!-- Data Table -->
+                                <div class="mt-3">
+                                    <?= $table ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar -->
+                        <div class="col-lg-3">
+                            <section class="mb-4">
+                                <h3>Últimos Processos Movimentados</h3>
+                                <div id="processoMovimentados" class="list-group"></div>
+                            </section>
+
+                            <section>
+                                <h3>Últimas Intimações</h3>
+                                <div id="intimacoes" class="list-group"></div>
+                            </section>
+                        </div>
+                    </div>
                 </div>
-                <?php
-                if (isset($_SESSION['msg'])) {
-                  echo '<div class="callout callout-info">';
-                  echo $_SESSION['msg'];
-                  echo '</div>';
-                }
-                ?>
-                <div class="mt-3">
-                  <?= $table ?>
+            </div>
+        </main>
+
+        <?= $this->include('template/modals/change_user_img.php') ?>
+        <?= $this->include('template/footer') ?>
+    </div>
+
+    <script>
+        const BASE_URL = '<?= base_url() ?>';
+        
+        // Utility functions
+        const formatDate = timestamp => {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('pt-BR');
+        };
+
+        const createProcessLink = (numeroProcesso) => {
+            return `${BASE_URL}/processos/editarpornumerodeprocesso/${numeroProcesso}`;
+        };
+
+        const handleFetchError = (error, elementId) => {
+            console.error('Erro:', error);
+            document.getElementById(elementId).innerHTML = `
+                <div class="alert alert-danger">
+                    Erro ao carregar informações. Tente novamente mais tarde.
                 </div>
-              </div>
-            </div><!-- Fim do Formulário -->
-            <div class="col-3"><!-- Inicio SideBar do Formulario -->
-              <h3>Últimos Processos Movimentados</h3>
-              <div id="processoMovimentados"></div>
+            `;
+        };
 
-              <h3>Últimas Intimações</h3>
-              <div id="intimacoes"></div>
+        // Process data rendering
+        const renderProcessItem = (item) => `
+            <div class="list-group-item">
+                <a href="${createProcessLink(item.numero_processo)}" class="text-primary">
+                    ${item.numero_processo}
+                </a>
+                <p class="mb-1">${item.nome || 'Sem descrição'}</p>
+                <small class="text-muted">Data: ${formatDate(item.dataHora)}</small>
+            </div>
+        `;
 
-            </div> <!-- Fim do SideBar do Formulario -->
-          </div> <!-- Fim do Row -->
-        </div><!--end::Container-->
-      </div><!--end::App Content-->
-    </main><!--end::App Main-->
+        const renderIntimacaoItem = (item) => `
+            <div class="list-group-item">
+                <a href="${createProcessLink(item.numero_processo)}" class="text-primary">
+                    ${item.numero_processo}
+                </a>
+                <p class="mb-1">${item.tipoComunicacao || 'Sem descrição'}</p>
+                <small class="text-muted">Data: ${formatDate(item.data_disponibilizacao)}</small>
+            </div>
+        `;
 
-    <?= $this->include('template/modals/change_user_img.php') ?>
-    <?= $this->include('template/footer') ?>
-</body><!--end::Body-->
-
-<script>
-
-  function formatDate(timestamp) {
-    const date = new Date(timestamp);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  }
-
-  function buscarProcesso() {
-    fetch("<?=base_url('processos/processosmovimentados/120')?>") // Faz a requisição GET
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`); // Trata erros de requisição
-        }
-        return response.json(); // Converte a resposta para JSON
-      })
-      .then(data => {
-        // Manipula os dados recebidos (data)
-        const processoMovimentadosDiv = document.getElementById('processoMovimentados');
-        processoMovimentadosDiv.innerHTML = ''; // Limpa o conteúdo atual da div
-
-        // Exibindo os dados.
-        if (data && Array.isArray(data)) { // Verifica se data existe e é um array
-          data.forEach(item => {
-            const paragrafo = document.createElement('p');
-
-            // Construindo o link para o número do processo
-            const linkProcesso = document.createElement('a');
-            linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`; // Substitua pela URL correta
-            linkProcesso.textContent = item.numero_processo;
-
-            // Construindo o parágrafo com o link
-            paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}, Data: ${formatDate(item.dataHora) || 'Sem descrição'}`;
-
-            // Adicionando o parágrafo à div
-            processoMovimentadosDiv.appendChild(paragrafo);
-          });
-        } else if (data && typeof data === 'object') { // Se for um objeto
-            for (const key in data) {
-                const paragrafo = document.createElement('p');
-                paragrafo.textContent = `${key}: ${data[key]}`;
-                processoMovimentadosDiv.appendChild(paragrafo);
+        // Data fetching functions
+        async function fetchProcessos() {
+            try {
+                const response = await fetch(`${BASE_URL}/processos/processosmovimentados/30`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                
+                const container = document.getElementById('processoMovimentados');
+                container.innerHTML = Array.isArray(data) && data.length > 0
+                    ? data.map(renderProcessItem).join('')
+                    : '<div class="list-group-item">Nenhum processo encontrado</div>';
+            } catch (error) {
+                handleFetchError(error, 'processoMovimentados');
             }
-        } else {
-            processoMovimentadosDiv.textContent = "Nenhum dado encontrado ou formato inválido.";
         }
-      })
-      .catch(error => {
-        // Trata erros durante o processo (ex: erro de rede, erro no JSON)
-        console.error('Erro:', error);
-        const processoMovimentadosDiv = document.getElementById('processoMovimentados');
-        processoMovimentadosDiv.textContent = 'Erro ao carregar informações.';
-      });
-  }
 
-  function buscarIntimacoes() {
-    fetch("<?=base_url('intimacoes/intimacoesporperiodo/120')?>") // Faz a requisição GET
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Erro na requisição: ${response.status}`); // Trata erros de requisição
+        async function fetchIntimacoes() {
+            try {
+                const response = await fetch(`${BASE_URL}/intimacoes/intimacoesporperiodo/30`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                
+                const container = document.getElementById('intimacoes');
+                container.innerHTML = Array.isArray(data) && data.length > 0
+                    ? data.map(renderIntimacaoItem).join('')
+                    : '<div class="list-group-item">Nenhuma intimação encontrada</div>';
+            } catch (error) {
+                handleFetchError(error, 'intimacoes');
+            }
         }
-        return response.json(); // Converte a resposta para JSON
-      })
-      .then(data => {
-        // Manipula os dados recebidos (data)
-        const intimacoesDiv = document.getElementById('intimacoes');
-        intimacoesDiv.innerHTML = ''; // Limpa o conteúdo atual da div
 
-        // Exemplo de como exibir os dados. Adapte conforme a estrutura do seu JSON.
-        if (data && Array.isArray(data)) { // Verifica se data existe e é um array
-          data.forEach(item => {
-            const paragrafo = document.createElement('p');
-
-          // Construindo o link para o número do processo
-          const linkProcesso = document.createElement('a');
-          linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`;
-          linkProcesso.textContent = item.numero_processo;
-
-          // Construindo o parágrafo com o link
-          paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.tipoComunicacao || 'Sem descrição'}, Data: ${formatDate(item.data_disponibilizacao) || 'Sem descrição'}`;
-
-          // Adicionando o parágrafo à div
-          intimacoesDiv.appendChild(paragrafo);
-
-          });
-          } else if (data && typeof data === 'object') { // Se for um objeto
-              for (const key in data) {
-                  const paragrafo = document.createElement('p');
-                  paragrafo.textContent = `${key}: ${data[key]}`;
-                  intimacoesDiv.appendChild(paragrafo);
-              }
-          } else {
-              intimacoesDiv.textContent = "Nenhum dado encontrado ou formato inválido.";
-          }
-        })
-        .catch(error => {
-          // Trata erros durante o processo (ex: erro de rede, erro no JSON)
-          console.error('Erro:', error);
-          const intimacoesDiv = document.getElementById('intimacoes');
-          intimacoesDiv.textContent = 'Erro ao carregar informações.';
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchProcessos();
+            fetchIntimacoes();
         });
-    }
-    
-// Chama a função para buscar os dados assim que a página carrega
-window.onload = buscarProcesso;
-// Chama a função para buscar os dados assim que a página carrega
-window.onload = buscarIntimacoes;
-</script>
-
-
+    </script>
+</body>
 </html>

@@ -71,5 +71,13 @@ class ProcessosModel extends Model
         ->get();
         return $query->getResultArray();
     }
+    public function joinEtiquetasProcessos($id_processo){
+        $query = $this->db->table('processos_etiquetas as pe')
+        ->join('etiquetas as e', 'pe.etiqueta_id = e.id_etiqueta', 'left')
+        ->select('e.id_etiqueta, e.nome, e.cor')
+        ->where('pe.processo_id', $id_processo)
+        ->get();
+        return $query->getResultArray();
+    }
 
 }
