@@ -34,7 +34,7 @@
           <!--begin::Row-->
           <div class="row">
             <div class="col-9">
-               
+              
               <!-- Início do Formulário -->
               <form action="" method="get">
                 <div class="input-group mb-3">
@@ -59,10 +59,12 @@
               </div>
             </div><!-- Fim do Formulário -->
             <div class="col-3"><!-- Inicio SideBar do Formulario -->
-              <h3>Ultimos Processos Movimentados</h3>
+              <h3>Últimos Processos Movimentados</h3>
               <div id="processoMovimentados"></div>
-              <h3>Ultimas Intimações</h3>
+
+              <h3>Últimas Intimações</h3>
               <div id="intimacoes"></div>
+
             </div> <!-- Fim do SideBar do Formulario -->
           </div> <!-- Fim do Row -->
         </div><!--end::Container-->
@@ -75,15 +77,15 @@
 
 <script>
 
-function formatDate(timestamp) {
+  function formatDate(timestamp) {
     const date = new Date(timestamp);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
-}
+  }
 
-function buscarProcesso() {
+  function buscarProcesso() {
     fetch("<?=base_url('processos/processosmovimentados/120')?>") // Faz a requisição GET
       .then(response => {
         if (!response.ok) {
@@ -96,21 +98,21 @@ function buscarProcesso() {
         const processoMovimentadosDiv = document.getElementById('processoMovimentados');
         processoMovimentadosDiv.innerHTML = ''; // Limpa o conteúdo atual da div
 
-        // Exemplo de como exibir os dados. Adapte conforme a estrutura do seu JSON.
+        // Exibindo os dados.
         if (data && Array.isArray(data)) { // Verifica se data existe e é um array
           data.forEach(item => {
             const paragrafo = document.createElement('p');
 
-  // Construindo o link para o número do processo
-  const linkProcesso = document.createElement('a');
-  linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`; // Substitua pela URL correta
-  linkProcesso.textContent = item.numero_processo;
+            // Construindo o link para o número do processo
+            const linkProcesso = document.createElement('a');
+            linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`; // Substitua pela URL correta
+            linkProcesso.textContent = item.numero_processo;
 
-  // Construindo o parágrafo com o link
-  paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}, Data: ${formatDate(item.dataHora) || 'Sem descrição'}`;
+            // Construindo o parágrafo com o link
+            paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}, Data: ${formatDate(item.dataHora) || 'Sem descrição'}`;
 
-  // Adicionando o parágrafo à div
-  processoMovimentadosDiv.appendChild(paragrafo);
+            // Adicionando o parágrafo à div
+            processoMovimentadosDiv.appendChild(paragrafo);
           });
         } else if (data && typeof data === 'object') { // Se for um objeto
             for (const key in data) {
@@ -130,58 +132,56 @@ function buscarProcesso() {
       });
   }
 
+  function buscarIntimacoes() {
+    fetch("<?=base_url('intimacoes/intimacoesporperiodo/120')?>") // Faz a requisição GET
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Erro na requisição: ${response.status}`); // Trata erros de requisição
+        }
+        return response.json(); // Converte a resposta para JSON
+      })
+      .then(data => {
+        // Manipula os dados recebidos (data)
+        const intimacoesDiv = document.getElementById('intimacoes');
+        intimacoesDiv.innerHTML = ''; // Limpa o conteúdo atual da div
+
+        // Exemplo de como exibir os dados. Adapte conforme a estrutura do seu JSON.
+        if (data && Array.isArray(data)) { // Verifica se data existe e é um array
+          data.forEach(item => {
+            const paragrafo = document.createElement('p');
+
+          // Construindo o link para o número do processo
+          const linkProcesso = document.createElement('a');
+          linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`;
+          linkProcesso.textContent = item.numero_processo;
+
+          // Construindo o parágrafo com o link
+          paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.tipoComunicacao || 'Sem descrição'}, Data: ${formatDate(item.data_disponibilizacao) || 'Sem descrição'}`;
+
+          // Adicionando o parágrafo à div
+          intimacoesDiv.appendChild(paragrafo);
+
+          });
+          } else if (data && typeof data === 'object') { // Se for um objeto
+              for (const key in data) {
+                  const paragrafo = document.createElement('p');
+                  paragrafo.textContent = `${key}: ${data[key]}`;
+                  intimacoesDiv.appendChild(paragrafo);
+              }
+          } else {
+              intimacoesDiv.textContent = "Nenhum dado encontrado ou formato inválido.";
+          }
+        })
+        .catch(error => {
+          // Trata erros durante o processo (ex: erro de rede, erro no JSON)
+          console.error('Erro:', error);
+          const intimacoesDiv = document.getElementById('intimacoes');
+          intimacoesDiv.textContent = 'Erro ao carregar informações.';
+        });
+    }
+    
 // Chama a função para buscar os dados assim que a página carrega
 window.onload = buscarProcesso;
-
-
-function buscarIntimacoes() {
-  fetch("<?=base_url('intimacoes/intimacoesporperiodo/120')?>") // Faz a requisição GET
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Erro na requisição: ${response.status}`); // Trata erros de requisição
-      }
-      return response.json(); // Converte a resposta para JSON
-    })
-    .then(data => {
-      // Manipula os dados recebidos (data)
-      const intimacoesDiv = document.getElementById('intimacoes');
-      intimacoesDiv.innerHTML = ''; // Limpa o conteúdo atual da div
-
-      // Exemplo de como exibir os dados. Adapte conforme a estrutura do seu JSON.
-      if (data && Array.isArray(data)) { // Verifica se data existe e é um array
-        data.forEach(item => {
-          const paragrafo = document.createElement('p');
-
-        // Construindo o link para o número do processo
-        const linkProcesso = document.createElement('a');
-        linkProcesso.href = `<?=base_url("processos/editarpornumerodeprocesso")?>/${item.numero_processo}`; // Substitua pela URL correta
-        linkProcesso.textContent = item.numero_processo;
-
-        // Construindo o parágrafo com o link
-        paragrafo.innerHTML = `${linkProcesso.outerHTML}, Descrição: ${item.nome || 'Sem descrição'}, Data: ${formatDate(item.dataHora) || 'Sem descrição'}`;
-
-        // Adicionando o parágrafo à div
-        intimacoesDiv.appendChild(paragrafo);
-
-        });
-        } else if (data && typeof data === 'object') { // Se for um objeto
-            for (const key in data) {
-                const paragrafo = document.createElement('p');
-                paragrafo.textContent = `${key}: ${data[key]}`;
-                processoMovimentadosDiv.appendChild(paragrafo);
-            }
-        } else {
-            processoMovimentadosDiv.textContent = "Nenhum dado encontrado ou formato inválido.";
-        }
-      })
-      .catch(error => {
-        // Trata erros durante o processo (ex: erro de rede, erro no JSON)
-        console.error('Erro:', error);
-        const processoMovimentadosDiv = document.getElementById('intimacoes');
-        processoMovimentadosDiv.textContent = 'Erro ao carregar informações.';
-      });
-  }
-
 // Chama a função para buscar os dados assim que a página carrega
 window.onload = buscarIntimacoes;
 </script>

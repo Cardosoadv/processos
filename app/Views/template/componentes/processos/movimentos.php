@@ -1,7 +1,7 @@
 <!--begin::Accordion-->
 <div class="card card-primary card-outline mb-4"><!--begin::Header-->
     <div class="card-header">
-        <div class="card-title">Intimações</div>
+        <div class="card-title">Movimentação</div>
     </div><!--end::Header-->
     <!--begin::Body-->
     <div class="card-body">
@@ -9,16 +9,16 @@
             <thead>
                 <tr>
                     <th scope="col">Data</th>
-                    <th scope="col">Intimação</th>
+                    <th scope="col">Movimento</th>
                 </tr>
             </thead>
 
-            <?php if ($intimacoes ?? null) : ?>
-                <?php foreach ($intimacoes as $intimacao) : ?>
+            <?php if ($movimentacoes ?? null) : ?>
+                <?php foreach ($movimentacoes as $movimentos) : ?>
                     <tbody>
                         <tr>
-                            <td><?= date('d/m/Y', strtotime($intimacao['data_disponibilizacao'])) ?></td>
-                            <td><?= $intimacao['tipoComunicacao'] ?></td>
+                            <td><?= date('d/m/Y', strtotime($movimentos['dataHora'])) ?></td>
+                            <td><?= $movimento['nome'] ?></td>
                         </tr>
                     </tbody>
                 <?php endforeach; ?>

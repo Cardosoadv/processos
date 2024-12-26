@@ -59,6 +59,14 @@
             </div>
             <!--end::Accordion-->
             <!-- Fim das Intimações -->
+             
+             <!-- Inicio dos Movimentos -->
+            <div>
+              <?= $this->include('template/componentes/processos/movimentos') ?>
+            </div>
+            <!--end::Accordion-->
+            <!-- Fim dos Movimentos -->
+            </div>
           </div> <!-- Fim do SideBar do Formulario -->
         </div> <!-- Fim do Row -->
       </div>
