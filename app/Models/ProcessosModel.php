@@ -23,10 +23,10 @@ class ProcessosModel extends Model
         'ativo',
         'status',
         'numeroprocessocommascara',
-        'risco',
+        'risco', //'Provável', 'Possível', 'Remoto'
         'dataDistribuicao',
         'valorCausa',
-        'resultado', //'Não Finalizado', 'Sucesso', 'Sucesso Parcial'
+        'resultado', //'Não Finalizado', 'Sucesso', 'Sucesso Parcial', 'Derrota'
         'valorCondenacao',
         'comentario',
     ];

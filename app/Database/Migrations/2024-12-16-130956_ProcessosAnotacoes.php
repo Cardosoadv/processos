@@ -9,7 +9,7 @@ class ProcessosAnotacoes extends Migration
     private $Fields =[
         'dataDistribuicao'          => ['type' => 'date', 'null' => true, 'after' =>'risco'],
         'valorCausa'                => ['type' => 'double', 'null' => true, 'after' =>'dataDistribuicao'],
-        'resultado'                 => ['type' => 'ENUM', 'constraint'=>['Não Finalizado', 'Sucesso', 'Sucesso Parcial'], 'default' => 'Não Finalizado', 'after' =>'dataDistribuicao'],
+        'resultado'                 => ['type' => 'ENUM', 'constraint'=>['Não Finalizado', 'Sucesso', 'Sucesso Parcial', 'Derrota'], 'default' => 'Não Finalizado', 'after' =>'dataDistribuicao'],
         'valorCondenacao'           => ['type' => 'double', 'null' => true, 'after' =>'resultado'],
         'comentario'                => ['type' => 'text', 'null' => true, 'after' =>'valorCondenacao'],
         ];

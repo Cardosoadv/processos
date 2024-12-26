@@ -9,8 +9,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="post" id="form_anotacao" name="form_anotacao" action="<?= site_url('/processos/adicionarAnotacao')?>/<?= $processo['id_processo'] ?>" enctype="multipart/form-data">
-                    <input type="hidden" name="processo_id" class="form-control"  value="<?= $processo['id_processo'] ?>">
+                <form method="post" id="form_anotacao" name="form_anotacao" action="<?= site_url('/processos/adicionarAnotacao')?>/<?= $processo['id_processo'] ?? '' ?>" enctype="multipart/form-data">
+                    <input type="hidden" name="processo_id" class="form-control"  value="<?= $processo['id_processo'] ?? '' ?>">
 
                     <!-- Inicio primeira linha formulário -->
                     <div class="row">

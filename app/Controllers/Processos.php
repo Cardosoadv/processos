@@ -71,7 +71,6 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/consultarprocesso/' . $processo['id_processo']));
     }
 
-    //TODO criar metodo de edição cumulado com novo processo
     /**
      * Editar por $Id
      * Esta função que irá salvar os dados do processo no db
@@ -94,8 +93,10 @@ class Processos extends BaseController
                 'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
                 'dataDistribuicao'               => $this->request->getPost('dataDistribuicao'),
                 'valorCausa'                     => $this->request->getPost('valorCausa'),
+                'risco'                         => $this->request->getPost('risco'),
                 'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
                 'comentario'                    => $this->request->getPost('comentario'),
+                'resultado'                     => $this->request->getPost('resultado'),
             ];
             
             //Salvando Polo Ativo
@@ -142,8 +143,10 @@ class Processos extends BaseController
                 'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
                 'dataDistribuicao'               => $this->request->getPost('dataDistribuicao'),
                 'valorCausa'                     => $this->request->getPost('valorCausa'),
+                'risco'                         => $this->request->getPost('risco'),
                 'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
                 'comentario'                    => $this->request->getPost('comentario'),
+                'resultado'                     => $this->request->getPost('resultado'),
             ];
             //Limpa as partes do processo
             $partesProcessoModel->deletarParteDoProcesso($id);
@@ -226,9 +229,20 @@ class Processos extends BaseController
         ];
         $data['img'] = 'vazio.png';
         $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
+        $numeroProcesso = $data['processo']['numero_processo'];
         $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
         $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
         $data['anotacoes'] = model('ProcessosAnotacoesModel')->where('processo_id', $id)->get()->getResultArray();
+        $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->get()->getResultArray();
+        $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->get()->getResultArray();
+        return view('processos/consultarProcesso', $data);
+    }
+
+    public function novo(){
+        $data = [
+            'titulo'    => 'Novo Processo',
+        ];
+        $data['img'] = 'vazio.png';
         return view('processos/consultarProcesso', $data);
     }
 

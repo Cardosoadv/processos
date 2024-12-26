@@ -47,10 +47,18 @@
             </div>
             <div class="col-4">
             <!-- Inicio SideBar do Formulario -->
+             <!-- Inicio das Anotações -->
             <div>
               <?= $this->include('template/componentes/processos/acordion') ?>
             </div>
             <!--end::Accordion-->
+            <!-- Fim das Anotações -->
+            <!-- Inicio das Intimações -->
+            <div>
+              <?= $this->include('template/componentes/processos/intimacoes') ?>
+            </div>
+            <!--end::Accordion-->
+            <!-- Fim das Intimações -->
           </div> <!-- Fim do SideBar do Formulario -->
         </div> <!-- Fim do Row -->
       </div>
@@ -70,26 +78,5 @@
 		
 
 </body><!--end::Body-->
-<script>
-
-  function mask(input) {
-    var value = input.value.replace(/\D/g, '').substring(0, 20);
-    const regex = /^(\d{7})(\d{2})(\d{4})(\d{1})(\d{2})(\d{4})$/;
-    const maskPartes = regex.exec(value);
-    if (!maskPartes) {
-      console.log("NUP inválida");
-    }
-    const primeiraParte = maskPartes[1];
-    const segundaParte = maskPartes[2];
-    const terceiraParte = maskPartes[3];
-    const quartaParte = maskPartes[4];
-    const quintaParte = maskPartes[5];
-    const sextaParte = maskPartes[6];
-    var mask = primeiraParte + "-" + segundaParte + "." + terceiraParte + "." + quartaParte + "." + quintaParte + "." + sextaParte;
-    input.value = mask;
-  }
-</script>
-
-
 
 </html>

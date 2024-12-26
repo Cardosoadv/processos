@@ -10,7 +10,7 @@
     <!--begin::Body-->
     <div class="card-body">
         <div class="accordion" id="#Anotações">
-            <?php if ($anotacoes) : ?>
+            <?php if ($anotacoes ?? null) : ?>
                 <?php foreach ($anotacoes as $anotacao) : ?>
                     <div class="accordion-item">
                         <h2 class="accordion-header"><button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#Anotacao<?= $anotacao['id_anotacao'] ?>" aria-expanded="false" aria-controls="Anotacao<?= $anotacao['id_anotacao'] ?>">
