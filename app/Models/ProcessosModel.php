@@ -74,10 +74,39 @@ class ProcessosModel extends Model
     public function joinEtiquetasProcessos($id_processo){
         $query = $this->db->table('processos_etiquetas as pe')
         ->join('etiquetas as e', 'pe.etiqueta_id = e.id_etiqueta', 'left')
-        ->select('e.id_etiqueta, e.nome, e.cor')
+        ->select('e.id_etiqueta, e.nome, e.cor, pe.processo_id')
         ->where('pe.processo_id', $id_processo)
         ->get();
         return $query->getResultArray();
+    }
+    /**
+     * Remove a etiqueta de um processo
+     * @param int $id_processo
+     * @param int $id_etiqueta
+     * 
+     */
+    public function addEtiqueta($id_processo, $id_etiqueta){
+        $query = $this->db->table('processos_etiquetas')
+        ->insert([
+            'processo_id' => $id_processo,
+            'etiqueta_id' => $id_etiqueta
+        ]);
+        return $this->db->affectedRows();
+    }
+
+
+    /**
+     * Remove a etiqueta de um processo
+     * @param int $id_processo
+     * @param int $id_etiqueta
+     * @return int Número de linhas afetadas
+     */
+    public function removeEtiqueta($id_processo, $id_etiqueta){
+        $query = $this->db->table('processos_etiquetas')
+        ->where('processo_id', $id_processo)
+        ->where('etiqueta_id', $id_etiqueta)
+        ->delete();
+        return $this->db->affectedRows();
     }
 
 }

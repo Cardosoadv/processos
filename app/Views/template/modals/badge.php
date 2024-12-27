@@ -3,25 +3,31 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addTagModalLabel">Adicionar Nova Etiqueta</h5>
+                <h5 class="modal-title" id="addTagModalLabel">Adicionar Etiqueta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="tagForm">
                     <div class="mb-3">
+                        <div class="opcoes">
+                            <?php foreach ($listaetiquetas as $listaetiqueta) : ?>
+                                <span class="badge" style="background-color:#<?= $listaetiqueta['cor'] ?>" id="<?= $listaetiqueta['id_etiqueta'] ?>" data-cor="#<?= $listaetiqueta['cor'] ?>" onclick="adcionaTag(this)">
+                                    <?= $listaetiqueta['nome'] ?>
+                                </span>
+                            <?php endforeach; ?>
+                        </div>
                         <label for="tagName" class="form-label">Nome da Etiqueta</label>
-                        <input type="text" class="form-control" id="tagName" required>
+                        <select name="tagName" id="tagName" class="form-select" required>
+                            <?php foreach ($listaetiquetas as $listaetiqueta) : ?>
+                                <option value="<?= $listaetiqueta['id_etiqueta'] ?>">
+                                    <span style="background-color:#<?= $listaetiqueta['cor'] ?>"><?= $listaetiqueta['nome'] ?></span>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>    
                     </div>
                     <div class="mb-3">
                         <label for="tagColor" class="form-label">Cor</label>
-                        <select class="form-select" id="tagColor">
-                            <option value="bg-primary">Azul</option>
-                            <option value="bg-success">Verde</option>
-                            <option value="bg-warning">Amarelo</option>
-                            <option value="bg-danger">Vermelho</option>
-                            <option value="bg-info">Ciano</option>
-                            <option value="bg-secondary">Cinza</option>
-                        </select>
+                        <input type="text" class="form-control" id="tagColor" required>
                     </div>
                 </form>
             </div>
@@ -32,3 +38,73 @@
         </div>
     </div>
 </div>
+
+<script>
+        // Adicione este código junto com o JavaScript existente
+        function addNewTag() {
+            const tagName = document.getElementById('tagName').value;
+            const tagColor = document.getElementById('tagColor').value;
+            
+            if (tagName) {
+                const tagsContainer = document.querySelector('.d-flex.flex-wrap.gap-2');
+                const newTag = document.createElement('span');
+                newTag.className = `badge ${tagColor}`;
+                newTag.textContent = tagName;
+                
+                // Inserir antes do botão de adicionar
+                const addButton = tagsContainer.querySelector('.btn-outline-secondary');
+                tagsContainer.insertBefore(newTag, addButton);
+                
+                // Fechar o modal e limpar o formulário
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addTagModal'));
+                modal.hide();
+                document.getElementById('tagForm').reset();
+            }
+        }
+
+        function adcionaTag(tag) {
+            console.log(tag);
+            const etiquetaId = parseInt(tag.id);
+            const processoId = <?= $processo['id_processo']?>;
+            const tagName = tag.textContent;
+            const tagColor = tag.getAttribute('data-cor'); // Corrigir para obter a cor correta
+            const tagsContainer = document.querySelector('.d-flex.flex-wrap.gap-2');
+            
+            // Faz a chamada AJAX para adicionar a etiqueta do banco de dados
+            fetch('<?= site_url('processos/adicionaretiqueta') ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        id_processo: processoId,
+                        id_etiqueta: etiquetaId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const newTag = document.createElement('span');
+                        newTag.className = `badge`;
+                        newTag.style.backgroundColor = tagColor; // Definir a cor da etiqueta
+                        newTag.textContent = tagName;
+            
+                        // Inserir antes do botão de adicionar
+                        const addButton = tagsContainer.querySelector('.btn-outline-secondary');
+                        tagsContainer.insertBefore(newTag, addButton);
+                    } else {
+                        alert('Erro ao adicionar a etiqueta.');
+                    }
+                })
+                .catch(error => console.error('Erro:', error));
+            
+            // Fechar o modal e limpar o formulário
+            const modal = bootstrap.Modal.getInstance(document.getElementById('addTagModal'));
+            modal.hide();
+            document.getElementById('tagForm').reset();
+            
+        }
+
+
+    </script>

@@ -62,6 +62,30 @@ class Processos extends BaseController
     }
 
     /**
+     * Exibe os dados individuais do processo
+     * @param int $id
+     */
+    public function consultarProcesso(int $id=null){
+        $processosModel = model('ProcessosModel');
+        $partesProcessoModel = model('ProcessosPartesModel');
+        $data = [
+            'titulo'    => 'Consultar Processo',
+        ];
+        $data['img'] = 'vazio.png';
+        $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
+        $numeroProcesso = $data['processo']['numero_processo'];
+        $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
+        $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
+        $data['anotacoes'] = model('ProcessosAnotacoesModel')->where('processo_id', $id)->get()->getResultArray();
+        $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
+        $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
+        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
+        $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
+        return view('processos/consultarProcesso', $data);
+    }
+
+
+    /**
      * Este função apenas redireciona para o editar por id
      */
     public function editarPorNumerodeProcesso(string $numeroProcesso){
@@ -217,28 +241,7 @@ class Processos extends BaseController
         $processosPartesModel->salvarParteDoProcesso($parteProcesso);
     }
 
-    /**
-     * Exibe os dados individuais do processo
-     * @param int $id
-     */
-    public function consultarProcesso(int $id=null){
-        $processosModel = model('ProcessosModel');
-        $partesProcessoModel = model('ProcessosPartesModel');
-        $data = [
-            'titulo'    => 'Consultar Processo',
-        ];
-        $data['img'] = 'vazio.png';
-        $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
-        $numeroProcesso = $data['processo']['numero_processo'];
-        $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
-        $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
-        $data['anotacoes'] = model('ProcessosAnotacoesModel')->where('processo_id', $id)->get()->getResultArray();
-        $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
-        $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
-        $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
-        return view('processos/consultarProcesso', $data);
-    }
-
+    
     /**
      * Inserir novo processo
      */
@@ -258,6 +261,30 @@ class Processos extends BaseController
         $data = $this->request->getPost();
         $processosAnotacoesModel->insert($data);
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
+    }
+
+    /**
+     * Remover as etiquetas do processo por Ajax
+     * @param json $data['id_processo', 'id_etiqueta']
+     * @return json ['success' => true]
+     */
+    public function removerEtiqueta(){
+        $data = $this->request->getJSON();
+        $processosModel = model('ProcessosModel');
+        $processosModel->removeEtiqueta($data->id_processo, $data->id_etiqueta);
+        return $this->response->setJSON(['success' => true]);
+    }
+
+    /**
+     * Adicionar as etiquetas do processo por Ajax
+     * @param json $data['id_processo', 'id_etiqueta']
+     * @return json ['success' => true]
+     */
+    public function adicionarEtiqueta(){
+        $data = $this->request->getJSON();
+        $processosModel = model('ProcessosModel');
+        $processosModel->addEtiqueta($data->id_processo, $data->id_etiqueta);
+        return $this->response->setJSON(['success' => true]);
     }
 
 }
