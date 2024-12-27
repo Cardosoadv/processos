@@ -52,6 +52,7 @@
             if (tagName) {
                 const tagsContainer = document.querySelector('.d-flex.flex-wrap.gap-2');
                 const newTag = document.createElement('span');
+
                 newTag.className = `badge ${tagColor}`;
                 newTag.textContent = tagName;
                 
@@ -90,9 +91,12 @@
                 .then(data => {
                     if (data.success) {
                         const newTag = document.createElement('span');
+                        const iconClosec = document.createElement('i');
+                        iconClosec.className = 'fas fa-times';
                         newTag.className = `badge`;
                         newTag.style.backgroundColor = tagColor; // Definir a cor da etiqueta
-                        newTag.textContent = tagName;
+                        newTag.textContent = tagName+' ';
+                        newTag.appendChild(iconClosec);
             
                         // Inserir antes do botão de adicionar
                         const addButton = tagsContainer.querySelector('.btn-outline-secondary');
@@ -104,11 +108,10 @@
                 .catch(error => console.error('Erro:', error));
             
             // Fechar o modal e limpar o formulário
+            
             const modal = bootstrap.Modal.getInstance(document.getElementById('addTagModal'));
             modal.hide();
             document.getElementById('tagForm').reset();
-            
+            tag.remove();
         }
-
-
     </script>
