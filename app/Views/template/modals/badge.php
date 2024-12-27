@@ -11,17 +11,21 @@
                     <div class="mb-3">
                         <div class="opcoes">
                             <?php foreach ($listaetiquetas as $listaetiqueta) : ?>
+                                <?php if(in_array($listaetiqueta['id_etiqueta'], array_column($etiquetas, 'id_etiqueta'))) continue; ?>
                                 <span class="badge" style="background-color:#<?= $listaetiqueta['cor'] ?>" id="<?= $listaetiqueta['id_etiqueta'] ?>" data-cor="#<?= $listaetiqueta['cor'] ?>" onclick="adcionaTag(this)">
                                     <?= $listaetiqueta['nome'] ?>
-                                </span>
+                                </span>  
                             <?php endforeach; ?>
                         </div>
                         <label for="tagName" class="form-label">Nome da Etiqueta</label>
                         <select name="tagName" id="tagName" class="form-select" required>
+                            
                             <?php foreach ($listaetiquetas as $listaetiqueta) : ?>
-                                <option value="<?= $listaetiqueta['id_etiqueta'] ?>">
-                                    <span style="background-color:#<?= $listaetiqueta['cor'] ?>"><?= $listaetiqueta['nome'] ?></span>
-                                </option>
+                                <?php if(in_array($listaetiqueta['id_etiqueta'], array_column($etiquetas, 'id_etiqueta'))) continue; ?>
+                                    <option value="<?= $listaetiqueta['id_etiqueta'] ?>">
+                                        <span style="background-color:#<?= $listaetiqueta['cor'] ?>"><?= $listaetiqueta['nome'] ?></span>
+                                    </option>
+                                <php endif; ?>
                             <?php endforeach; ?>
                         </select>    
                     </div>
