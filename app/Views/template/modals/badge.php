@@ -48,7 +48,6 @@
                 const newTag = document.createElement('span');
 
                 // Faz a chamada AJAX para adicionar a etiqueta do banco de dados
-                //TODO Revisar o código desta função.
                 fetch('<?= site_url('etiquetas/adicionar') ?>', {
                     method: 'POST',
                     headers: {
@@ -75,12 +74,15 @@
                         // Inserir antes do botão de adicionar
                         const addButton = tagsContainer.querySelector('.btn-outline-secondary');
                         tagsContainer.insertBefore(newTag, addButton);
+                        mostrarMensagem('Etiqueta adicionada com sucesso!', 'success');
                     } else {
-                        alert('Erro ao adicionar a etiqueta.');
+                        mostrarMensagem('Erro ao adicionar etiqueta.', 'error');
                     }
                 })
-                .catch(error => console.error('Erro:', error));
-
+                .catch(error => {
+                    console.error('Erro:', error)
+                    mostrarMensagem('Erro ao remover etiqueta.', 'error');
+                });
 
                 // Código anterior para revisar
                 newTag.className = `badge ${tagColor}`;
@@ -89,6 +91,7 @@
                 // Inserir antes do botão de adicionar
                 const addButton = tagsContainer.querySelector('.btn-outline-secondary');
                 tagsContainer.insertBefore(newTag, addButton);
+                mostrarMensagem('Etiqueta adicionada com sucesso!');
                 
                 // Fechar o modal e limpar o formulário
                 const modal = bootstrap.Modal.getInstance(document.getElementById('addTagModal'));
@@ -131,19 +134,44 @@
                         // Inserir antes do botão de adicionar
                         const addButton = tagsContainer.querySelector('.btn-outline-secondary');
                         tagsContainer.insertBefore(newTag, addButton);
+                        mostrarMensagem('Etiqueta adicionada com sucesso!', 'success');
                     } else {
-                        alert('Erro ao adicionar a etiqueta.');
+                        mostrarMensagem('Erro ao remover etiqueta.', 'error');
                     }
                 })
-                .catch(error => console.error('Erro:', error));
+                .catch(error => {console.error('Erro:', error);
+                    mostrarMensagem('Erro ao adicionar etiqueta.', 'error');
+                });
             
-            // Fechar o modal e limpar o formulário
-            
+            // Fechar o modal e limpar o formulário   
             const modal = bootstrap.Modal.getInstance(document.getElementById('addTagModal'));
             modal.hide();
             document.getElementById('tagForm').reset();
             tag.remove();
         }
+
+    function mostrarMensagem(mensagem, tipo) {
+    // Implementar de acordo com seu sistema de notificações
+    // Exemplo usando Toast do Bootstrap
+    const toastContainer = document.getElementById('toast-container');
+    if (!toastContainer) return;
+
+    const toastElement = document.createElement('div');
+    toastElement.className = `toast align-items-center text-white bg-${tipo === 'success' ? 'success' : 'danger'}`;
+    toastElement.setAttribute('role', 'alert');
+    toastElement.innerHTML = `
+        <div class="d-flex">
+            <div class="toast-body">
+                ${mensagem}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    `;
+    
+    toastContainer.appendChild(toastElement);
+    const toast = new bootstrap.Toast(toastElement);
+    toast.show();
+}
     </script>
     <script>
 // Here we can adjust defaults for all color pickers on page:

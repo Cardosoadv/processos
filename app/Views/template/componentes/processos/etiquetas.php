@@ -45,11 +45,15 @@
                 .then(data => {
                     if (data.success) {
                         badge.remove(); // Remove a tag badge
+                        mostrarMensagem('Etiqueta removida com sucesso!', 'success');
                     } else {
-                        alert('Erro ao remover a etiqueta.');
+                        mostrarMensagem('Erro ao remover etiqueta.', 'error');;
                     }
                 })
-                .catch(error => console.error('Erro:', error));
+                .catch(error => {
+                console.error('Erro:', error);
+                mostrarMensagem('Erro ao remover etiqueta.', 'error');
+            });
             });
         });
     });
