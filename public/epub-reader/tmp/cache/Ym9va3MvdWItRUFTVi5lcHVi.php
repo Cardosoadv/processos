@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"4b4e8d386c12b41f753d5acfdb19db87ca8dcd3e","show":0,"cover":null,"title":["Holy Bible - English: American Standard\nVersion"],"author":[],"description":""}|*/?>

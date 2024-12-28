@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"6323d720e32b07bb96a7e11c87e76e65b27dbfdc","show":0,"cover":null,"title":["Holy Bible - Tagalog: Ang Dating Biblia (1905)"],"author":[],"description":""}|*/?>

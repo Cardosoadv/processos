@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"e9a7fe70e25263d416b920d07ac8bdedb3bfed78","show":0,"cover":"dbt%2FOEBPS%2FImages%2Fcover.jpg","title":{"0":"Darby Bible Translation"},"author":{"0":"\nVarious"},"description":""}|*/?>

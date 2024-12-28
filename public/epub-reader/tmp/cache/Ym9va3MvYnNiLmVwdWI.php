@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"aa7dc8e15508277505572a831b04cc41a3f631be","show":0,"cover":"bsb%20-%20final%20-%207-18-21%2FOEBPS%2FImages%2Fcover.jpg","title":{"0":"Holy Bible, Berean Study Bible, BSB"},"author":{"0":"\nVarious"},"description":""}|*/?>

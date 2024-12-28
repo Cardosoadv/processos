@@ -1,0 +1,1 @@
+<?php/*|{"sha1":"4a98725e950f7e27469058c16c937b0a72610dd9","show":0,"cover":"erv%2FOEBPS%2FImages%2Fcover.jpg","title":{"0":"English Revised Version"},"author":{"0":"\nVarious"},"description":""}|*/?>
