@@ -11,7 +11,7 @@ class Home extends BaseController
             'img'       =>  'vazio.png',
             'titulo'    => 'Dashboard'
         ];
-        return view('dashboard', $data);
+        return view('kamban', $data);
     }
 
     
