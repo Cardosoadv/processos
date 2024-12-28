@@ -19,9 +19,28 @@ class Etiquetas extends BaseController
 
     public function adicionar()
     {
-        $etiquetasModel = new EtiquetasModel();
+        $etiquetasModel = model('EtiquetasModel');
+        $processosModel = model('ProcessosModel');
         $data = $this->request->getJSON();
-        $etiquetas = $etiquetasModel->findAll();
-        return $this->response->setJSON(['SugestaoEtiquetas' => $etiquetas]);
+        $nome = $data->nome;
+        $cor = preg_replace('/^#/', '', $data->cor);
+        $id_processo = $data->id_processo;
+        if($nome == null || $cor == null || $id_processo == null){
+            return $this->response->setJSON(['success' => false]);
+        }
+        if($etiquetasModel->where('nome', $nome)->first()){
+            return $this->response->setJSON(['success' => false]);
+        }
+        try{
+        $etiquetasModel->insert([
+            'nome' => $nome,
+            'cor' => $cor,
+        ]);
+        $idEtiqueta = $etiquetasModel->InsertID();
+        $processosModel->addEtiqueta($id_processo,$idEtiqueta);
+        }catch(\Exception $e){
+            return $this->response->setJSON(['success' => false, 'error' => $e->getMessage()]);
+        }
+        return $this->response->setJSON(['success' => true]);
     }
 }

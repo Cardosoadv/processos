@@ -10,7 +10,6 @@
  * See usage examples at http://jscolor.com/examples/
  */
 
-
 (function (global, factory) {
 
 	'use strict';
