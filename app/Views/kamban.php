@@ -90,7 +90,7 @@
         <?= $this->include('template/modals/change_user_img.php') ?>
         <script>
             const draggables = document.querySelectorAll('.draggable');
-            const dropAreas = document.querySelectorAll('.drop-area'); // Seleciona todas as áreas de drop
+            const dropAreas = document.querySelectorAll('.drop-area');
 
             draggables.forEach(draggable => {
                 draggable.addEventListener('dragstart', () => {
@@ -102,12 +102,12 @@
                 });
             });
 
-            dropAreas.forEach(dropArea => { // Itera sobre cada área de drop
+            dropAreas.forEach(dropArea => {
                 dropArea.addEventListener('dragover', e => {
                     e.preventDefault();
                     const afterElement = getDragAfterElement(dropArea, e.clientY);
                     const draggable = document.querySelector('.dragging');
-                    if (draggable == null) return; // Sai se não houver elemento sendo arrastado
+                    if (draggable == null) return;
                     if (afterElement == null) {
                         dropArea.appendChild(draggable);
                     } else {
@@ -118,7 +118,37 @@
                 dropArea.addEventListener('drop', e => {
                     e.preventDefault();
                     const draggable = document.querySelector('.dragging');
-                    if (draggable == null) return; // Verifica se tem um elemento sendo arrastado
+                    if (draggable == null) return;
+
+                    // Chamada AJAX aqui
+                    const tarefaId = draggable.dataset.id;
+                    const statusId = dropArea.dataset.id;
+                    const url = `http://localhost/processos/tarefas?Tarefa-id=${tarefaId}&status-id=${statusId}`; // Substitua 'url' pela sua URL real
+
+                    fetch(url, {
+                            method: 'GET'
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Erro na requisição: ${response.status}`);
+                            }
+                            return response.json(); // Se a resposta for JSON
+                            //return response.text(); Se a resposta for texto
+                        })
+                        .then(data => {
+                            // Tratar a resposta, se necessário
+                            console.log('Resposta do servidor:', data);
+                            // Exibir mensagem de sucesso ou erro para o usuário
+                            if (data.success) {
+                                alert("Tarefa movida com sucesso!");
+                            } else {
+                                alert("Erro ao mover a tarefa.");
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro na requisição AJAX:', error);
+                            alert("Erro ao mover a tarefa.");
+                        });
                 });
             });
 
@@ -129,13 +159,19 @@
                     const box = child.getBoundingClientRect();
                     const offset = y - box.top - box.height / 2;
                     if (offset < 0 && offset > closest.offset) {
-                        return { offset: offset, element: child };
+                        return {
+                            offset: offset,
+                            element: child
+                        };
                     } else {
                         return closest;
                     }
-                }, { offset: Number.NEGATIVE_INFINITY }).element;
+                }, {
+                    offset: Number.NEGATIVE_INFINITY
+                }).element;
             }
         </script>
+
         <?= $this->include('template/footer') ?>
     </div>
 </body>
