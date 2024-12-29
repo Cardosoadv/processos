@@ -1,3 +1,5 @@
+<?php //TODO: Corrigir o drag and drop do kanban 
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -33,7 +35,7 @@
                                         Backlog
                                     </h3>
                                 </div>
-                                <div class="card-body" ondrop="drop(event,1)" ondragover="allowDrop(event)">
+                                <div class="card-body drop-area" data-id="Status-1">
                                     <?= $this->include('template/componentes/kamban/cartao') ?>
                                 </div>
                             </div>
@@ -43,7 +45,7 @@
                                         A fazer
                                     </h3>
                                 </div>
-                                <div class="card-body" ondrop="drop(event,2)" ondragover="allowDrop(event)">
+                                <div class="card-body drop-area" id="aFazer" data-id="Status-2">
                                 </div>
                             </div>
 
@@ -53,7 +55,7 @@
                                         Fazendo
                                     </h3>
                                 </div>
-                                <div class="card-body" ondrop="drop(event,3)" ondragover="allowDrop(event)">
+                                <div class="card-body drop-area" data-id="Status-3">
 
                                 </div>
                             </div>
@@ -63,7 +65,7 @@
                                         Feito
                                     </h3>
                                 </div>
-                                <div class="card-body" ondrop="drop(event, 4)" ondragover="allowDrop(event)">
+                                <div class="card-body drop-area" data-id="Status-4">
 
                                 </div>
                             </div>
@@ -74,7 +76,7 @@
                                         Cancelados
                                     </h3>
                                 </div>
-                                <div class="card-body" ondrop="drop(event, 5)" ondragover="allowDrop(event)">
+                                <div class="card-body drop-area" data-id="Status-5">
 
                                 </div>
                             </div>
@@ -86,6 +88,54 @@
 
         <?= $this->include('template/modals/tarefas.php') ?>
         <?= $this->include('template/modals/change_user_img.php') ?>
+        <script>
+            const draggables = document.querySelectorAll('.draggable');
+            const dropAreas = document.querySelectorAll('.drop-area'); // Seleciona todas as áreas de drop
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => {
+                    draggable.classList.add('dragging');
+                });
+
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging');
+                });
+            });
+
+            dropAreas.forEach(dropArea => { // Itera sobre cada área de drop
+                dropArea.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    const afterElement = getDragAfterElement(dropArea, e.clientY);
+                    const draggable = document.querySelector('.dragging');
+                    if (draggable == null) return; // Sai se não houver elemento sendo arrastado
+                    if (afterElement == null) {
+                        dropArea.appendChild(draggable);
+                    } else {
+                        dropArea.insertBefore(draggable, afterElement);
+                    }
+                });
+
+                dropArea.addEventListener('drop', e => {
+                    e.preventDefault();
+                    const draggable = document.querySelector('.dragging');
+                    if (draggable == null) return; // Verifica se tem um elemento sendo arrastado
+                });
+            });
+
+            function getDragAfterElement(dropArea, y) {
+                const draggableElements = [...dropArea.querySelectorAll('.draggable:not(.dragging)')];
+
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+        </script>
         <?= $this->include('template/footer') ?>
     </div>
 </body>

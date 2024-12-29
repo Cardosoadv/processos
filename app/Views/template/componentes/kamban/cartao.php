@@ -1,5 +1,5 @@
 <!-- Inicio da Tarefa -->
-<div class="tarefa" id="tarefa_<?php echo $item['id'] ?? '' ?>" draggable="true" ondragstart="drag(event)">
+<div class="tarefa draggable" id="tarefa_<?php echo $item['id'] ?? '' ?>" draggable="true" data-id:"Tarefa-1">
     <div class="card card-info card-outline">
         <div class="card-header">
             <h5 class="card-title"><?php echo $item['task'] ?? 'Titulo' ?></h5>
