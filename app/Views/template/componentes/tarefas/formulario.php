@@ -3,8 +3,8 @@
         <div class="form-group col-md-6">
             <label>Tarefa</label>
             <div class="input-group">
-                <input type="hidden" name="id" placeholder="id" class="form-control" value="">
-                <input type="text" name="task" placeholder="task" class="form-control" value="">
+                <input type="hidden" name="id_tarefa" class="form-control" value="">
+                <input type="text" name="tarefa" class="form-control" value="">
             </div>
         </div>
         <div class="form-group col-md-6">
@@ -19,6 +19,13 @@
         <div class="form-group col">
             <label>Responsavel</label>
             <div class="input-group">
+                <?php if (isset($responsaveis)) : ?>
+                    <select name="responsavel" class="form-control" style="width: 100%;">
+                        <?php foreach ($responsaveis as $responsavel) : ?>
+                            <option value="<?= $responsavel['id'] ?>"><?= $responsavel['username'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>    
                 <!-- Responsaveis -->
             </div>
         </div>

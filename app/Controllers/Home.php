@@ -11,6 +11,7 @@ class Home extends BaseController
             'img'       =>  'vazio.png',
             'titulo'    => 'Dashboard'
         ];
+        $data['responsaveis'] = model('ResposavelModel')->getUsers();
         return view('kamban', $data);
     }
 

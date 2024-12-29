@@ -123,7 +123,7 @@
                     // Chamada AJAX aqui
                     const tarefaId = draggable.dataset.id;
                     const statusId = dropArea.dataset.id;
-                    const url = `http://localhost/processos/tarefas?Tarefa-id=${tarefaId}&status-id=${statusId}`; // Substitua 'url' pela sua URL real
+                    const url = `<?=base_url("tarefas")?>?Tarefa-id=${tarefaId}&status-id=${statusId}`; // Substitua 'url' pela sua URL real
 
                     fetch(url, {
                             method: 'GET'

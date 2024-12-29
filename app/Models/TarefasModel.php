@@ -7,13 +7,12 @@ use CodeIgniter\Model;
 class TarefasModel extends Model
 {
     protected $table            = 'tarefas';
-    protected $primaryKey       = 'id_tarefas';
+    protected $primaryKey       = 'id_tarefa';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'id_tarefa',
         'tarefa',
         'prazo',
         'prioridade',
