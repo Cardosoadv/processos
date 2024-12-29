@@ -1,1 +1,0 @@
-export var siteUrl = "http://localhost/sistema/sistema";
