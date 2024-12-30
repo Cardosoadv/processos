@@ -1,5 +1,3 @@
-<?php //TODO: Corrigir o drag and drop do kanban 
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -36,7 +34,11 @@
                                     </h3>
                                 </div>
                                 <div class="card-body drop-area" data-id="Status-1">
-                                    <?= $this->include('template/componentes/kamban/cartao') ?>
+                                    <?php foreach ($cartoes as $cartao):?>
+                                        <?php if ($cartao['status'] == 1):?>
+                                            <?= $cartao['html'] ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
                             <div class="card card-row card-primary">
@@ -46,6 +48,11 @@
                                     </h3>
                                 </div>
                                 <div class="card-body drop-area" id="aFazer" data-id="Status-2">
+                                <?php foreach ($cartoes as $cartao):?>
+                                        <?php if ($cartao['status'] == 2):?>
+                                            <?= $cartao['html'] ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
 
@@ -56,6 +63,11 @@
                                     </h3>
                                 </div>
                                 <div class="card-body drop-area" data-id="Status-3">
+                                <?php foreach ($cartoes as $cartao):?>
+                                        <?php if ($cartao['status'] == 3):?>
+                                            <?= $cartao['html'] ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
 
                                 </div>
                             </div>
@@ -66,6 +78,11 @@
                                     </h3>
                                 </div>
                                 <div class="card-body drop-area" data-id="Status-4">
+                                <?php foreach ($cartoes as $cartao):?>
+                                        <?php if ($cartao['status'] == 4):?>
+                                            <?= $cartao['html'] ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
 
                                 </div>
                             </div>
@@ -77,6 +94,11 @@
                                     </h3>
                                 </div>
                                 <div class="card-body drop-area" data-id="Status-5">
+                                <?php foreach ($cartoes as $cartao):?>
+                                        <?php if ($cartao['status'] == 5):?>
+                                            <?= $cartao['html'] ?>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
 
                                 </div>
                             </div>

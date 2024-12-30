@@ -15,7 +15,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row py-1" >
         <div class="form-group col">
             <label>Responsavel</label>
             <div class="input-group">
@@ -27,6 +27,18 @@
                     </select>
                 <?php endif; ?>    
                 <!-- Responsaveis -->
+            </div>
+        </div>
+        <div class="form-group col">
+            <label>Status</label>
+            <div class="input-group">
+                <select name="status" class="form-control" style="width: 100%;">
+                    <option value="1">Backlog</option>
+                    <option value="2">A Fazer</option>
+                    <option value="3">Fazendo</option>
+                    <option value="4">Feito</option>
+                    <option value="5">Cancelado</option>
+                </select>
             </div>
         </div>
         <div class="form-group col">

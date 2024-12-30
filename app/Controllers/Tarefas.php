@@ -11,9 +11,11 @@ class Tarefas extends BaseController
             'img'       =>  'vazio.png',
             'titulo'    => 'Dashboard'
         ];
-        $tarefas['id'] = $this->request->getGet("Tarefa-id");
-        $tarefas['status'] = $this->request->getGet("status-id");
-        print_r($tarefas);
+        $data['responsaveis'] = model('ResposavelModel')->getUsers();
+        $data['tarefas'] = model('TarefasModel')->findAll();
+        helper('criarcartao');
+        $data['cartoes'] = criarcartao($data['tarefas']);
+        return view('kamban', $data);
     }
 
     public function nova(){
@@ -29,7 +31,21 @@ class Tarefas extends BaseController
         $tarefasModel = model('TarefasModel');
         try{
         $tarefasModel->insert($data);
-            echo "Sucesso!";
+            return redirect()->to(base_url('tarefas'));
+        }
+        catch(\Exception $e){
+            echo "Erro! ".$e->getMessage();
+        }
+    }
+
+    public function editarStatus(){
+        
+        $tarefas['id'] = $this->request->getGet("Tarefa-id");
+        $tarefas['status'] = $this->request->getGet("status-id");
+        $tarefasModel = model('TarefasModel');
+        try{
+            $tarefasModel->update($tarefas['id'], ['status' => $tarefas['status']]);
+            return redirect()->to(base_url('tarefas'));
         }
         catch(\Exception $e){
             echo "Erro! ".$e->getMessage();

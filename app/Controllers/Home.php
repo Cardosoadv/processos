@@ -12,7 +12,7 @@ class Home extends BaseController
             'titulo'    => 'Dashboard'
         ];
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
-        return view('kamban', $data);
+        return view('dashboard', $data);
     }
 
     

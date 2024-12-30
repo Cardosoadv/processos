@@ -12821,6 +12821,7 @@ textarea.form-control-lg {
 
 .app-content.kanban .content-header+.content {
   height: calc(100% - ((2 * 15px) + (1.8rem * 1.2)))
+
 }
 
 .app-content.kanban .card .card-body {
@@ -12828,7 +12829,7 @@ textarea.form-control-lg {
 }
 
 .app-content.kanban .card.card-row {
-  width: 340px;
+  width: 300px;
   display: inline-block;
   margin: 0 .5rem
 }
