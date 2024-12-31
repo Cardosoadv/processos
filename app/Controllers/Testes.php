@@ -53,8 +53,10 @@ class Testes extends BaseController
         ];
         $query = http_build_query($params);
         $apiUrl .= '?' . $query;
-
         
+        // URL alvo
+$url = 'https://www.google.com';
+
 // Inicializa uma nova sessão cURL
 $ch = curl_init($apiUrl);
 
