@@ -51,11 +51,12 @@ class Testes extends BaseController
             'numeroOab' => '164136',
             'ufOab' => 'mg'
         ];
-        // URL alvo
-$url = 'https://www.google.com';
+        $query = http_build_query($params);
+        $apiUrl .= '?' . $query;
 
+        
 // Inicializa uma nova sessão cURL
-$ch = curl_init($url);
+$ch = curl_init($apiUrl);
 
 // Configura as opções da requisição
 
@@ -74,9 +75,6 @@ curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) A
 // Otimiza a performance (se o servidor suportar)
 curl_setopt($ch, CURLOPT_ENCODING, ""); // Habilita todos os encodings suportados pelo cURL
 
-// Desabilita a verificação do certificado SSL (NÃO RECOMENDADO EM PRODUÇÃO, apenas para testes em ambientes controlados)
-// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
 // Executa a requisição
 $response = curl_exec($ch);
@@ -92,13 +90,13 @@ if (curl_errno($ch)) {
     // Obtém informações sobre a requisição (código HTTP, etc.)
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-    echo "Código HTTP: " . $http_code . "\n";
+    $data = json_decode($response, true);
+
 
     if ($http_code == 200) {
-        // Salva a resposta em um arquivo (opcional)
-        file_put_contents('google.html', $response);
-        echo "Resposta salva em google.html\n";
-
+        echo '<pre>';
+        print_r($data);
+        echo '</pre>';
         // Ou exibe a resposta (com cuidado, pode ser muito grande):
         // echo $response;
     } else {
