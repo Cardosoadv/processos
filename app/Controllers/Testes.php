@@ -67,22 +67,36 @@ class Testes extends BaseController
 
         $context = stream_context_create($contextOptions);
 
-        $response = @file_get_contents($apiUrl, false, $context);
+        $handle = @fopen($apiUrl, 'r', false, $context);
 
-        if ($response === FALSE) {
-            // Tratamento de erro. Usando @ para suprimir warnings do PHP.
-            $error = error_get_last();
-            echo "Erro na requisição: " . $error['message'];
-            return;
-        } else {
-            $data = json_decode($response, true);
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                echo "Erro ao decodificar JSON: " . json_last_error_msg();
-                return;
-            }
-            var_dump($data);
-        }
-    }
+if ($handle === FALSE) {
+    $error = error_get_last();
+    echo "Erro ao abrir o stream: " . $error['message'];
+    return;
+}
+
+$response = '';
+while (!feof($handle)) {
+    $response .= fread($handle, 8192); // Lê 8KB por vez
+}
+
+fclose($handle);
+
+if ($response === '') {
+    echo "Resposta vazia.";
+    return;
+}
+
+$data = json_decode($response, true);
+if (json_last_error() !== JSON_ERROR_NONE) {
+    echo "Erro ao decodificar JSON: " . json_last_error_msg();
+    return;
+}
+
+var_dump($data);
+
+}
+
 
     public function index2()
     {
