@@ -41,4 +41,16 @@ $permission = $permitions->permission();
         </li>
 
     <?php endif; ?>
+
+    <?php if($permission['tarefas']):?>
+
+<li class="nav-item <?php echo (($active === "tarefas") ? "menu-open" : "");?>">
+    <a href="<?php echo site_url('tarefas');?>" class="nav-link <?php echo (($active === "tarefas") ? "active" : "");?>">
+        <i class="nav-icon bi bi-check2-square"></i>
+        <p> Tarefas </p>
+    </a>
+</li>
+
+<?php endif; ?>    
+
 </ul>

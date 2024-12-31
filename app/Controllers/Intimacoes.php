@@ -28,6 +28,16 @@ class Intimacoes extends BaseController
         $receberIntimacoes->getIntimacoes($params);
     }
 
+    public function processo($numeroProcesso)
+    {
+        $params = [
+            'numeroProcesso' => $numeroProcesso
+        ];
+
+        $receberIntimacoes = new ReceberIntimacoes();
+        $receberIntimacoes->getIntimacoes($params);
+    }
+
     /**
      * Efetua o tratamento das intimações organizando os dados e salvandos nas tabelas corretas
      */
@@ -85,6 +95,8 @@ class Intimacoes extends BaseController
         ];
         $auditoriaRecebimentoIntimacoes = new AuditoriaRecebimentoIntimacoes();
         $auditoriaRecebimentoIntimacoes->registraProcessamentoIntimacoes($data);
+        $data['titulo'] = 'Intimações';
+        return view('dashboard', $data);
     }
 
     /**
@@ -110,7 +122,7 @@ class Intimacoes extends BaseController
             'codigoClasse'             => $processos['codigoClasse'],
             'ativo'                    => $processos['ativo'],
             'status'                   => $processos['status'],
-            'risco'                    => $processos['risco'] ?? 'Possível', // Operador de coalescência nula (??) já está correto.
+            'risco'                    => $processos['risco'] ?? 'Possível',
             'numeroprocessocommascara' => $processos['numeroprocessocommascara'],
         ];
 

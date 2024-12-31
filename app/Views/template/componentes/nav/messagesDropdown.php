@@ -2,7 +2,7 @@
                         <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end"><a href="#" class="dropdown-item"><!--begin::Message-->
                                 <div class="d-flex">
                                 <div class="flex-shrink-0">
-                                <img src="<?=  base_url($img)  ?>" alt="User Avatar" class="img-size-50 rounded-circle me-3"></div>
+                                <img src="<?php echo  base_url($img ?? 'public/dist/assets/img/user1-128x128.jpg')   ?>" alt="User Avatar" class="img-size-50 rounded-circle me-3"></div>
                                     <div class="flex-grow-1">
                                         <h3 class="dropdown-item-title">
                                             Brad Diesel

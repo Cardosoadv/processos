@@ -1,10 +1,10 @@
-<li class="nav-item dropdown user-menu"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img src="<?= base_url($img) ?>" class="user-image rounded-circle shadow img-size-50" alt="User Image"><span class="d-none d-md-inline">Alexander Pierce</span></a>
+<li class="nav-item dropdown user-menu"><a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><img src="<?= base_url($img ?? 'public/dist/assets/img/user1-128x128.jpg') ?>" class="user-image rounded-circle shadow img-size-50" alt="User Image"><span class="d-none d-md-inline">Alexander Pierce</span></a>
     <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
         <!--begin::User Image-->
         <li class="user-header text-bg-primary">
             <a data-bs-toggle="modal" data-bs-target="#modal-alterar-foto-perfil">
 
-                <img src="<?= base_url($img) ?>" class="rounded-circle shadow img-size-50" alt="User Image"></a>
+                <img src="<?php echo base_url($img ?? 'public/dist/assets/img/user1-128x128.jpg')  ?>" class="rounded-circle shadow img-size-50" alt="User Image"></a>
             <p>
                 Alexander Pierce - Web Developer
                 <small>Member since Nov. 2023</small>
