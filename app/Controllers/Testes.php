@@ -51,49 +51,64 @@ class Testes extends BaseController
             'numeroOab' => '164136',
             'ufOab' => 'mg'
         ];
-        $query = http_build_query($params);
-        $apiUrl .= '?' . $query;
+        // URL alvo
+$url = 'https://www.google.com';
 
-        $contextOptions = [
-            'http' => [
-                'method' => 'GET',
-                'header' => [
-                    'Content-Type: application/json',
-                    'Accept: application/json',
-                    'User-Agent: insomnia/10.1.1'
-                ]
-            ]
-        ];
+// Inicializa uma nova sessão cURL
+$ch = curl_init($url);
 
-        $context = stream_context_create($contextOptions);
+// Configura as opções da requisição
 
-        $handle = @fopen($apiUrl, 'r', false, $context);
+// Retorna a transferência como string ao invés de exibir diretamente
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-if ($handle === FALSE) {
-    $error = error_get_last();
-    echo "Erro ao abrir o stream: " . $error['message'];
-    return;
+// Define um tempo limite para a requisição em segundos (evita travamentos)
+curl_setopt($ch, CURLOPT_TIMEOUT, 10); // 10 segundos
+
+// Segue redirecionamentos HTTP (importante para alguns sites)
+curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+// Define um User-Agent (simula um navegador, pode ser útil para algumas APIs)
+curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36');
+
+// Otimiza a performance (se o servidor suportar)
+curl_setopt($ch, CURLOPT_ENCODING, ""); // Habilita todos os encodings suportados pelo cURL
+
+// Desabilita a verificação do certificado SSL (NÃO RECOMENDADO EM PRODUÇÃO, apenas para testes em ambientes controlados)
+// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+// Executa a requisição
+$response = curl_exec($ch);
+
+// Verifica se ocorreu algum erro
+if (curl_errno($ch)) {
+    $error_msg = curl_error($ch);
+    echo "Erro cURL: " . $error_msg . "\n";
+    // Trata o erro de acordo com a sua necessidade (log, exibir mensagem amigável, etc.)
+} else {
+    // A requisição foi bem-sucedida
+
+    // Obtém informações sobre a requisição (código HTTP, etc.)
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+
+    echo "Código HTTP: " . $http_code . "\n";
+
+    if ($http_code == 200) {
+        // Salva a resposta em um arquivo (opcional)
+        file_put_contents('google.html', $response);
+        echo "Resposta salva em google.html\n";
+
+        // Ou exibe a resposta (com cuidado, pode ser muito grande):
+        // echo $response;
+    } else {
+        echo "Erro na requisição. Código HTTP: " . $http_code . "\n";
+        // Trata outros códigos HTTP de acordo com a sua necessidade
+    }
 }
 
-$response = '';
-while (!feof($handle)) {
-    $response .= fread($handle, 8192); // Lê 8KB por vez
-}
-
-fclose($handle);
-
-if ($response === '') {
-    echo "Resposta vazia.";
-    return;
-}
-
-$data = json_decode($response, true);
-if (json_last_error() !== JSON_ERROR_NONE) {
-    echo "Erro ao decodificar JSON: " . json_last_error_msg();
-    return;
-}
-
-var_dump($data);
+// Fecha a sessão cURL (libera recursos) - ESSENCIAL!
+curl_close($ch);
 
 }
 
