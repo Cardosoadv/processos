@@ -46,6 +46,44 @@ class Testes extends BaseController
 
     public function index()
     {
+        $apiUrl = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
+        $params = [
+            'numeroOab' => '164136',
+            'ufOab' => 'mg'
+        ];
+        $query = http_build_query($params);
+        $apiUrl .= '?' . $query;
+        // Iniciando a sessão cURL
+        $ch = curl_init();
+
+        // Configurando as opções da requisição
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'User-Agent: insomnia/10.1.1'
+        ));
+
+        // Executa a requisição e obtém a resposta
+        $response = curl_exec($ch);
+
+        // Verifica se houve algum erro
+        if (curl_errno($ch)) {
+            echo 'Erro na requisição: ' . curl_error($ch);
+            // Fecha a sessão cURL
+            curl_close($ch);
+            return;
+        } else {
+            // Processa a resposta da API
+            $data = json_decode($response, true);
+
+            var_dump($data);
+        }
+    }
+
+    public function index2()
+    {
         // Example usage: Display the first chapter
         $showPage = $this->request->getGet('showPage');
         $page = $this->getPage($showPage);
