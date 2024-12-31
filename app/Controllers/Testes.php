@@ -53,31 +53,33 @@ class Testes extends BaseController
         ];
         $query = http_build_query($params);
         $apiUrl .= '?' . $query;
-        // Iniciando a sessão cURL
-        $ch = curl_init();
 
-        // Configurando as opções da requisição
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Accept: application/json',
-            'User-Agent: insomnia/10.1.1'
-        ));
+        $contextOptions = [
+            'http' => [
+                'method' => 'GET',
+                'header' => [
+                    'Content-Type: application/json',
+                    'Accept: application/json',
+                    'User-Agent: insomnia/10.1.1'
+                ]
+            ]
+        ];
 
-        // Executa a requisição e obtém a resposta
-        $response = curl_exec($ch);
+        $context = stream_context_create($contextOptions);
 
-        // Verifica se houve algum erro
-        if (curl_errno($ch)) {
-            echo 'Erro na requisição: ' . curl_error($ch);
-            // Fecha a sessão cURL
-            curl_close($ch);
+        $response = @file_get_contents($apiUrl, false, $context);
+
+        if ($response === FALSE) {
+            // Tratamento de erro. Usando @ para suprimir warnings do PHP.
+            $error = error_get_last();
+            echo "Erro na requisição: " . $error['message'];
             return;
         } else {
-            // Processa a resposta da API
             $data = json_decode($response, true);
-
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                echo "Erro ao decodificar JSON: " . json_last_error_msg();
+                return;
+            }
             var_dump($data);
         }
     }
