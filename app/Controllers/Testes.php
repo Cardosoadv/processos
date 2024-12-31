@@ -75,11 +75,12 @@ curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) A
 // Otimiza a performance (se o servidor suportar)
 curl_setopt($ch, CURLOPT_ENCODING, ""); // Habilita todos os encodings suportados pelo cURL
 
+// Desabilita a verificação do certificado SSL (NÃO RECOMENDADO EM PRODUÇÃO, apenas para testes em ambientes controlados)
+// curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+// curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
 // Executa a requisição
 $response = curl_exec($ch);
-
-// Fecha a sessão cURL (libera recursos) - ESSENCIAL!
-curl_close($ch);
 
 // Verifica se ocorreu algum erro
 if (curl_errno($ch)) {
@@ -89,8 +90,10 @@ if (curl_errno($ch)) {
 } else {
     // A requisição foi bem-sucedida
 
-    $data = json_decode($response, true);
+    // Obtém informações sobre a requisição (código HTTP, etc.)
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
+    echo "Código HTTP: " . $http_code . "\n";
 
     if ($http_code == 200) {
         // Salva a resposta em um arquivo (opcional)
@@ -105,6 +108,8 @@ if (curl_errno($ch)) {
     }
 }
 
+// Fecha a sessão cURL (libera recursos) - ESSENCIAL!
+curl_close($ch);
 
 }
 
