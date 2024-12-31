@@ -75,9 +75,11 @@ curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) A
 // Otimiza a performance (se o servidor suportar)
 curl_setopt($ch, CURLOPT_ENCODING, ""); // Habilita todos os encodings suportados pelo cURL
 
-
 // Executa a requisição
 $response = curl_exec($ch);
+
+// Fecha a sessão cURL (libera recursos) - ESSENCIAL!
+curl_close($ch);
 
 // Verifica se ocorreu algum erro
 if (curl_errno($ch)) {
@@ -87,16 +89,14 @@ if (curl_errno($ch)) {
 } else {
     // A requisição foi bem-sucedida
 
-    // Obtém informações sobre a requisição (código HTTP, etc.)
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
     $data = json_decode($response, true);
 
 
     if ($http_code == 200) {
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+        // Salva a resposta em um arquivo (opcional)
+        file_put_contents('google.html', $response);
+        echo "Resposta salva em google.html\n";
+
         // Ou exibe a resposta (com cuidado, pode ser muito grande):
         // echo $response;
     } else {
@@ -105,8 +105,6 @@ if (curl_errno($ch)) {
     }
 }
 
-// Fecha a sessão cURL (libera recursos) - ESSENCIAL!
-curl_close($ch);
 
 }
 
