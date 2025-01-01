@@ -5,6 +5,8 @@ namespace App\Controllers;
 use ZipArchive;
 use SimpleXMLElement;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Libraries\ReceberIntimacoesJs;
+
 
 class Testes extends BaseController
 {
@@ -55,16 +57,16 @@ class Testes extends BaseController
         $apiUrl .= '?' . $query;
         $data['apiUrl'] = $apiUrl;
         // Iniciando a sessão cURL
-        return view('receberintimacoesjs', $data);
+        return view('receberintimacoesjs2', $data);
     }
 
     public function processarIntimacoes()
     {
-        $json = $this->request->getPost('json');
-        $data = json_decode($json, true);
-        $data['success'] = true; // Simulate a successful response
-        $data['message'] = 'Intimações recebidas com sucesso!';
-        return json_encode($data);
+        $json = $this->request->getJSON();
+        $lib = new ReceberIntimacoesJs();
+        $resposta = $lib->getIntimacoes($json);
+        return $this->response->setJSON($resposta);
+        
     }
 
     public function index2()

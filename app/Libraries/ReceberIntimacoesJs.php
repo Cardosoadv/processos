@@ -5,7 +5,7 @@ namespace App\Libraries;
 use App\Controllers\Intimacoes;
 use Exception;
 
-class ReceberIntimacoes{
+class ReceberIntimacoesJs{
 
         private $intimacoes;
 
@@ -13,25 +13,29 @@ class ReceberIntimacoes{
      * Função para buscar as intimações no DJEN
      * @param array $params
      */
-    public function getIntimacoes($json){
+    public function getIntimacoes($data){
 
     // Processa a resposta da API
-    $data = json_decode($json, true);
+echo $data->status;
+echo $data->count;
+        print_r($data);
             
-    if(empty($data)||empty($data['status'])){
+    if(empty($data)||empty($data->status)){
         return;
     } 
 
     //Checa se a requisição foi bem sucedida
-    if ($data['status']==="success"){
-                
+    if ($data->status==="success"){
+                echo "cheguei aqui";
         // Generate a unique filename
         $filename = $this->generateFilename();
                     
         // Save JSON to file
-        $this->saveJsonToFile($filename, $json);
+        $this->saveJsonToFile($filename, $data);
         $this->intimacoes = new Intimacoes();
         $this->intimacoes->parseIntimacao($data, $filename);
+        return ['filename' => $filename, 'data' => $data];
+
         }
     }
 
