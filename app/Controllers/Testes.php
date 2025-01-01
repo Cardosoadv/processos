@@ -53,33 +53,18 @@ class Testes extends BaseController
         ];
         $query = http_build_query($params);
         $apiUrl .= '?' . $query;
+        $data['apiUrl'] = $apiUrl;
         // Iniciando a sessão cURL
-        $ch = curl_init();
+        return view('receberintimacoesjs', $data);
+    }
 
-        // Configurando as opções da requisição
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: application/json',
-            'Accept: application/json',
-            'User-Agent: insomnia/10.1.1'
-        ));
-
-        // Executa a requisição e obtém a resposta
-        $response = curl_exec($ch);
-
-        // Verifica se houve algum erro
-        if (curl_errno($ch)) {
-            echo 'Erro na requisição: ' . curl_error($ch);
-            // Fecha a sessão cURL
-            curl_close($ch);
-            return;
-        } else {
-            // Processa a resposta da API
-            $data = json_decode($response, true);
-
-            var_dump($data);
-        }
+    public function processarIntimacoes()
+    {
+        $json = $this->request->getPost('json');
+        $data = json_decode($json, true);
+        $data['success'] = true; // Simulate a successful response
+        $data['message'] = 'Intimações recebidas com sucesso!';
+        return json_encode($data);
     }
 
     public function index2()
