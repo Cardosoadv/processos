@@ -33,7 +33,7 @@ echo $data->count;
         // Save JSON to file
         $this->saveJsonToFile($filename, $data);
         $this->intimacoes = new Intimacoes();
-        $this->intimacoes->parseIntimacao($data, $filename);
+        $this->intimacoes->parseIntimacaoJs($data, $filename);
         return ['filename' => $filename, 'data' => $data];
 
         }
@@ -68,7 +68,7 @@ echo $data->count;
      */
     private function saveJsonToFile($filename, $jsonContent) {
         // Attempt to write the file
-        $result = file_put_contents($filename, $jsonContent);
+        $result = file_put_contents($filename, json_encode($jsonContent));
         
         if ($result === false) {
             throw new Exception("Unable to save JSON file: {$filename}");

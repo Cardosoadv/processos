@@ -216,4 +216,62 @@ class Intimacoes extends BaseController
         return $this->response->setJSON($intimacoes);
     }
 
+    public function parseIntimacaoJs($data, $filename) {
+
+        $intimacoesModel = new IntimacoesModel();
+        $usuario_id = user_id();
+        $nomeArquivo = $filename;
+        $statusRecebimentoIntimacao = $data->message;
+        $numeroIntimacoesRecebidas = $data->count;
+        $numeroIntimacoesRepetidas = 0;
+        $numeroIntimacoesProcessadas = 0;
+
+        if ($numeroIntimacoesRecebidas === 0) {
+            return;
+        }
+
+        //Percorre os itens da intimação
+        foreach ($data->items as $items) {
+
+            //checa se a intimação já consta no db
+            if ($intimacoesModel->intimacaoJaExiste($items->id) === false) {
+
+                //Verifica se existe e salva ou atualiza o processo no db
+                $idProcesso = $this->salvarProcessos(array($items));
+
+                //Salva ou atualiza a intimação no db
+                $this->salvarIntimacao(array($items));
+
+                //Percorre a lista de destinários salvando cada uma no db
+                foreach ($items->destinatarios as $itemsDestinatario) {
+                    //Salva ou atualiza o destinatário no db
+                    $this->salvarDestinatarios(array($itemsDestinatario));
+                    //Salva as partes do processo!
+                    $processosController = new Processos();
+                    $processosController->salvarPartes(array($itemsDestinatario), $idProcesso);
+                }
+                //Percorre a lista de advogados salvando cada uma no db
+                foreach ($items->destinatarioadvogados as $itemsAdvogados) {
+                    $this->salvarAdvogados(array($itemsAdvogados));
+                }
+                $numeroIntimacoesProcessadas++;
+            } else {
+                $numeroIntimacoesRepetidas++;
+            }
+        }
+        //Binding de dados para auditoria    
+        $data = [
+            'status_recebimento_intimacao' => $statusRecebimentoIntimacao,
+            'numero_intimacoes_recebidas' => $numeroIntimacoesRecebidas,
+            'numero_intimacoes_repetidas' => $numeroIntimacoesRepetidas,
+            'numero_intimacoes_processadas' => $numeroIntimacoesProcessadas,
+            'nomeArquivo' => $nomeArquivo,
+            'usuario_id' => $usuario_id,
+        ];
+        $auditoriaRecebimentoIntimacoes = new AuditoriaRecebimentoIntimacoes();
+        $auditoriaRecebimentoIntimacoes->registraProcessamentoIntimacoes($data);
+        $data['titulo'] = 'Intimações';
+        return view('dashboard', $data);
+    }
+
 }
