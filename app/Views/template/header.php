@@ -13,4 +13,6 @@
     <!--CKEditor -->
     <link rel="stylesheet" href="<?= base_url('public/style.css')?>">
 	<link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css" crossorigin>
+    <!-- Toastr -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" crossorigin>
 	

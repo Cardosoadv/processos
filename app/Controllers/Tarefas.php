@@ -42,13 +42,17 @@ class Tarefas extends BaseController
         
         $tarefas['id'] = $this->request->getGet("Tarefa-id");
         $tarefas['status'] = $this->request->getGet("status-id");
+        log_message('debug', 'Tarefa ID: ' . $tarefas['id']);
+        log_message('debug', 'Status ID: ' . $tarefas['status']);
         $tarefasModel = model('TarefasModel');
         try{
             $tarefasModel->update($tarefas['id'], ['status' => $tarefas['status']]);
-            return redirect()->to(base_url('tarefas'));
+
+            return $this->response->setJSON(['success' => true, 'message' => 'Status atualizado com sucesso!']);
+            
         }
         catch(\Exception $e){
-            echo "Erro! ".$e->getMessage();
+            return $this->response->setJSON(['success' => false, 'message' => $e->getMessage()]);
         }
     }
 

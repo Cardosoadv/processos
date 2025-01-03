@@ -4,6 +4,8 @@
 <head>
     <title><?= $titulo ?></title>
     <?= $this->include('template/header') ?>
+    
+
 </head>
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -33,7 +35,7 @@
                                         Backlog
                                     </h3>
                                 </div>
-                                <div class="card-body drop-area" data-id="Status-1">
+                                <div class="card-body drop-area" data-id="1">
                                     <?php foreach ($cartoes as $cartao):?>
                                         <?php if ($cartao['status'] == 1):?>
                                             <?= $cartao['html'] ?>
@@ -47,7 +49,7 @@
                                         A fazer
                                     </h3>
                                 </div>
-                                <div class="card-body drop-area" id="aFazer" data-id="Status-2">
+                                <div class="card-body drop-area" id="aFazer" data-id="2">
                                 <?php foreach ($cartoes as $cartao):?>
                                         <?php if ($cartao['status'] == 2):?>
                                             <?= $cartao['html'] ?>
@@ -62,7 +64,7 @@
                                         Fazendo
                                     </h3>
                                 </div>
-                                <div class="card-body drop-area" data-id="Status-3">
+                                <div class="card-body drop-area" data-id="3">
                                 <?php foreach ($cartoes as $cartao):?>
                                         <?php if ($cartao['status'] == 3):?>
                                             <?= $cartao['html'] ?>
@@ -77,7 +79,7 @@
                                         Feito
                                     </h3>
                                 </div>
-                                <div class="card-body drop-area" data-id="Status-4">
+                                <div class="card-body drop-area" data-id="4">
                                 <?php foreach ($cartoes as $cartao):?>
                                         <?php if ($cartao['status'] == 4):?>
                                             <?= $cartao['html'] ?>
@@ -93,7 +95,7 @@
                                         Cancelados
                                     </h3>
                                 </div>
-                                <div class="card-body drop-area" data-id="Status-5">
+                                <div class="card-body drop-area" data-id="5">
                                 <?php foreach ($cartoes as $cartao):?>
                                         <?php if ($cartao['status'] == 5):?>
                                             <?= $cartao['html'] ?>
@@ -145,16 +147,18 @@
                     // Chamada AJAX aqui
                     const tarefaId = draggable.dataset.id;
                     const statusId = dropArea.dataset.id;
-                    const url = `<?=base_url("tarefas")?>?Tarefa-id=${tarefaId}&status-id=${statusId}`; // Substitua 'url' pela sua URL real
+                    const url = `<?=base_url("tarefas/editarstatus")?>?Tarefa-id=${tarefaId}&status-id=${statusId}`; // Substitua 'url' pela sua URL real
 
                     fetch(url, {
                             method: 'GET'
                         })
                         .then(response => {
-                            if (!response.ok) {
-                                throw new Error(`Erro na requisição: ${response.status}`);
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Erro na requisição AJAX'.response.message);
                             }
-                            return response.json(); // Se a resposta for JSON
+                            // Se a resposta for JSON
                             //return response.text(); Se a resposta for texto
                         })
                         .then(data => {
@@ -162,14 +166,14 @@
                             console.log('Resposta do servidor:', data);
                             // Exibir mensagem de sucesso ou erro para o usuário
                             if (data.success) {
-                                alert("Tarefa movida com sucesso!");
+                                toastr.success("Tarefa movida com sucesso!");
                             } else {
-                                alert("Erro ao mover a tarefa.");
+                                toastr.error("Erro ao mover a tarefa.");
                             }
                         })
                         .catch(error => {
                             console.error('Erro na requisição AJAX:', error);
-                            alert("Erro ao mover a tarefa.");
+                            toastr.error("Erro ao mover a tarefa.");
                         });
                 });
             });
@@ -194,8 +198,9 @@
             }
         </script>
 
-        <?= $this->include('template/footer') ?>
+        
     </div>
+    <?= $this->include('template/footer') ?>
 </body>
 
 </html>

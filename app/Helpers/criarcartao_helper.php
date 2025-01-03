@@ -4,7 +4,7 @@ function criarcartao(array $items){
 
     $data = [];
     foreach($items as $item){
-    $html = "<div class='tarefa draggable' id='tarefa_".$item['id_tarefa']." draggable='true' data-id:'Tarefa-".$item['id_tarefa'].">
+    $html = "<div class='tarefa draggable' id='tarefa_".$item['id_tarefa']."' draggable='true' data-id='".$item['id_tarefa']."'>
                 <div class='card card-info card-outline'>
                     <div class='card-header'>
                         <h5 class='card-title'>".$item['tarefa']."</h5>
