@@ -52,7 +52,7 @@
             </div>
             <div class="col-4">
             <!-- Inicio SideBar do Formulario -->
-             <!-- Inicio das Anotações -->
+            <!-- Inicio das Anotações -->
             <div>
               <?= $this->include('template/componentes/processos/acordion') ?>
             </div>
@@ -64,8 +64,8 @@
             </div>
             <!--end::Accordion-->
             <!-- Fim das Intimações -->
-             
-             <!-- Inicio dos Movimentos -->
+            
+            <!-- Inicio dos Movimentos -->
             <div>
               <?= $this->include('template/componentes/processos/movimentos') ?>
             </div>

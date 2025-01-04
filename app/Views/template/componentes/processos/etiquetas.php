@@ -7,7 +7,7 @@
                         <span class="badge" style="background-color:#<?= $etiqueta['cor'] ?>" id="<?= $etiqueta['id_etiqueta'] ?>"><?= $etiqueta['nome'] ?>&nbsp; 
                             <i class="fas fa-times"></i>
                         </span>
-                    <?php endforeach; ?>
+                    <?php endforeach; ?> 
                 <?php endif; ?>
             <button class="btn btn-sm btn-outline-secondary" 
                 data-bs-toggle="modal" 

@@ -21,7 +21,7 @@ class ProcessosModel extends Model
         'tipoDocumento',
         'codigoClasse',
         'ativo',
-        'status',
+        'status', //P
         'numeroprocessocommascara',
         'risco', //'Provável', 'Possível', 'Remoto'
         'dataDistribuicao',
@@ -71,6 +71,7 @@ class ProcessosModel extends Model
         ->get();
         return $query->getResultArray();
     }
+    
     public function joinEtiquetasProcessos($id_processo){
         $query = $this->db->table('processos_etiquetas as pe')
         ->join('etiquetas as e', 'pe.etiqueta_id = e.id_etiqueta', 'left')
@@ -79,6 +80,8 @@ class ProcessosModel extends Model
         ->get();
         return $query->getResultArray();
     }
+
+
     /**
      * Remove a etiqueta de um processo
      * @param int $id_processo

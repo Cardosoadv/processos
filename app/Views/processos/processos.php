@@ -1,3 +1,15 @@
+<?php 
+
+use App\Models\ProcessosModel;
+
+function etiquetasDosProcesso($id_processo){
+    $etiquetas = new ProcessosModel();
+    $etiquetas = $etiquetas->joinEtiquetasProcessos($id_processo);
+    return $etiquetas;
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -41,7 +53,7 @@
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
                                     <a href="<?= base_url('processos/novo/') ?>" 
-                                       class="btn btn-success">
+                                        class="btn btn-success">
                                         Novo Processo
                                     </a>
                                 </div>
@@ -71,20 +83,38 @@
                                             <tbody>
                                                 <?php foreach ($processos as $processo): ?>
                                                     <tr>
-                                                        <td><?= esc($processo['numero_processo']) ?></td>
+                                                        <td><?= esc($processo['numeroprocessocommascara']) ?></td>
                                                         <td></td>
                                                         <td><?= esc($processo['dataDistribuicao']) ?></td>
                                                         <td>
                                                             <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
-                                                               class="btn btn-sm btn-primary">
+                                                                class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
                                                             <a href="<?= base_url('processos/excluir/' . $processo['id_processo']) ?>" 
-                                                               class="btn btn-sm btn-danger">
+                                                                class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
                                                         </td>
-                                                    </tr>
+                                                        </tr>
+                                                        <tr>
+                                                        <td>
+                                                            <?php 
+                                                            $etiquetas = etiquetasDosProcesso($processo['id_processo']);
+                                                            foreach ($etiquetas as $etiqueta){ 
+                                                                echo "<span class='badge mr-1' style='background-color:#".$etiqueta['cor']."' id=".$etiqueta['id_etiqueta']."'>".$etiqueta['nome']." &nbsp;";
+                                                                echo "<i class='fas fa-times'></i>";
+                                                                echo "</span>";
+                                                                echo " ";
+                                                            };
+                                                            ?>                                                        
+                                                            <button class="btn btn-sm btn-outline-secondary" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#addTagModal">
+                                                                    <i class="fas fa-plus"></i> Adicionar
+                                                            </button>
+                                                        </td>
+                                                        </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
