@@ -10,7 +10,7 @@ class Processos extends Migration
 
 
         $this->forge->addField([
-            'id_processo'               => ['type' => 'int', 'constraint' => 11],
+            'id_processo'               => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
             'siglaTribunal'             => ['type' => 'varchar', 'constraint' => 10, 'null' => true],
             'nomeOrgao'                 => ['type' => 'varchar', 'constraint'=>150, 'null' => true],
             'numero_processo'           => ['type' => 'varchar', 'constraint'=>50, 'null' => true],
