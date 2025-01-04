@@ -21,7 +21,8 @@ class Processos extends BaseController
         $pager = $processosModel->pager;
         $data['pager'] = $pager;
         $data['processos'] = $processos;
-
+        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
+        $data['etiquetas'] = [];
         
         return view('processos/processos', $data);
     }

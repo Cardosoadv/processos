@@ -83,23 +83,9 @@ function etiquetasDosProcesso($id_processo){
                                             <tbody>
                                                 <?php foreach ($processos as $processo): ?>
                                                     <tr>
-                                                        <td><?= esc($processo['numeroprocessocommascara']) ?></td>
-                                                        <td></td>
-                                                        <td><?= esc($processo['dataDistribuicao']) ?></td>
-                                                        <td>
-                                                            <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
-                                                                class="btn btn-sm btn-primary">
-                                                                Editar
-                                                            </a>
-                                                            <a href="<?= base_url('processos/excluir/' . $processo['id_processo']) ?>" 
-                                                                class="btn btn-sm btn-danger">
-                                                                Excluir
-                                                            </a>
-                                                        </td>
-                                                        </tr>
-                                                        <tr>
-                                                        <td>
-                                                            <?php 
+                                                        <td><?= esc($processo['numeroprocessocommascara']) ?>
+                                                        <br/>
+                                                        <?php 
                                                             $etiquetas = etiquetasDosProcesso($processo['id_processo']);
                                                             foreach ($etiquetas as $etiqueta){ 
                                                                 echo "<span class='badge mr-1' style='background-color:#".$etiqueta['cor']."' id=".$etiqueta['id_etiqueta']."'>".$etiqueta['nome']." &nbsp;";
@@ -113,6 +99,19 @@ function etiquetasDosProcesso($id_processo){
                                                                 data-bs-target="#addTagModal">
                                                                     <i class="fas fa-plus"></i> Adicionar
                                                             </button>
+
+                                                        </td>
+                                                        <td></td>
+                                                        <td><?= esc($processo['dataDistribuicao']) ?></td>
+                                                        <td>
+                                                            <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
+                                                                class="btn btn-sm btn-primary">
+                                                                Editar
+                                                            </a>
+                                                            <a href="<?= base_url('processos/excluir/' . $processo['id_processo']) ?>" 
+                                                                class="btn btn-sm btn-danger">
+                                                                Excluir
+                                                            </a>
                                                         </td>
                                                         </tr>
                                                 <?php endforeach; ?>
@@ -142,6 +141,7 @@ function etiquetasDosProcesso($id_processo){
         </main>
 
         <?= $this->include('template/modals/change_user_img.php') ?>
+        
         <?= $this->include('template/footer') ?>
     </div>
 
