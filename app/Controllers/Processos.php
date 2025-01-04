@@ -19,7 +19,7 @@ class Processos extends BaseController
         $processos = $processosModel
                     ->paginate(25);
         $pager = $processosModel->pager;
-        $data['pager'] = $pager->makeLinks($page,25,count($processosModel->findAll());
+        $data['pager'] = $pager->makeLinks($page,25,count($processosModel->findAll()));
         $data['processos'] = $processos;
 
         echo '<pre>';
