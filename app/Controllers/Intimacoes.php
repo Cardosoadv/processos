@@ -156,7 +156,7 @@ class Intimacoes extends BaseController
             'motivo_cancelamento'               => $intimacao['motivo_cancelamento'] ?? null,
             'data_cancelamento'                 => $intimacao['data_cancelamento'] ?? null,
             'datadisponibilizacao'              => $converterData->dataParaBancoDados($intimacao['datadisponibilizacao']),
-            'dataenvio'                         => $converterData->dataParaBancoDados($intimacao['dataenvio']),
+            'dataenvio'                         => $converterData->dataParaBancoDados($intimacao['datadisponibilizacao']),
             'meiocompleto'                      => $intimacao['meiocompleto'],
         ];
         $intimacoesModel->insert($data);
