@@ -121,7 +121,7 @@ class Intimacoes extends BaseController
             'tipoDocumento'            => $processos['tipoDocumento'],
             'codigoClasse'             => $processos['codigoClasse'],
             'ativo'                    => $processos['ativo'],
-            'status'                   => $processos['status'],
+            'status'                   => $processos['status'] ?? 'P',
             'risco'                    => $processos['risco'] ?? 'Possível',
             'numeroprocessocommascara' => $processos['numeroprocessocommascara'],
         ];
