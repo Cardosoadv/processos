@@ -14,19 +14,16 @@ class Processos extends BaseController
             'titulo'    => 'Processos',
         ];
 
-        $page = $this->request->getVar('page') ?? 1;
+
         $processosModel = model('ProcessosModel');
         $processos = $processosModel
                     ->paginate(25);
         $pager = $processosModel->pager;
-        $data['pager'] = $pager->makeLinks($page,25,count($processosModel->findAll()));
+        $data['pager'] = $pager;
         $data['processos'] = $processos;
 
-        echo '<pre>';
-        print_r($data['pager']);
-        echo '</pre>';
         
-        //return view('processos/processos', $data);
+        return view('processos/processos', $data);
     }
 
     /**
