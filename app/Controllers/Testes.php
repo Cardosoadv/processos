@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\Controller;
 use App\Libraries\ReceberIntimacoesJs;
 
 
@@ -24,8 +23,11 @@ class Testes extends BaseController
 
     public function processarIntimacoes()
     {
+
+        $lib = new ReceberIntimacoesJs(); 
+
         $json = $this->request->getJSON();
-        $lib = new ReceberIntimacoesJs();
+
         $resposta = $lib->getIntimacoes($json);
         return $this->response->setJSON($resposta);
         
