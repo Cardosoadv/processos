@@ -25,7 +25,7 @@ $permission = $permitions->permission();
 
         <li class="nav-item <?php echo (($active === "processos") ? "menu-open" : "");?>">
             <a href="<?php echo site_url('processos');?>" class="nav-link <?php echo (($active === "processos") ? "active" : "");?>">
-                <i class="nav-icon bi bi-box-seam-fill"></i>
+                <i class="nav-icon fa-solid fa-landmark"></i>
                 <p> Processos </p>
             </a>
         </li>
@@ -35,7 +35,8 @@ $permission = $permitions->permission();
     <?php if($permission['intimacoes']):?>
 
         <li class="nav-item <?php echo (($active === "intimacoes") ? "menu-open" : "");?>">
-            <a href="<?php echo site_url('intimacoes');?>" class="nav-link <?php echo (($active === "intimacoes") ? "active" : "");?>"><i class="nav-icon bi bi-box-seam-fill"></i>
+            <a href="<?php echo site_url('intimacoes');?>" class="nav-link <?php echo (($active === "intimacoes") ? "active" : "");?>">
+                <i class="nav-icon fa-solid fa-cloud-arrow-down"></i>
                 <p>Intimacoes</p>
             </a>
         </li>

@@ -15,6 +15,14 @@ class Intimacoes extends BaseController
 {
     public function index()
     {
+        $intimacoesModel = model('IntimacoesModel');
+        $data['titulo'] = 'Intimações';
+        $data['intimacoes'] = $intimacoesModel->orderBy('data_disponibilizacao', 'DESC')->findAll();
+        return view('intimacoes', $data);
+    }
+
+    public function receberIntimacoes()
+    {
 
         $oab = "61061";
         $ufOab = "MG";
