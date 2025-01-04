@@ -54,7 +54,50 @@
 
                                 <!-- Data Table -->
                                 <div class="mt-3">
-                                    <?= $table ?>
+                                    <?php if (empty($processos)): ?>
+                                        <div class="alert alert-info">
+                                            Nenhum processo encontrado.
+                                        </div>
+                                    <?php else: ?>
+                                        <table class="table table-striped hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Número do Processo</th>
+                                                    <th>Nome</th>
+                                                    <th>Data de Criação</th>
+                                                    <th>Ações</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($processos as $processo): ?>
+                                                    <tr>
+                                                        <td><?= esc($processo['numero_processo']) ?></td>
+                                                        <td></td>
+                                                        <td><?= esc($processo['dataDistribuicao']) ?></td>
+                                                        <td>
+                                                            <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
+                                                               class="btn btn-sm btn-primary">
+                                                                Editar
+                                                            </a>
+                                                            <a href="<?= base_url('processos/excluir/' . $processo['id_processo']) ?>" 
+                                                               class="btn btn-sm btn-danger">
+                                                                Excluir
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                        <ul class="pagination justify-content-center">
+                                            <?php foreach ($pager->links() as $link): ?>
+                                                <li class="page-item <?= $link['active'] ? 'active' : '' ?>">
+                                                    <a href="<?= $link['uri'] ?>" class="page-link">
+                                                        <?= $link['title'] ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>

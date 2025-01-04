@@ -14,38 +14,19 @@ class Processos extends BaseController
             'titulo'    => 'Processos',
         ];
 
-        $table = new \CodeIgniter\View\Table();
+        $page = $this->request->getVar('page') ?? 1;
         $processosModel = model('ProcessosModel');
         $processos = $processosModel
-                ->findAll();
-        //Seta os titulos da tabela
-        $table->setHeading(['Numero Processo', 'Tribunal', 'Orgão', 'Ações']);
-        //Define o template da tabela        
-        $template = [
-                        'table_open' => '<table class="table table-hover">',
-                        'cell_start'  => '<td class="col-md-4">', // Define a largura da primeira coluna como 3/12 do container
-                        'cell_alt_start' => '<td class="col-md-4">', // Deixa as outras colunas com largura automática
-                    ];
-        $table->setTemplate($template);   
-        //Adiciona as linhas na tabela
-        foreach ($processos as $processo) {
-            $table->addRow([
-                $processo['numeroprocessocommascara'],
-                ['data' => $processo['siglaTribunal'], 'class' =>'col'], //Ajusta a largura desta coluna.
-                $processo['nomeOrgao'],
-                '<div class="btn-group">
-                    <a href="' . base_url('processos/consultarprocesso/' . $processo['id_processo']) . '" class="btn btn-primary">
-                        <i class="fas fa-edit"></i> Editar
-                    </a>
-                    <a href="' . base_url('processos/excluir/' . $processo['id_processo']) . '" class="btn btn-danger">
-                        <i class="fas fa-trash"></i> Excluir
-                    </a>
-                </div>'
-            ]);
-        }
-        //Gera a tabela
-        $data['table'] = $table->generate();
-        return view('processos/processos', $data);
+                    ->paginate(25);
+        $pager = $processosModel->pager;
+        $data['pager'] = $pager->makeLinks($page,25,count($processosModel->findAll());
+        $data['processos'] = $processos;
+
+        echo '<pre>';
+        print_r($data['pager']);
+        echo '</pre>';
+        
+        //return view('processos/processos', $data);
     }
 
     /**
