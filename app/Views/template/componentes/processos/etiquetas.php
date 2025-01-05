@@ -21,7 +21,7 @@
     document.addEventListener('DOMContentLoaded', function () {
         // Seleciona todos os ícones de exclusão
         var deleteIcons = document.querySelectorAll('.badge i.fas.fa-times');
-        var processo = <?= $processo['id_processo']?>;
+        var processo = <?= $processo['id_processo']?? 0?>;
         // Adiciona um ouvinte de evento de clique para cada ícone
         deleteIcons.forEach(function (icon) {
             icon.addEventListener('click', function () {

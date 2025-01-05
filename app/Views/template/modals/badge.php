@@ -57,7 +57,7 @@
                     body: JSON.stringify({
                         nome: tagName,
                         cor: tagColor,
-                        id_processo: <?= $processo['id_processo']?>,
+                        id_processo: <?= $processo['id_processo'] ?? 0 ?>,
                     })
                 })
                 .then(response => response.json())
@@ -103,7 +103,7 @@
         function adcionaTag(tag) {
             console.log(tag);
             const etiquetaId = parseInt(tag.id);
-            const processoId = <?= $processo['id_processo']?>;
+            const processoId = <?= $processo['id_processo'] ?? 0?>;
             const tagName = tag.textContent;
             const tagColor = tag.getAttribute('data-cor'); // Corrigir para obter a cor correta
             const tagsContainer = document.querySelector('.d-flex.flex-wrap.gap-2');

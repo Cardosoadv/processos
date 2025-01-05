@@ -229,6 +229,8 @@ class Processos extends BaseController
             'titulo'    => 'Novo Processo',
         ];
         $data['img'] = 'vazio.png';
+        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
+        $data['etiquetas'] = [];
         return view('processos/consultarProcesso', $data);
     }
 
