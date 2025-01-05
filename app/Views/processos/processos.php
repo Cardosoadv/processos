@@ -71,7 +71,7 @@ function etiquetasDosProcesso($id_processo){
                                             Nenhum processo encontrado.
                                         </div>
                                     <?php else: ?>
-                                        <table class="table table-striped hover">
+                                        <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>Número do Processo</th>
