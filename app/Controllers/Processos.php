@@ -14,7 +14,7 @@ class Processos extends BaseController
             'titulo'    => 'Processos',
         ];
 
-
+ 
         $processosModel = model('ProcessosModel');
         $processos = $processosModel
                     ->paginate(25);
