@@ -24,3 +24,4 @@ $data = $this->response->getPost();
 echo '<pre>';
 print_r($data);
 }
+}
