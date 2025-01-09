@@ -18,8 +18,10 @@ class Clientes extends BaseController
 
     }
 
-    public function salvar($id=null){
+    public function salvar(){
 
+        $id = $this->request->getPost('id_cliente') ?? null;
+        
         if($id === null){
         $data = $this->request->getPost();
         echo '<pre>';
