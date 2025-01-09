@@ -1,5 +1,5 @@
 <!--begin::Accordion-->
-<div class="card card-primary card-outline mb-4"><!--begin::Header-->
+<div class="card card-info card-outline mb-4"><!--begin::Header-->
     <div class="card-header">
         <div class="card-title">Intimações</div>
     </div><!--end::Header-->

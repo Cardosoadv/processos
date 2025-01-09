@@ -1,3 +1,9 @@
+<?php
+
+$selected = $processo['id_processo'] ?? "";
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -52,6 +58,13 @@
             </div>
             <div class="col-4">
             <!-- Inicio SideBar do Formulario -->
+
+            <!-- Inicio das Tarefas -->
+            <div>
+              <?= $this->include('template/componentes/tarefas/sidebar') ?>
+            </div>
+            <!-- Fim das Tarefas -->
+
             <!-- Inicio das Anotações -->
             <div>
               <?= $this->include('template/componentes/processos/acordion') ?>
@@ -82,6 +95,7 @@
   <?= $this->include('template/modals/change_user_img.php') ?>
   <?= $this->include('template/modals/anotacao.php') ?>
   <?= $this->include('template/modals/badge.php') ?>
+  <?= $this->include('template/modals/tarefas.php') ?>
   <?= $this->include('template/footer') ?>
 
 

@@ -1,5 +1,12 @@
+<?php
+
+$processos = model('ProcessosModel')->findAll();
+
+?>
+
+
 <form method="post" id="form_tarefa" name="form_tarefa" action="<?= site_url('/tarefas/nova') ?>">
-    <div class=" row">
+    <div class=" row py-1">
         <div class="form-group col-md-6">
             <label>Tarefa</label>
             <div class="input-group">
@@ -12,6 +19,16 @@
             <div class="input-group">
                 <input type="date" name="prazo" value="" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" spellcheck="false" data-ms-editor="true">
             </div>
+        </div>
+    </div>
+
+    <div class="row py-1" >
+        <div class = "form-group">
+            <select name="processo_id" class="form-control">
+                <?php foreach ($processos as $processo) : ?>
+                    <option value="<?= $processo['id_processo'] ?>" <?= isset($selected) && $processo['id_processo'] == $selected ? 'selected' : ''?>><?= $processo['numeroprocessocommascara'] ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
     </div>
 

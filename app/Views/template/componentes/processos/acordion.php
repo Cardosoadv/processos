@@ -1,5 +1,5 @@
 <!--begin::Accordion-->
-<div class="card card-primary card-outline mb-4"><!--begin::Header-->
+<div class="card card-secondary card-outline mb-4"><!--begin::Header-->
     <div class="card-header">
         <div class="card-title">Anotações</div>
         <div class="card-tools">
