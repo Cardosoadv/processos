@@ -18,10 +18,14 @@ class Clientes extends BaseController
 
     }
 
-public function salvar(){
+    public function salvar(){
 
-$data = $this->request->getPost();
-echo '<pre>';
-print_r($data);
-}
+        $data = $this->request->getPost();
+        echo '<pre>';
+        print_r($data);
+    
+        // Para debug adicional, você pode adicionar:
+        var_dump($this->request->getBody());
+        var_dump($_POST);
+    }
 }
