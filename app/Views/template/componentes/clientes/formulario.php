@@ -1,4 +1,5 @@
 <form method="post" id="form_cliente" name="form_cliente" action="<?= site_url('clientes/salvar') ?>/<?= $cliente['id_cliente'] ?? '' ?>">
+    <?= csrf_field() ?>
     <input type="hidden" name="id_cliente" value="<?= $cliente['id_cliente'] ?? '' ?>">
 
     <div class="row mb-3">
