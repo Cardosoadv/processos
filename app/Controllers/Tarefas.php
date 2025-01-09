@@ -15,6 +15,7 @@ class Tarefas extends BaseController
         $data['tarefas'] = model('TarefasModel')->findAll();
         helper('criarcartao');
         $data['cartoes'] = criarcartao($data['tarefas']);
+        Session()->set(['msg'=> null]);
         return view('kamban', $data);
     }
 

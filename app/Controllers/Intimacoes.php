@@ -18,6 +18,7 @@ class Intimacoes extends BaseController
         $intimacoesModel = model('IntimacoesModel');
         $data['titulo'] = 'Intimações';
         $data['intimacoes'] = $intimacoesModel->orderBy('data_disponibilizacao', 'DESC')->findAll();
+        Session()->set(['msg'=> null]);
         return view('intimacoes', $data);
     }
 

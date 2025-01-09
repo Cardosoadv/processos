@@ -20,6 +20,7 @@ class IntimacoesJs extends BaseController
         $query = http_build_query($params);
         $this->apiUrl .= '?' . $query;
         $data['apiUrl'] = $this->apiUrl;
+        Session()->set(['msg'=> null]);
         return view('receberintimacoesjs2', $data);
     }
 
@@ -42,6 +43,7 @@ class IntimacoesJs extends BaseController
         $query = http_build_query($params);
         $this->apiUrl .= '?' . http_build_query($params);
         $data['apiUrl'] = $this->apiUrl;
+        Session()->set(['msg'=> null]);
         return view('receberintimacoesjs2', $data);
     }
 
@@ -55,6 +57,7 @@ class IntimacoesJs extends BaseController
         $query = http_build_query($params);
         $this->apiUrl .= '?' . $query;
         $data['apiUrl'] = $this->apiUrl;
+        Session()->set(['msg'=> null]);
         return view('receberintimacoesjs2', $data);
     }
 

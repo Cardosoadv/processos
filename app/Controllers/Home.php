@@ -12,6 +12,7 @@ class Home extends BaseController
             'titulo'    => 'Dashboard'
         ];
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
+        Session()->set(['msg'=> null]);
         return view('dashboard', $data);
     }
 

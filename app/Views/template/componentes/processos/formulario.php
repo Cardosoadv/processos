@@ -66,12 +66,27 @@ function mask(input) {
 
 
     <div class="row mt-3">
-
         <div class="form-group">
             <label>Juízo</label>
             <input type="text" name="nomeOrgao" class="form-control" value="<?= $processo['nomeOrgao'] ?? '' ?>">
         </div>
+    </div>
 
+    <div class="row mt-3">
+        <div class="form-group col-10">
+            <label>Cliente</label>
+            <select name="cliente_id" class="form-control">
+            <option value="">Selecione um Cliente</option>
+                <?php foreach ($clientes as $cliente): ?>
+                    <option value="<?= $cliente['id_cliente'] ?>" <?= ($processo['cliente_id'] ?? '' == $cliente['id_cliente']) ? 'selected' : '' ?>><?= $cliente['nome'] ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group col-2">
+            <a href="<?= base_url('clientes/novo/') ?>" class="btn btn-success">
+                Novo Cliente
+            </a>
+        </div>
     </div>
 
     <div class="row mt-3 border rounded bg-custom" style="background-color: #f0f0f0;">

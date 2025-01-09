@@ -3,18 +3,22 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
+use Exception;
 
 class Clientes extends BaseController
 {
     public function index()
     {
         $data = [
-            'img'       =>  'vazio.png',
-            'titulo'    => 'Processos',
+            'img'       => 'vazio.png',
+            'titulo'    => 'Clientes',
         ];
+        Session()->set(['msg'=> null]);
+        $clientesModel = model('ClientesModel');
+        $data['clientes'] = $clientesModel->paginate(25);
+        $data['pager'] = $clientesModel->pager;
 
-        return view('clientes/consultarClientes', $data);
+        return view('clientes/clientes', $data);
 
     }
 
@@ -23,15 +27,35 @@ class Clientes extends BaseController
         $id = $this->request->getPost('id_cliente') ?? null;
         
         if(! is_numeric($id)){
-        $data = $this->request->getPost();
-        $clientesModel = model('ClientesModel')->insert($data);
- 
-        echo '<pre>';
-        print_r($data);
-    
-        // Para debug adicional, você pode adicionar:
-        var_dump($this->request->getBody());
-        var_dump($_POST);
+            $data = $this->request->getPost();
+            try{
+            model('ClientesModel')->insert($data);
+            return redirect()->to(base_url('clientes'));
+            }
+            catch(Exception $e){
+                Session()->set(['msg'=> $e]);
+                return redirect()->to(base_url('clientes'));
+            }
         }
+    }
+
+    public function editarCliente($id){
+        $data = [
+            'img'       => 'vazio.png',
+            'titulo'    => 'Editar Dados do Cliente',
+        ];
+        $data['cliente'] = model('ClientesModel')->find($id);
+        Session()->set(['msg'=> null]);
+
+        return view('clientes/consultarClientes', $data);
+    }
+
+    public function novo(){
+        $data = [
+            'img'       => 'vazio.png',
+            'titulo'    => 'Novo Cliente',
+        ];
+        Session()->set(['msg'=> null]);
+        return view('clientes/consultarClientes', $data);
     }
 }

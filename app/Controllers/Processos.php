@@ -23,7 +23,7 @@ class Processos extends BaseController
         $data['processos'] = $processos;
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
         $data['etiquetas'] = [];
-        
+        Session()->set(['msg'=> null]);
         return view('processos/processos', $data);
     }
 
@@ -59,8 +59,15 @@ class Processos extends BaseController
         $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
         $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
+        $data['clientes'] = model('ClientesModel')->findAll();
         $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
+        Session()->set(['msg'=> null]);
         return view('processos/consultarProcesso', $data);
+    }
+
+    public function editar(int $id){
+
+        return redirect()->to(base_url('processos/consultarprocesso/'.$id));
     }
 
 
@@ -100,6 +107,7 @@ class Processos extends BaseController
                 'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
                 'comentario'                    => $this->request->getPost('comentario'),
                 'resultado'                     => $this->request->getPost('resultado'),
+                'cliente_id'                    => $this->request->getPost('cliente_id'),
             ];
             
             //Salvando Polo Ativo
@@ -150,6 +158,7 @@ class Processos extends BaseController
                 'valorCondenacao'               => $this->request->getPost('valorCondenacao'),
                 'comentario'                    => $this->request->getPost('comentario'),
                 'resultado'                     => $this->request->getPost('resultado'),
+                'cliente_id'                    => $this->request->getPost('cliente_id'),
             ];
             //Limpa as partes do processo
             $partesProcessoModel->deletarParteDoProcesso($id);
