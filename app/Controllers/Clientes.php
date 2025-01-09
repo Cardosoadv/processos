@@ -22,8 +22,10 @@ class Clientes extends BaseController
 
         $id = $this->request->getPost('id_cliente') ?? null;
         
-        if($id === null){
+        if(! is_numeric($id)){
         $data = $this->request->getPost();
+        $clientesModel = model('ClientesModel')->insert($data);
+ 
         echo '<pre>';
         print_r($data);
     
