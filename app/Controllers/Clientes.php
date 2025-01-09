@@ -20,7 +20,7 @@ class Clientes extends BaseController
 
 public function salvar(){
 
-$data = $this->response->getPost();
+$data = $this->request->getPost();
 echo '<pre>';
 print_r($data);
 }
