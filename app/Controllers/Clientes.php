@@ -17,4 +17,10 @@ class Clientes extends BaseController
         return view('clientes/consultarClientes', $data);
 
     }
+
+public function salvar(){
+
+$data = $this->response->getPost();
+echo '<pre>';
+print_r($data);
 }
