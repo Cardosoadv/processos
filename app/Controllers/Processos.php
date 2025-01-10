@@ -61,6 +61,8 @@ class Processos extends BaseController
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
         $data['clientes'] = model('ClientesModel')->findAll();
         $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
+        $data['tarefas'] = model('TarefasModel')->where('processo_id', $id)->get()->getResultArray();
+        $data['responsaveis'] = model('ResposavelModel')->getUsers();
         Session()->set(['msg'=> null]);
         return view('processos/consultarProcesso', $data);
     }
