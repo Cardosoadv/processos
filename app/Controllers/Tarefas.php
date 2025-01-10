@@ -57,6 +57,18 @@ class Tarefas extends BaseController
         }
     }
 
+    public function listarTarefas(){
+        $tarefasModel = model('TarefasModel');
+        $data = [
+            'img'       =>  'vazio.png',
+            'titulo'    => 'Tarefas',
+        ];
+        $data['tarefas'] = $tarefasModel->paginate(25);
+        $data['pager'] = $tarefasModel->pager;
+        Session()->set(['msg'=> null]);
+        return view('tarefas', $data);
+
+    }
 
 
 }
