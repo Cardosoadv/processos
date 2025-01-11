@@ -35,7 +35,7 @@
                     <label class="form-check-label" for="inlineCheckbox1">Privado</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="privacidade" id="inlineCheckbox2" value="2">
+                    <input class="form-check-input" type="radio" name="privacidade" id="inlineCheckbox2" value="2" disabled>
                     <label class="form-check-label" for="inlineCheckbox2">Envolvidos</label>
                 </div>
                 <div class="form-check form-check-inline">

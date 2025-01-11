@@ -17,6 +17,7 @@ class ProcessosAnotacoesModel extends Model
         'titulo',
         'anotacao',
         'privacidade', // 1 - Privado, 2 - Envolvidos, 3 - Público
+        'user_id',
         'processo_id',
     ];
 
@@ -49,4 +50,21 @@ class ProcessosAnotacoesModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Retorna as anotações feitas pelo usuário logado ou marcadas como públicas
+     * @param int $userId
+     * @param int $processoId
+     * @return array
+     */
+    public function getAnotacoesPublicasOuDoUsuarioPorProcesso($userId, $processoId)
+    {
+        return $this->where('processo_id', $processoId)
+                    ->groupStart() // Inicia o grupo de condições OR
+                        ->where('user_id', $userId) // Anotações do usuário
+                        ->orWhere('privacidade', 3) // OU anotações públicas
+                    ->groupEnd() // Finaliza o grupo de condições OR
+                    ->findAll();
+    }
+
 }

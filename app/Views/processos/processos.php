@@ -74,10 +74,9 @@ function etiquetasDosProcesso($id_processo){
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Número do Processo</th>
-                                                    <th>Nome</th>
-                                                    <th>Data de Criação</th>
-                                                    <th>Ações</th>
+                                                    <th class="col-4">Número do Processo</th>
+                                                    <th class="col-6">Titulo / Cliente</th>
+                                                    <th class="col-2">Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -88,28 +87,37 @@ function etiquetasDosProcesso($id_processo){
                                                         <?php 
                                                             $etiquetas = etiquetasDosProcesso($processo['id_processo']);
                                                             foreach ($etiquetas as $etiqueta){ 
-                                                                echo "<span class='badge mr-1' style='background-color:#".$etiqueta['cor']."' id=".$etiqueta['id_etiqueta']."'>".$etiqueta['nome']." &nbsp;";
+                                                                echo "<span class='badge mr-1' style='background-color:#".$etiqueta['cor']."; font-size: 0.5rem;' id=".$etiqueta['id_etiqueta'].">".$etiqueta['nome']." &nbsp;";
                                                                 echo "<i class='fas fa-times'></i>";
                                                                 echo "</span>";
                                                                 echo " ";
                                                             };
-                                                            ?>                                                        
-                                                            <button class="btn btn-sm btn-outline-secondary" 
+                                                            ?>
+                                                                                                                
+                                                            <button class="btn btn-sm btn-outline-secondary"
+                                                                style="padding: 0.1rem 0.25rem; font-size: 0.5rem;"
                                                                 data-bs-toggle="modal" 
                                                                 data-bs-target="#addTagModal">
-                                                                    <i class="fas fa-plus"></i> Adicionar
+                                                                    <i class="fas fa-plus" style="font-size: 0.5rem;"></i> Adicionar
                                                             </button>
+                                                            
 
                                                         </td>
-                                                        <td></td>
-                                                        <td><?= esc($processo['dataDistribuicao']) ?></td>
+                                                        <td><?= esc($processo['titulo_processo']) ?><br/>
+                                                        <?= esc($processo['nome']) ?>
+                                                    
+                                                    
+                                                        </td>
+                                                       
                                                         <td>
                                                             <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
-                                                                class="btn btn-sm btn-primary">
+                                                                class="btn btn-sm btn-primary"
+                                                                style="padding: 0.1rem 0.25rem; font-size: 0.7rem;">
                                                                 Editar
                                                             </a>
                                                             <a href="<?= base_url('processos/excluir/' . $processo['id_processo']) ?>" 
-                                                                class="btn btn-sm btn-danger">
+                                                                class="btn btn-sm btn-danger"
+                                                                style="padding: 0.1rem 0.25rem; font-size: 0.7rem;">
                                                                 Excluir
                                                             </a>
                                                         </td>

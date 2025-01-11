@@ -17,10 +17,9 @@ class Processos extends BaseController
  
         $processosModel = model('ProcessosModel');
         $processos = $processosModel
-                    ->paginate(25);
-        $pager = $processosModel->pager;
-        $data['pager'] = $pager;
-        $data['processos'] = $processos;
+                    ->joinProcessoCliente(25);
+        $data['pager'] = $processos['pager'];
+        $data['processos'] = $processos['processos'];
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
         $data['etiquetas'] = [];
         Session()->set(['msg'=> null]);
@@ -55,14 +54,14 @@ class Processos extends BaseController
         $numeroProcesso = $data['processo']['numero_processo'];
         $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
         $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
-        $data['anotacoes'] = model('ProcessosAnotacoesModel')->where('processo_id', $id)->get()->getResultArray();
+        $data['anotacoes'] = model('ProcessosAnotacoesModel')->getAnotacoesPublicasOuDoUsuarioPorProcesso(user_id(), $id);
         $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
         $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
-        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
-        $data['clientes'] = model('ClientesModel')->findAll();
+        $data['listaetiquetas'] = model('EtiquetasModel')->findAll(); //TODO Mover lógica para view
+        $data['clientes'] = model('ClientesModel')->findAll(); //TODO Mover lógica para view
         $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
         $data['tarefas'] = model('TarefasModel')->where('processo_id', $id)->get()->getResultArray();
-        $data['responsaveis'] = model('ResposavelModel')->getUsers();
+        $data['responsaveis'] = model('ResposavelModel')->getUsers(); //TODO Mover lógica para view
         Session()->set(['msg'=> null]);
         return view('processos/consultarProcesso', $data);
     }
@@ -101,6 +100,7 @@ class Processos extends BaseController
             $poloPassivo = $this->request->getPost('poloPassivo[]');
             $data = [
                 'tipoDocumento'                 => $this->request->getPost('tipoDocumento'),
+                'titulo_processo'               => $this->request->getPost('titulo_processo'),
                 'nomeOrgao'                     => $this->request->getPost('nomeOrgao'),
                 'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
                 'dataDistribuicao'              => $this->request->getPost('dataDistribuicao'),
@@ -151,6 +151,7 @@ class Processos extends BaseController
             $data = [
                 'id_processo'                   => $this->request->getPost('id_processo'),
                 'tipoDocumento'                 => $this->request->getPost('tipoDocumento'),
+                'titulo_processo'               => $this->request->getPost('titulo_processo'),
                 'siglaTribunal'                 => $this->request->getPost('siglaTribunal'),
                 'nomeOrgao'                     => $this->request->getPost('nomeOrgao'),
                 'numeroprocessocommascara'      => $this->request->getPost('numeroprocessocommascara'),
@@ -251,6 +252,7 @@ class Processos extends BaseController
     public function adicionarAnotacao(){
         $processosAnotacoesModel = model('ProcessosAnotacoesModel');
         $data = $this->request->getPost();
+        $data['user_id'] = user_id();
         $processosAnotacoesModel->insert($data);
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
     }

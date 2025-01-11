@@ -26,7 +26,7 @@ $processos = model('ProcessosModel')->findAll();
         <div class = "form-group">
             <select name="processo_id" class="form-control">
                 <?php foreach ($processos as $processo) : ?>
-                    <option value="<?= $processo['id_processo'] ?>" <?= isset($selected) && $processo['id_processo'] == $selected ? 'selected' : ''?>><?= $processo['numeroprocessocommascara'] ?></option>
+                    <option value="<?= $processo['id_processo'] ?>" <?= isset($selected) && $processo['id_processo'] == $selected ? 'selected' : ''?>><?= $processo['numeroprocessocommascara'] ?> - <?= esc($processo['titulo_processo']) ?></option>
                 <?php endforeach; ?>
             </select>
         </div>

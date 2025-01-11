@@ -17,6 +17,7 @@ class ProcessosModel extends Model
         'siglaTribunal',
         'nomeOrgao',
         'numero_processo',
+        'titulo_processo',
         'link',
         'tipoDocumento',
         'codigoClasse',
@@ -29,6 +30,7 @@ class ProcessosModel extends Model
         'resultado', //'Não Finalizado', 'Sucesso', 'Sucesso Parcial', 'Derrota'
         'valorCondenacao',
         'comentario',
+        'cliente_id',
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -110,6 +112,19 @@ class ProcessosModel extends Model
         ->where('etiqueta_id', $id_etiqueta)
         ->delete();
         return $this->db->affectedRows();
+    }
+
+    /**
+     * Join processo e cliente
+     */
+    public function joinProcessoCliente(?int $porPagina = 25){
+        $this->builder()
+        ->join('clientes', 'processos.cliente_id = clientes.id_cliente', 'left');
+        
+        return [
+            'processos'  => $this->paginate($porPagina),
+            'pager' => $this->pager,
+        ];
     }
 
 }

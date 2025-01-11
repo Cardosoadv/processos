@@ -63,6 +63,12 @@ function mask(input) {
 
     </div>
 
+    <div class="row mt-3">
+        <div class="form-group">
+            <label>Titulo</label>
+            <input type="text" name="titulo_processo" class="form-control" value="<?= $processo['titulo_processo'] ?? '' ?>">
+        </div>
+    </div>
 
 
     <div class="row mt-3">
