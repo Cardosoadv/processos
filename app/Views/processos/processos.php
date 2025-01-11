@@ -100,15 +100,10 @@ function etiquetasDosProcesso($id_processo){
                                                                 data-bs-target="#addTagModal">
                                                                     <i class="fas fa-plus" style="font-size: 0.5rem;"></i> Adicionar
                                                             </button>
-                                                            
-
                                                         </td>
                                                         <td><?= esc($processo['titulo_processo']) ?><br/>
                                                         <?= esc($processo['nome']) ?>
-                                                    
-                                                    
                                                         </td>
-                                                       
                                                         <td>
                                                             <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
                                                                 class="btn btn-sm btn-primary"

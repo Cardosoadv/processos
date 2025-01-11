@@ -1,3 +1,7 @@
+<?php 
+$listaetiquetas = model('EtiquetasModel')->findAll();
+?>
+
 <script src="<?= base_url('public/js/jscolor.js')?>"></script>
 <!-- Modal para adicionar nova etiqueta -->
 <div class="modal fade" id="addTagModal" tabindex="-1" aria-labelledby="addTagModalLabel" aria-hidden="true">

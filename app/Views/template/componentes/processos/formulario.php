@@ -1,3 +1,7 @@
+<?php
+$clientes = model('ClientesModel')->findAll();
+?>
+
 <script>
 /**
  * Função para adicionar um campo de polo ativo

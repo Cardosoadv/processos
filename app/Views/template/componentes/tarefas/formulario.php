@@ -1,7 +1,6 @@
 <?php
-
 $processos = model('ProcessosModel')->findAll();
-
+$responsaveis = model('ResposavelModel')->getUsers();
 ?>
 
 

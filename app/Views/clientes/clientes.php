@@ -78,6 +78,10 @@
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
+                                                            <a href="<?= base_url('processos/processosdocliente/' . $cliente['id_cliente']) ?>" 
+                                                                class="btn btn-sm btn-secondary">
+                                                                Processos
+                                                            </a>
                                                         </td>
                                                         </tr>
                                                 <?php endforeach; ?>

@@ -9,19 +9,68 @@ class Processos extends BaseController
 {
 
     public function index(){
+        //TODO Incluir ordenação pelos cabeçahos da tabela
         $data = [
             'img'       =>  'vazio.png',
             'titulo'    => 'Processos',
         ];
+        $s = $this->request->getGet('s');
+        if($s === null){
+            $processosModel = model('ProcessosModel');
+            $processos = $processosModel
+                                        ->joinProcessoCliente(25);
+            $data['pager'] = $processos['pager'];
+            $data['processos'] = $processos['processos'];
+        }else{
+            $processosModel = model('ProcessosModel');
+            $processos = $processosModel
+                                        ->groupStart() // Inicia o grupo de condições OR
+                                            ->like('numero_processo', $s) // Pesquisa por numero do processo
+                                            ->orLike('titulo_processo', $s) // OU Pelo Titulo dele
+                                        ->groupEnd() // Finaliza o grupo de condições OR
+                                        ->joinProcessoCliente(25)
+                                        ;
+            $data['pager'] = $processos['pager'];
+            $data['processos'] = $processos['processos'];
+        }
 
- 
-        $processosModel = model('ProcessosModel');
-        $processos = $processosModel
-                    ->joinProcessoCliente(25);
-        $data['pager'] = $processos['pager'];
-        $data['processos'] = $processos['processos'];
-        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
-        $data['etiquetas'] = [];
+        Session()->set(['msg'=> null]);
+        return view('processos/processos', $data);
+    }
+    
+    /**
+     * Retorna os processos do cliente
+     * @param int $cliente_id
+     * @return view com os processos do cliente
+     */
+    public function processosDoCliente(?int $cliente_id){
+        
+        $data = [
+            'img'       =>  'vazio.png',
+            'titulo'    => 'Processos',
+        ];
+        $s = $this->request->getGet('s');
+        if($s === null){
+            $processosModel = model('ProcessosModel');
+            $processos = $processosModel
+                                        ->where('cliente_id', $cliente_id)
+                                        ->joinProcessoCliente(25);
+            $data['pager'] = $processos['pager'];
+            $data['processos'] = $processos['processos'];
+        }else{
+            $processosModel = model('ProcessosModel');
+            $processos = $processosModel
+                                        ->where('cliente_id', $cliente_id)
+                                        ->groupStart() // Inicia o grupo de condições OR
+                                            ->like('numero_processo', $s) // Pesquisa por numero do processo
+                                            ->orLike('titulo_processo', $s) // OU Pelo Titulo dele
+                                        ->groupEnd() // Finaliza o grupo de condições OR
+                                        ->joinProcessoCliente(25)
+                                        ;
+            $data['pager'] = $processos['pager'];
+            $data['processos'] = $processos['processos'];
+        }
+
         Session()->set(['msg'=> null]);
         return view('processos/processos', $data);
     }
@@ -49,7 +98,7 @@ class Processos extends BaseController
         $data = [
             'titulo'    => 'Consultar Processo',
         ];
-        $data['img'] = 'vazio.png';
+        $data['img'] = 'vazio.png'; 
         $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
         $numeroProcesso = $data['processo']['numero_processo'];
         $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
@@ -57,11 +106,8 @@ class Processos extends BaseController
         $data['anotacoes'] = model('ProcessosAnotacoesModel')->getAnotacoesPublicasOuDoUsuarioPorProcesso(user_id(), $id);
         $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
         $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
-        $data['listaetiquetas'] = model('EtiquetasModel')->findAll(); //TODO Mover lógica para view
-        $data['clientes'] = model('ClientesModel')->findAll(); //TODO Mover lógica para view
         $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
         $data['tarefas'] = model('TarefasModel')->where('processo_id', $id)->get()->getResultArray();
-        $data['responsaveis'] = model('ResposavelModel')->getUsers(); //TODO Mover lógica para view
         Session()->set(['msg'=> null]);
         return view('processos/consultarProcesso', $data);
     }
