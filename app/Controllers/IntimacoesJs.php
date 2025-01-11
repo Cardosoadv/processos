@@ -21,7 +21,7 @@ class IntimacoesJs extends BaseController
         $this->apiUrl .= '?' . $query;
         $data['apiUrl'] = $this->apiUrl;
         Session()->set(['msg'=> null]);
-        return view('receberintimacoesjs2', $data);
+        return view('receberintimacoesjs', $data);
     }
 
     public function processarIntimacoes()
@@ -40,11 +40,10 @@ class IntimacoesJs extends BaseController
         $params = [
             'numeroProcesso' => $numeroProcesso,
         ];
-        $query = http_build_query($params);
         $this->apiUrl .= '?' . http_build_query($params);
         $data['apiUrl'] = $this->apiUrl;
         Session()->set(['msg'=> null]);
-        return view('receberintimacoesjs2', $data);
+        return view('receberintimacoesjs', $data);
     }
 
     public function rodrigo()
@@ -58,7 +57,7 @@ class IntimacoesJs extends BaseController
         $this->apiUrl .= '?' . $query;
         $data['apiUrl'] = $this->apiUrl;
         Session()->set(['msg'=> null]);
-        return view('receberintimacoesjs2', $data);
+        return view('receberintimacoesjs', $data);
     }
 
 }
