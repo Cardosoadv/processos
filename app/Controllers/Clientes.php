@@ -14,21 +14,22 @@ class Clientes extends BaseController
             'titulo'    => 'Clientes',
         ];
         $s = $this->request->getGet('s');
-        $orderBy = $this->request->getGet('orderBy'); // Campo para ordenação
-        $orderDirection = $this->request->getGet('orderDirection'); // Direção da ordenação
-
+        
         $clientesModel = model('ClientesModel');
 
+        if($s !== null){
+            $clientesModel
+                            ->like('nome', $s);
+            
             $data['clientes'] = $clientesModel->paginate(25);
             $data['pager'] = $clientesModel->pager;
-
-            if($s !== null){
-                $clientesModel
-                                ->like('nome', $s)
-                                ->paginate(25);
+                
+            Session()->set(['msg'=> null]);
+            return view('clientes/clientes', $data);                    
             }
-
-            
+        
+        $data['clientes'] = $clientesModel->paginate(25);
+        $data['pager'] = $clientesModel->pager;
 
         Session()->set(['msg'=> null]);
         return view('clientes/clientes', $data);
