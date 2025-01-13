@@ -14,7 +14,7 @@ class IntimacoesJs extends BaseController
     {
         $this->apiUrl;
         $params = [
-            'numeroOab' => '164136',
+            'numeroOab' => '61061',
             'ufOab' => 'mg'
         ];
         $query = http_build_query($params);
