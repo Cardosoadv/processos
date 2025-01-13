@@ -88,7 +88,7 @@ function mask(input) {
             <select name="cliente_id" class="form-control">
             <option value="">Selecione um Cliente</option>
                 <?php foreach ($clientes as $cliente): ?>
-                    <option value="<?= $cliente['id_cliente'] ?>" <?= ($processo['cliente_id'] ?? '' == $cliente['id_cliente']) ? 'selected' : '' ?>><?= $cliente['nome'] ?></option>
+                    <option value="<?= $cliente['id_cliente'] ?>" <?= ($processo['cliente_id'] == $cliente['id_cliente']) ? 'selected' : '' ?>><?= $cliente['nome'] ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
