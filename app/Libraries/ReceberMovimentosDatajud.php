@@ -147,7 +147,7 @@ class ReceberMovimentosDatajud{
         $storagePath = WRITEPATH . '/jsons';
 
         if (!is_dir($storagePath)) {
-            mkdir($storagePath, 0755, true);
+            mkdir($storagePath, 0777, true);
         }
         
         // Generate filename with timestamp

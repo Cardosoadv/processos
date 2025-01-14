@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Libraries;
+
+
 class LerJson{
 
     public function lerJson($arquivo)
