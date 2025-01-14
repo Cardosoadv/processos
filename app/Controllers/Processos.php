@@ -285,6 +285,7 @@ class Processos extends BaseController
     public function novo(){
         $data = [
             'titulo'    => 'Novo Processo',
+            'processo'  => ['cliente_id'=>null],
         ];
         $data['img'] = 'vazio.png';
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
