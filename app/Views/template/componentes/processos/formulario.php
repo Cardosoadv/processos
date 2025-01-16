@@ -50,7 +50,7 @@ function mask(input) {
 </script>
 
 
-<form method="post" id="form_processo" name="form_processo" action="<?= site_url('processos/salvar') ?>/<?= $processo['id_processo']?? ''?>" enctype="multipart/form-data">
+<form method="post" id="form_processo" name="form_processo" action="<?= site_url('processos/salvar') ?>" enctype="multipart/form-data">
     <input type="hidden" name="id_processo" class="form-control" value="<?= $processo['id_processo'] ?? '' ?>">
         
     <div class="row mb-3">
