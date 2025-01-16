@@ -135,7 +135,13 @@ class Processos extends BaseController
     {
         $rules = [
             'titulo_processo' => 'required|min_length[3]',
-            'numeroprocessocommascara' => 'required',
+            'numeroprocessocommascara' => [
+                    'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
+                    'errors' => [
+                        'required' => 'O número do processo é obrigatório',
+                        'regex_match' => 'O número do processo está em formato inválido'
+                    ]
+            ],
             'cliente_id' => 'required|numeric',
             // Adicionar outras regras
         ];
