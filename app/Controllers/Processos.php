@@ -108,6 +108,7 @@ class Processos extends BaseController
         $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
         $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
         $data['tarefas'] = model('TarefasModel')->where('processo_id', $id)->get()->getResultArray();
+        $data['selected'] = $id;
         Session()->set(['msg'=> null]);
         return view('processos/consultarProcesso', $data);
     }

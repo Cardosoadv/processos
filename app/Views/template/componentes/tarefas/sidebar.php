@@ -27,7 +27,15 @@
                         <tr>
                             <td><?= esc($tarefa['tarefa']) ?></td>
                             <td><?= esc(date('d/m/Y', strtotime($tarefa['prazo']))) ?></td>
-                            <td><?= esc($tarefa['status']) ?></td>
+                            <td>
+                                <select name="status" id="status" class="form-control status-select" data-tarefa-id=<?= esc($tarefa['id_tarefa']) ?>>
+                                    <option value="1" <?= ($tarefa['status'] == 1) ? 'selected' : ''; ?>>Backlog</option>
+                                    <option value="2" <?= ($tarefa['status'] == 2) ? 'selected' : ''; ?>>A Fazer</option>
+                                    <option value="3" <?= ($tarefa['status'] == 3) ? 'selected' : ''; ?>>Fazendo</option>
+                                    <option value="4" <?= ($tarefa['status'] == 4) ? 'selected' : ''; ?>>Feito</option>
+                                    <option value="5" <?= ($tarefa['status'] == 5) ? 'selected' : ''; ?>>Cancelado</option>
+                                </select>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -35,3 +43,40 @@
         <?php endif; ?>
     </div>
 </div><!--end::Body-->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('.status-select');
+
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            const tarefaId = this.dataset.tarefaId;
+            const novoStatus = this.value;
+            const statusId = this.dataset.statusId;
+            const url = `<?=base_url("tarefas/editarstatus")?>?Tarefa-id=${tarefaId}&status-id=${novoStatus}`;
+            fetch(url) // Requisição GET, sem necessidade de configurar headers ou body
+            .then(response => {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Erro na requisição AJAX'.response.message);
+                            }
+                        })
+            .then(data => {
+                            // Tratar a resposta, se necessário
+                            console.log('Resposta do servidor:', data);
+                            // Exibir mensagem de sucesso ou erro para o usuário
+                            if (data.success) {
+                                toastr.success("Tarefa movida com sucesso!");
+                            } else {
+                                toastr.error("Erro ao mover a tarefa.");
+                            }
+                        })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert("Erro ao atualizar o status");
+            });
+        });
+    });
+});
+</script>
