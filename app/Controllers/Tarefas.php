@@ -32,7 +32,7 @@ class Tarefas extends BaseController
         $tarefasModel = model('TarefasModel');
         try{
         $tarefasModel->insert($data);
-            return redirect()->to(base_url('tarefas'));
+            return redirect()->back()->withInput()->with('msg', 'Tarefa adicionada com sucesso!');
         }
         catch(\Exception $e){
             echo "Erro! ".$e->getMessage();

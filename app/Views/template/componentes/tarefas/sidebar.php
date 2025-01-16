@@ -17,9 +17,9 @@
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
-                        <th>Tarefa</th>
-                        <th>Prazo</th>
-                        <th>Status</th>
+                        <th class="col-5">Tarefa</th>
+                        <th class="col">Prazo</th>
+                        <th class="col">Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -28,7 +28,7 @@
                             <td><?= esc($tarefa['tarefa']) ?></td>
                             <td><?= esc(date('d/m/Y', strtotime($tarefa['prazo']))) ?></td>
                             <td>
-                                <select name="status" id="status" class="form-control status-select" data-tarefa-id=<?= esc($tarefa['id_tarefa']) ?>>
+                                <select name="status" id="status" class="form-control  status-select" data-tarefa-id=<?= esc($tarefa['id_tarefa']) ?> style="padding: 0.1rem 0.25rem; font-size: 0.8rem;">
                                     <option value="1" <?= ($tarefa['status'] == 1) ? 'selected' : ''; ?>>Backlog</option>
                                     <option value="2" <?= ($tarefa['status'] == 2) ? 'selected' : ''; ?>>A Fazer</option>
                                     <option value="3" <?= ($tarefa['status'] == 3) ? 'selected' : ''; ?>>Fazendo</option>
