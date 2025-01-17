@@ -10,7 +10,7 @@ function criarcartao(array $items){
                         <h5 class='card-title'>".$item['tarefa']."</h5>
                         <div class='card-tools'>
                             <a class='btn btn-tool btn-link'>".$item['id_tarefa']."</a>
-                            <a class='btn btn-tool'>
+                            <a class='btn btn-tool edit-tarefa' data-tarefa-id='". $item['id_tarefa']."' data-tarefa-nome='".$item['tarefa']."' data-tarefa-detalhes='". $item['detahes'] ."' ' data-tarefa-prazo='". $item['prazo'] ."'>
                                 <i class='fas fa-pen'></i>
                             </a>
                         </div>

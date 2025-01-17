@@ -111,6 +111,8 @@
 
         <?= $this->include('template/modals/tarefas.php') ?>
         <?= $this->include('template/modals/change_user_img.php') ?>
+        <?= $this->include('template/modals/editartarefas.php') ?>
+
         <script>
             const draggables = document.querySelectorAll('.draggable');
             const dropAreas = document.querySelectorAll('.drop-area');

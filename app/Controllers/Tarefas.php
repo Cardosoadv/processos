@@ -22,7 +22,7 @@ class Tarefas extends BaseController
     public function nova(){
         $data = [
             'tarefa'            => $this->request->getPost('tarefa'),
-            'descricao'         => $this->request->getPost('descricao'),
+            'detahes'         => $this->request->getPost('detahes'),
             'prazo'             => $this->request->getPost('prazo'),
             'status'            => $this->request->getPost('status'),
             'responsavel'       => $this->request->getPost('responsavel'),
@@ -35,7 +35,7 @@ class Tarefas extends BaseController
             return redirect()->back()->withInput()->with('msg', 'Tarefa adicionada com sucesso!');
         }
         catch(\Exception $e){
-            echo "Erro! ".$e->getMessage();
+            return redirect()->back()->withInput()->with('msg', "Erro! ".$e->getMessage());
         }
     }
 
@@ -67,7 +67,26 @@ class Tarefas extends BaseController
         $data['pager'] = $tarefasModel->pager;
         Session()->set(['msg'=> null]);
         return view('tarefas', $data);
+    }
 
+    public function atualizar(){
+        $data = [
+            'tarefa'            => $this->request->getPost('tarefa'),
+            'detahes'         => $this->request->getPost('detahes'),
+            'prazo'             => $this->request->getPost('prazo'),
+            'status'            => $this->request->getPost('status'),
+            'responsavel'       => $this->request->getPost('responsavel'),
+            'prioridade'        => $this->request->getPost('prioridade'),
+            'processo_id'       => $this->request->getPost('processo_id'),
+        ];
+        $tarefasModel = model('TarefasModel');
+        try{
+        $tarefasModel->insert($data);
+            return redirect()->back()->withInput()->with('msg', 'Tarefa adicionada com sucesso!');
+        }
+        catch(\Exception $e){
+            return redirect()->back()->withInput()->with('msg', "Erro! ".$e->getMessage());
+        }
     }
 
 
