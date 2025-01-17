@@ -20,11 +20,11 @@
                         <input type="date" class="form-control" id="edit_prazo" name="prazo">
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group py-1">
                         <label for="edit_detalhes">Detalhes</label>
                         <textarea class="form-control" id="edit_detalhes" name="detalhes"></textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                    <button type="submit" class="btn btn-primary py-2">Salvar Alterações</button>
                 </form>
             </div>
         </div>

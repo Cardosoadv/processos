@@ -70,18 +70,15 @@ class Tarefas extends BaseController
     }
 
     public function atualizar(){
+        $id = $this->request->getPost('id_tarefa');
         $data = [
             'tarefa'            => $this->request->getPost('tarefa'),
-            'detahes'         => $this->request->getPost('detahes'),
+            'detahes'         => $this->request->getPost('detalhes'),
             'prazo'             => $this->request->getPost('prazo'),
-            'status'            => $this->request->getPost('status'),
-            'responsavel'       => $this->request->getPost('responsavel'),
-            'prioridade'        => $this->request->getPost('prioridade'),
-            'processo_id'       => $this->request->getPost('processo_id'),
         ];
         $tarefasModel = model('TarefasModel');
         try{
-        $tarefasModel->insert($data);
+        $tarefasModel->update($id,$data);
             return redirect()->back()->withInput()->with('msg', 'Tarefa adicionada com sucesso!');
         }
         catch(\Exception $e){
