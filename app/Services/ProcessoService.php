@@ -16,13 +16,13 @@ class ProcessoService
 
     public function __construct()
     {
-        $this->db = db_connect();
-        $this->processosModel = model('ProcessosModel');
-        $this->partesProcessoModel = model('ProcessosPartesModel');
-        $this->processosAnotacoesModel = model('ProcessosAnotacoesModel');
-        $this->processosMovimentosModel = model('ProcessosMovimentosModel');
-        $this->intimacoesModel = model('IntimacoesModel');
-        $this->tarefasModel = model('TarefasModel');
+        $this->db                           = db_connect();
+        $this->processosModel               = model('ProcessosModel');
+        $this->partesProcessoModel          = model('ProcessosPartesModel');
+        $this->processosAnotacoesModel      = model('ProcessosAnotacoesModel');
+        $this->processosMovimentosModel     = model('ProcessosMovimentosModel');
+        $this->intimacoesModel              = model('IntimacoesModel');
+        $this->tarefasModel                 = model('TarefasModel');
     }
 
     public function listarProcessos(?string $search, string $sortField, string $sortOrder, int $perPage = 25, ?int $encerrado = null)
