@@ -116,6 +116,13 @@ class ProcessosModel extends Model
         return $this->db->affectedRows();
     }
 
+    public function removeEtiquetas($id_processo){
+        $query = $this->db->table('processos_etiquetas')
+        ->where('processo_id', $id_processo)
+        ->delete();
+        return $this->db->affectedRows();
+    }
+
     /**
      * Join processo e cliente
      */

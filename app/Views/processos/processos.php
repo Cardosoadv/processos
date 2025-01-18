@@ -60,7 +60,8 @@ function etiquetasDosProcesso($id_processo){
 
                                 <?php if (isset($_SESSION['msg'])): ?>
                                     <div class="callout callout-info">
-                                        <?= $_SESSION['msg'] ?>
+                                        <?= session()->get('msg') ?>
+                                        <?= session()->get('errors') ?>
                                     </div>
                                 <?php endif; ?>
 

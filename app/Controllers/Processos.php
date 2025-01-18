@@ -3,135 +3,106 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Services\ProcessoService;
+
+
 use App\Models\ProcessosPartesModel;
 
 class Processos extends BaseController
 {
 
-    public function index(){
-        //TODO Incluir ordenação pelos cabeçahos da tabela
-        $data = [
-            'img'       =>  'vazio.png',
-            'titulo'    => 'Processos',
-        ];
-        $s = $this->request->getGet('s');
-        $sortField = $this->request->getGet('sort') ?? 'id_processo';
-        $sortOrder = $this->request->getGet('order') ?? 'asc';
+    protected $processoService;
 
-        $nextOrder = $sortOrder === 'asc' ? 'desc' : 'asc';
-    
-        // Add sort data to view
-        $data['sortField'] = $sortField;
-        $data['sortOrder'] = $sortOrder;
-        $data['nextOrder'] = $nextOrder;
-        $data['s'] = $s;
-
-
-        if($s === null){
-            $processosModel = model('ProcessosModel');
-            $processos = $processosModel
-                                        ->orderBy($sortField, $sortOrder)
-                                        ->joinProcessoCliente(25);
-            $data['pager'] = $processos['pager'];
-            $data['processos'] = $processos['processos'];
-        }else{
-            $processosModel = model('ProcessosModel');
-            $processos = $processosModel
-                                        ->groupStart() // Inicia o grupo de condições OR
-                                            ->like('numero_processo', $s) // Pesquisa por numero do processo
-                                            ->orLike('titulo_processo', $s) // OU Pelo Titulo dele
-                                        ->groupEnd() // Finaliza o grupo de condições OR
-                                        ->orderBy($sortField, $sortOrder)
-                                        ->joinProcessoCliente(25)
-                                        ;
-            $data['pager'] = $processos['pager'];
-            $data['processos'] = $processos['processos'];
-        }
-
-        Session()->set(['msg'=> null]);
-        return view('processos/processos', $data);
+    public function __construct()
+    {
+        $this->processoService = new ProcessoService();
     }
-    
-    /**
-     * Retorna os processos do cliente
-     * @param int $cliente_id
-     * @return view com os processos do cliente
-     */
-    public function processosDoCliente(?int $cliente_id){
+
+    public function index()
+    {
+        $data = [
+            'img'       => 'vazio.png',
+            'titulo'    => 'Processos',
+            'sortField' => $this->request->getGet('sort') ?? 'id_processo',
+            'sortOrder' => $this->request->getGet('order') ?? 'asc',
+            's'         => $this->request->getGet('s')
+        ];
         
+        $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
+
+        $processos = $this->processoService->listarProcessos(
+            $data['s'],
+            $data['sortField'],
+            $data['sortOrder']
+        );
+
+        $data['pager'] = $processos['pager'];
+        $data['processos'] = $processos['processos'];
+
+        Session()->set(['msg'=> null]);
+        return view('processos/processos', $data);
+    }
+    
+    public function processosDoCliente(?int $cliente_id)
+    {
         $data = [
-            'img'       =>  'vazio.png',
-            'titulo'    => 'Processos',
+            'img'    => 'vazio.png',
+            'titulo' => 'Processos',
+            's'      => $this->request->getGet('s')
         ];
-        $s = $this->request->getGet('s');
-        if($s === null){
-            $processosModel = model('ProcessosModel');
-            $processos = $processosModel
-                                        ->where('cliente_id', $cliente_id)
-                                        ->joinProcessoCliente(25);
-            $data['pager'] = $processos['pager'];
-            $data['processos'] = $processos['processos'];
-        }else{
-            $processosModel = model('ProcessosModel');
-            $processos = $processosModel
-                                        ->where('cliente_id', $cliente_id)
-                                        ->groupStart() // Inicia o grupo de condições OR
-                                            ->like('numero_processo', $s) // Pesquisa por numero do processo
-                                            ->orLike('titulo_processo', $s) // OU Pelo Titulo dele
-                                        ->groupEnd() // Finaliza o grupo de condições OR
-                                        ->joinProcessoCliente(25)
-                                        ;
-            $data['pager'] = $processos['pager'];
-            $data['processos'] = $processos['processos'];
-        }
+
+        $processos = $this->processoService->listarProcessosCliente($cliente_id, $data['s']);
+        
+        $data['pager'] = $processos['pager'];
+        $data['processos'] = $processos['processos'];
 
         Session()->set(['msg'=> null]);
         return view('processos/processos', $data);
     }
 
-    /**
-     * Retorna os processos movimentados em $dias
-     * @param string $dias número de dias a serem consultados
-     * @return json com os processos movimentados
-     */
-    public function ProcessosMovimentados($dias){
-        $hoje = date('Y-m-d', time());
-        $semanaPassada = date('Y-m-d', strtotime('-'.$dias.' days'));
-        $processosMovimentadosModel = model('ProcessosMovimentosModel');
-        $processosMovimentados = $processosMovimentadosModel->getProcessoMovimentadoPeriodo($semanaPassada, $hoje);
-        return $this->response->setJSON($processosMovimentados);
+    public function ProcessosMovimentados($dias)
+    {
+        $processos = $this->processoService->getProcessosMovimentados($dias);
+        return $this->response->setJSON($processos);
     }
 
-    /**
-     * Exibe os dados individuais do processo
-     * @param int $id
-     */
-    public function consultarProcesso(int $id=null){
-        $processosModel = model('ProcessosModel');
-        $partesProcessoModel = model('ProcessosPartesModel');
-        $data = [
-            'titulo'    => 'Consultar Processo',
-        ];
-        $data['img'] = 'vazio.png'; 
-        $data['processo'] = $processosModel->where('id_processo', $id)->get()->getRowArray();
-        $numeroProcesso = $data['processo']['numero_processo'];
-        $data['poloAtivo'] = $partesProcessoModel->getParteProcesso($id, 'A');
-        $data['poloPassivo'] = $partesProcessoModel->getParteProcesso($id, 'P');
-        $data['anotacoes'] = model('ProcessosAnotacoesModel')->getAnotacoesPublicasOuDoUsuarioPorProcesso(user_id(), $id);
-        $data['movimentacoes'] = model('ProcessosMovimentosModel')->where('numero_processo', $numeroProcesso)->orderBy('dataHora', 'DESC')->limit(5)->get()->getResultArray();
-        $data['intimacoes']= model('IntimacoesModel')->where('numero_processo', $numeroProcesso)->orderBy('data_disponibilizacao', 'DESC')->limit(5)->get()->getResultArray();
-        $data['etiquetas'] = $processosModel->joinEtiquetasProcessos($id);
-        $data['tarefas'] = model('TarefasModel')->where('processo_id', $id)->get()->getResultArray();
-        $data['selected'] = $id;
+    public function consultarProcesso(int $id = null)
+    {
+        $data = array_merge(
+            ['titulo' => 'Consultar Processo', 'img' => 'vazio.png', 'selected' => $id],
+            $this->processoService->getDetalhesProcesso($id)
+        );
+
         Session()->set(['msg'=> null]);
         return view('processos/consultarProcesso', $data);
     }
 
-    public function editar(int $id){
-
-        return redirect()->to(base_url('processos/consultarprocesso/'.$id));
+    public function salvar()
+    {
+        if (!$this->validarDadosProcesso()) {
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+        
+        try {
+            // Converte o id para int ou null se estiver vazio
+            $id = $this->request->getPost('id_processo');
+            $id = !empty($id) ? (int)$id : null;
+            
+            $data = $this->prepararDadosProcesso();
+            
+            $idProcesso = $this->processoService->salvarProcesso($data, $id);
+            
+            $this->processarPartes('poloAtivo[]', 'A', $idProcesso);
+            $this->processarPartes('poloPassivo[]', 'P', $idProcesso);
+            
+            return redirect()   ->to(base_url('processos/consultarprocesso/' . $idProcesso))
+                                ->with('success', 'Processo salvo com sucesso');
+        } catch (\Exception $e) {
+            return redirect()   ->back()
+                                ->withInput()
+                                ->with('error', 'Erro ao salvar processo: ' . $e->getMessage());
+        }
     }
-
 
     /**
      * Este função apenas redireciona para o editar por id
@@ -151,73 +122,18 @@ class Processos extends BaseController
         $rules = [
             'titulo_processo' => 'required|min_length[3]',
             'numeroprocessocommascara' => [
-                    'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
+                    'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]|is_unique[processos.numeroprocessocommascara]',
                     'errors' => [
                         'required' => 'O número do processo é obrigatório',
-                        'regex_match' => 'O número do processo está em formato inválido'
+                        'regex_match' => 'O número do processo está em formato inválido',
+                        'is_unique' => 'Já existe um processo com este número.'
                     ]
             ],
-            'cliente_id' => 'required|numeric',
-            // Adicionar outras regras
         ];
         
         return $this->validate($rules);
     }
-    /**
-     * Salva os dados do processo
-     * Cria um novo processo ou atualiza um existente
-     */
-    public function salvar()
-    {
-        $id = $this->request->getPost('id_processo');
-        
-        // Validação dos dados
-        if (!$this->validarDadosProcesso()) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
-        }
-        
-        $partesProcessoModel = model('ProcessosPartesModel');
-        $processosModel = model('ProcessosModel');
-        
-        try {
-            // Inicia transaction
-            $db = db_connect();
-            $db->transStart();
-            
-            // Prepara dados comuns
-            $data = $this->prepararDadosProcesso();
-            
-            if (!is_numeric($id)) {
-                // Novo processo
-                $processosModel->insert($data);
-                $id = $processosModel->insertID();
-            } else {
-                // Atualização
-                $partesProcessoModel->deletarParteDoProcesso(intval($id));
-                $processosModel->update(intval($id), $data);
-            }
-            
-            // Processa as partes
-            $this->processarPartes('poloAtivo[]', 'A', $id);
-            $this->processarPartes('poloPassivo[]', 'P', $id);
-            
-            // Finaliza transaction
-            $db->transComplete();
-            
-            if ($db->transStatus() === FALSE) {
-                throw new \Exception('Erro ao salvar processo');
-            }
-            
-            return redirect()->to(base_url('processos/consultarprocesso/' . $id))
-                            ->with('success', 'Processo salvo com sucesso');
-                            
-        } catch (\Exception $e) {
-            $db->transRollback();
-            return redirect()->back()
-                            ->withInput()
-                            ->with('error', 'Erro ao salvar processo: ' . $e->getMessage());
-        }
-    }
+
 
     private function prepararDadosProcesso()
     {
@@ -303,39 +219,50 @@ class Processos extends BaseController
         return view('processos/consultarProcesso', $data);
     }
 
-    /**
-     * Receber e salvar as anotoções do processo
-     */
-    public function adicionarAnotacao(){
-        $processosAnotacoesModel = model('ProcessosAnotacoesModel');
+    public function adicionarAnotacao()
+    {
         $data = $this->request->getPost();
         $data['user_id'] = user_id();
-        $processosAnotacoesModel->insert($data);
+        
+        $this->processoService->salvarAnotacao($data);
+        
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
     }
 
-    /**
-     * Remover as etiquetas do processo por Ajax
-     * @param json $data['id_processo', 'id_etiqueta']
-     * @return json ['success' => true]
-     */
-    public function removerEtiqueta(){
+    public function removerEtiqueta()
+    {
         $data = $this->request->getJSON();
-        $processosModel = model('ProcessosModel');
-        $processosModel->removeEtiqueta($data->id_processo, $data->id_etiqueta);
-        return $this->response->setJSON(['success' => true]);
+        $success = $this->processoService->gerenciarEtiquetas($data->id_processo, $data->id_etiqueta, false);
+        return $this->response->setJSON(['success' => $success]);
+    }
+
+    public function adicionarEtiqueta()
+    {
+        $data = $this->request->getJSON();
+        $success = $this->processoService->gerenciarEtiquetas($data->id_processo, $data->id_etiqueta, true);
+        return $this->response->setJSON(['success' => $success]);
     }
 
     /**
-     * Adicionar as etiquetas do processo por Ajax
-     * @param json $data['id_processo', 'id_etiqueta']
-     * @return json ['success' => true]
-     */
-    public function adicionarEtiqueta(){
-        $data = $this->request->getJSON();
-        $processosModel = model('ProcessosModel');
-        $processosModel->addEtiqueta($data->id_processo, $data->id_etiqueta);
-        return $this->response->setJSON(['success' => true]);
+ * Deleta um processo e seus registros relacionados
+ * 
+ * @param int $id ID do processo
+ * @return \CodeIgniter\HTTP\RedirectResponse
+ */
+    public function excluir(int $id)
+    {
+        try {
+            $this->processoService->deletarProcesso($id);
+            
+            return redirect()
+                ->to(base_url('processos'))
+                ->with('success', 'Processo deletado com sucesso');
+                
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Erro ao deletar processo: ' . $e->getMessage());
+        }
     }
 
 }
