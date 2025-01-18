@@ -16,7 +16,7 @@ class TarefasModel extends Model
         'tarefa',
         'prazo',
         'prioridade',
-        'detahes',
+        'detalhes',
         'responsavel',
         'processo_id',
         'status',

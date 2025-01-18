@@ -31,6 +31,8 @@ class ProcessosModel extends Model
         'valorCondenacao',
         'comentario',
         'cliente_id',
+        'dataRevisao',
+        'encerrado',
     ];
 
     protected bool $allowEmptyInserts = false;

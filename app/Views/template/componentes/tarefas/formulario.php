@@ -24,6 +24,7 @@ $responsaveis = model('ResposavelModel')->getUsers();
     <div class="row py-1" >
         <div class = "form-group">
             <select name="processo_id" class="form-control">
+                <option value="">Selecione um processo</option>
                 <?php foreach ($processos as $processo) : ?>
                     <option value="<?= $processo['id_processo'] ?>" <?= isset($selected) && $processo['id_processo'] == $selected ? 'selected' : ''?>><?= $processo['numeroprocessocommascara'] ?> - <?= esc($processo['titulo_processo']) ?></option>
                 <?php endforeach; ?>

@@ -22,7 +22,7 @@ class Tarefas extends BaseController
     public function nova(){
         $data = [
             'tarefa'            => $this->request->getPost('tarefa'),
-            'detahes'         => $this->request->getPost('detahes'),
+            'detalhes'         => $this->request->getPost('detalhes'),
             'prazo'             => $this->request->getPost('prazo'),
             'status'            => $this->request->getPost('status'),
             'responsavel'       => $this->request->getPost('responsavel'),
@@ -73,7 +73,7 @@ class Tarefas extends BaseController
         $id = $this->request->getPost('id_tarefa');
         $data = [
             'tarefa'            => $this->request->getPost('tarefa'),
-            'detahes'         => $this->request->getPost('detalhes'),
+            'detalhes'         => $this->request->getPost('detalhes'),
             'prazo'             => $this->request->getPost('prazo'),
         ];
         $tarefasModel = model('TarefasModel');
