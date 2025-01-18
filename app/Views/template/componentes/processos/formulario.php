@@ -227,10 +227,12 @@ $clientes = model('ClientesModel')->findAll();
             label.textContent = 'Encerrado';
             label.classList.remove('btn-outline-success');
             label.classList.add('btn-outline-danger');
+            this.value = 1;
         } else {
             label.textContent = 'Ativo';
             label.classList.remove('btn-outline-danger');
             label.classList.add('btn-outline-success');
+            this.value = 0;
         }
     }
 
