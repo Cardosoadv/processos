@@ -3,61 +3,60 @@ $clientes = model('ClientesModel')->findAll();
 ?>
 
 <script>
-/**
- * Função para adicionar um campo de polo ativo
- */
-function addAtivo() {
-    const ativoDiv = document.getElementById('ativo');
-    const newInput = document.createElement('input');
-    newInput.type = 'text';
-    newInput.className = 'form-control mt-2';
-    newInput.name = 'poloAtivo[]';
-    ativoDiv.appendChild(newInput);
-}
-/**
- * Função para adicionar um campo de polo passivo
- */
-function addPassivo() {
-    const passivoDiv = document.getElementById('passivo');
-    const newInputPassivo = document.createElement('input');
-    newInputPassivo.type = 'text';
-    newInputPassivo.className = 'form-control mt-2';
-    newInputPassivo.name = 'poloPassivo[]';
-    passivoDiv.appendChild(newInputPassivo);
-}
-
-/**
- * Função para formatar o campo de número de processo
- * @param string input
- */
-function mask(input) {
-    var value = input.value.replace(/\D/g, '').substring(0, 20);
-    const regex = /^(\d{7})(\d{2})(\d{4})(\d{1})(\d{2})(\d{4})$/;
-    const maskPartes = regex.exec(value);
-    if (!maskPartes) {
-      console.log("NUP inválida");
+    /**
+     * Função para adicionar um campo de polo ativo
+     */
+    function addAtivo() {
+        const ativoDiv = document.getElementById('ativo');
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.className = 'form-control mt-2';
+        newInput.name = 'poloAtivo[]';
+        ativoDiv.appendChild(newInput);
     }
-    const primeiraParte = maskPartes[1];
-    const segundaParte = maskPartes[2];
-    const terceiraParte = maskPartes[3];
-    const quartaParte = maskPartes[4];
-    const quintaParte = maskPartes[5];
-    const sextaParte = maskPartes[6];
-    var mask = primeiraParte + "-" + segundaParte + "." + terceiraParte + "." + quartaParte + "." + quintaParte + "." + sextaParte;
-    input.value = mask;
-  }
+    /**
+     * Função para adicionar um campo de polo passivo
+     */
+    function addPassivo() {
+        const passivoDiv = document.getElementById('passivo');
+        const newInputPassivo = document.createElement('input');
+        newInputPassivo.type = 'text';
+        newInputPassivo.className = 'form-control mt-2';
+        newInputPassivo.name = 'poloPassivo[]';
+        passivoDiv.appendChild(newInputPassivo);
+    }
 
+    /**
+     * Função para formatar o campo de número de processo
+     * @param string input
+     */
+    function mask(input) {
+        var value = input.value.replace(/\D/g, '').substring(0, 20);
+        const regex = /^(\d{7})(\d{2})(\d{4})(\d{1})(\d{2})(\d{4})$/;
+        const maskPartes = regex.exec(value);
+        if (!maskPartes) {
+            console.log("NUP inválida");
+        }
+        const primeiraParte = maskPartes[1];
+        const segundaParte = maskPartes[2];
+        const terceiraParte = maskPartes[3];
+        const quartaParte = maskPartes[4];
+        const quintaParte = maskPartes[5];
+        const sextaParte = maskPartes[6];
+        var mask = primeiraParte + "-" + segundaParte + "." + terceiraParte + "." + quartaParte + "." + quintaParte + "." + sextaParte;
+        input.value = mask;
+    }
 </script>
 
 
 <form method="post" id="form_processo" name="form_processo" action="<?= site_url('processos/salvar') ?>" enctype="multipart/form-data">
     <input type="hidden" name="id_processo" class="form-control" value="<?= $processo['id_processo'] ?? '' ?>">
-        
+
     <div class="row mb-3">
-    
+
         <div class="form-group col">
-        <label>Numero do Processo</label>
-        <input type="text" id="numeroprocessocommascara" name="numeroprocessocommascara" class="form-control" value="<?= $processo['numeroprocessocommascara'] ?? '' ?>" onchange="mask(this)">
+            <label>Numero do Processo</label>
+            <input type="text" id="numeroprocessocommascara" name="numeroprocessocommascara" class="form-control" value="<?= $processo['numeroprocessocommascara'] ?? '' ?>" onchange="mask(this)">
         </div>
 
         <div class="form-group col">
@@ -86,7 +85,7 @@ function mask(input) {
         <div class="form-group col-10">
             <label>Cliente</label>
             <select name="cliente_id" class="form-control">
-            <option value="">Selecione um Cliente</option>
+                <option value="">Selecione um Cliente</option>
                 <?php foreach ($clientes as $cliente): ?>
                     <option value="<?= $cliente['id_cliente'] ?>" <?= ($processo['cliente_id'] == $cliente['id_cliente']) ? 'selected' : '' ?>><?= $cliente['nome'] ?></option>
                 <?php endforeach; ?>
@@ -100,32 +99,34 @@ function mask(input) {
     </div>
 
     <div class="row mt-3 border rounded bg-custom" style="background-color: #f0f0f0;">
-        <center><h3>Partes</h3></center>
+        <center>
+            <h3>Partes</h3>
+        </center>
         <div class="row">
             <!-- Polo Ativo -->
             <div class="col py-3">
                 <label>Polo Ativo</label>
                 <div class="form-group">
-                <?php if($poloAtivo ?? null):?>
-                    <?php foreach ($poloAtivo as $ativo):?>
-                        <input type="text" class="form-control mt-2" name="poloAtivo[]" value="<?= $ativo['nome'] ?? '' ?>">                        
-                    <?php endforeach; ?>
-                <?php else:?>
-                    <input type="text" class="form-control mt-2" name="poloAtivo[]" value="">
-                <?php endif; ?>
-                <div id="ativo"></div>
+                    <?php if ($poloAtivo ?? null): ?>
+                        <?php foreach ($poloAtivo as $ativo): ?>
+                            <input type="text" class="form-control mt-2" name="poloAtivo[]" value="<?= $ativo['nome'] ?? '' ?>">
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <input type="text" class="form-control mt-2" name="poloAtivo[]" value="">
+                    <?php endif; ?>
+                    <div id="ativo"></div>
                 </div>
             </div>
             <!-- Polo Passivo -->
             <div class="col py-3">
                 <label>Polo Passivo</label>
                 <div class="form-group">
-                    <?php if($poloPassivo ?? null):?>
-                        <?php foreach ($poloPassivo as $passivo):?>
+                    <?php if ($poloPassivo ?? null): ?>
+                        <?php foreach ($poloPassivo as $passivo): ?>
                             <input type="text" class="form-control mt-2" name="poloPassivo[]" value="<?php echo $passivo['nome'] ?>">
                         <?php endforeach; ?>
-                    <?php else:?>
-                        <input type="text" class="form-control mt-2" name="poloPassivo[]" value="">   
+                    <?php else: ?>
+                        <input type="text" class="form-control mt-2" name="poloPassivo[]" value="">
                     <?php endif; ?>
                     <div id="passivo"></div>
                 </div>
@@ -141,7 +142,7 @@ function mask(input) {
         </div>
     </div>
 
-    <div class="row mt-3">    
+    <div class="row mt-3">
 
         <div class="form-group col">
             <label>Data Distribuição</label>
@@ -162,7 +163,7 @@ function mask(input) {
             </select>
         </div>
 
-        
+
     </div>
     <div class="row mt-3">
 
@@ -173,7 +174,7 @@ function mask(input) {
                 <option value="Sucesso" <?= isset($processo['resultado']) && $processo['resultado'] == 'Sucesso' ? 'selected' : '' ?>>Sucesso</option>
                 <option value="Sucesso Parcial" <?= isset($processo['resultado']) && $processo['resultado'] == 'Sucesso Parcial' ? 'selected' : '' ?>>Sucesso Parcial</option>
                 <option value="Derrota" <?= isset($processo['resultado']) && $processo['resultado'] == 'Derrota' ? 'selected' : '' ?>>Derrota</option>
-            
+
             </select>
         </div>
 
@@ -191,8 +192,50 @@ function mask(input) {
             </textarea>
         </div>
     </div>
-    <div class="mt-3">
-        <button type="submit" class="btn btn-primary">Salvar</button>
-        <a href="<?= site_url('/processos/') ?>" class="btn btn-outline-secondary right">Cancelar</a>
+
+    <div class="row mt-3">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="dataRevisao">Data da Revisão</label>
+                <input type="date" class="form-control" id="dataRevisao" name="dataRevisao" value="<?= $processo['dataRevisao'] ?? '' ?>">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="encerrado">Situação do Processo</label>
+                <div class="btn-group w-100" role="group" aria-label="Encerrado">
+                    <input type="checkbox" class="btn-check" id="encerrado" name="encerrado" value="<?= $processo['encerrado'] ?? 0 ?>" autocomplete="off" <?= ($processo['encerrado'] == 1) ? 'checked' : '' ?>>
+                    <label class="btn w-100" id="situacao" for="encerrado">
+                        <?= ($processo['encerrado'] == 1) ? 'Encerrado' : 'Ativo' ?>
+                    </label>
+                </div>
+            </div>
+        </div> 
+        <div class="mt-3">
+            <button type="submit" class="btn btn-primary">Salvar</button>
+            <a href="<?= site_url('/processos/') ?>" class="btn btn-outline-secondary right">Cancelar</a>
+        </div>
     </div>
 </form>
+
+<script>
+    const checkbox = document.getElementById('encerrado');
+    const label = document.getElementById('situacao');
+
+    function atualizarBotao() {
+        if (checkbox.checked) {
+            label.textContent = 'Encerrado';
+            label.classList.remove('btn-outline-success');
+            label.classList.add('btn-outline-danger');
+        } else {
+            label.textContent = 'Ativo';
+            label.classList.remove('btn-outline-danger');
+            label.classList.add('btn-outline-success');
+        }
+    }
+
+    checkbox.addEventListener('change', atualizarBotao);
+
+    // Chama a função inicialmente para definir o estado correto ao carregar a página
+    atualizarBotao();
+</script>

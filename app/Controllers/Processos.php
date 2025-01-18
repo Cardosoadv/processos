@@ -66,6 +66,11 @@ class Processos extends BaseController
         return $this->response->setJSON($processos);
     }
 
+    public function editar(int $id = null)
+    {
+        return redirect()->to(base_url('processos/consultarprocesso/' . $id));
+    }
+    
     public function consultarProcesso(int $id = null)
     {
         $data = array_merge(
@@ -149,6 +154,8 @@ class Processos extends BaseController
             'comentario'                => $this->request->getPost('comentario'),
             'resultado'                 => $this->request->getPost('resultado'),
             'cliente_id'                => $this->request->getPost('cliente_id'),
+            'dataRevisao'               => $this->request->getPost('dataRevisao'),
+            'encerrado'                 => ($this->request->getPost('encerrado')) ? 1 : 0,
         ];
     }
     
