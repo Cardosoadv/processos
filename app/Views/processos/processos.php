@@ -74,8 +74,27 @@ function etiquetasDosProcesso($id_processo){
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th class="col-4">Número do Processo</th>
-                                                    <th class="col-6">Titulo / Cliente</th>
+                                                    <th class="col-4">
+                                                        <a href="<?= base_url('processos?sort=numero_processo&order=' . 
+                                                            ($sortField === 'numero_processo' ? $nextOrder : 'asc')) . 
+                                                            ($s ? '&s=' . $s : '') ?>" 
+                                                            class="text-decoration-none text-dark">
+                                                                Número do Processo
+                                                            <?php if($sortField === 'numero_processo'): ?>
+                                                                <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
+                                                            <?php endif; ?>
+                                                        </a>    
+                                                    </th>
+                                                    <th class="col-6">
+                                                        <a href="<?= base_url('processos?sort=titulo_processo&order=' . 
+                                                            ($sortField === 'titulo_processo' ? $nextOrder : 'asc')) .
+                                                            ($s ? '&s=' . $s : '') ?>" 
+                                                            class="text-decoration-none text-dark">
+                                                            Título
+                                                            <?php if($sortField === 'titulo_processo'): ?>
+                                                                <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
+                                                            <?php endif; ?>
+                                                        </a> / Cliente</th>
                                                     <th class="col-2">Ações</th>
                                                 </tr>
                                             </thead>

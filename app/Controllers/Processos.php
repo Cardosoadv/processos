@@ -15,9 +15,22 @@ class Processos extends BaseController
             'titulo'    => 'Processos',
         ];
         $s = $this->request->getGet('s');
+        $sortField = $this->request->getGet('sort') ?? 'id_processo';
+        $sortOrder = $this->request->getGet('order') ?? 'asc';
+
+        $nextOrder = $sortOrder === 'asc' ? 'desc' : 'asc';
+    
+        // Add sort data to view
+        $data['sortField'] = $sortField;
+        $data['sortOrder'] = $sortOrder;
+        $data['nextOrder'] = $nextOrder;
+        $data['s'] = $s;
+
+
         if($s === null){
             $processosModel = model('ProcessosModel');
             $processos = $processosModel
+                                        ->orderBy($sortField, $sortOrder)
                                         ->joinProcessoCliente(25);
             $data['pager'] = $processos['pager'];
             $data['processos'] = $processos['processos'];
@@ -28,6 +41,7 @@ class Processos extends BaseController
                                             ->like('numero_processo', $s) // Pesquisa por numero do processo
                                             ->orLike('titulo_processo', $s) // OU Pelo Titulo dele
                                         ->groupEnd() // Finaliza o grupo de condições OR
+                                        ->orderBy($sortField, $sortOrder)
                                         ->joinProcessoCliente(25)
                                         ;
             $data['pager'] = $processos['pager'];
