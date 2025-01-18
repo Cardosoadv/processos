@@ -25,21 +25,34 @@ class ProcessoService
         $this->tarefasModel = model('TarefasModel');
     }
 
-    public function listarProcessos(?string $search, string $sortField, string $sortOrder, int $perPage = 25)
+    public function listarProcessos(?string $search, string $sortField, string $sortOrder, int $perPage = 25, ?int $encerrado = null)
     {
         if($search === null) {
             return $this->processosModel
-                ->orderBy($sortField, $sortOrder)
-                ->joinProcessoCliente($perPage);
+                                        ->where('encerrado', 0)
+                                        ->orderBy($sortField, $sortOrder)
+                                        ->joinProcessoCliente($perPage);
+        }
+
+        if($encerrado === null) {
+            return $this->processosModel
+                                        ->orderBy($sortField, $sortOrder)
+                                        ->groupStart()
+                                        ->like('numero_processo', $search)
+                                        ->orLike('titulo_processo', $search)
+                                    ->groupEnd()
+                                    ->orderBy($sortField, $sortOrder)
+                                    ->joinProcessoCliente($perPage);
         }
 
         return $this->processosModel
-            ->groupStart()
-                ->like('numero_processo', $search)
-                ->orLike('titulo_processo', $search)
-            ->groupEnd()
-            ->orderBy($sortField, $sortOrder)
-            ->joinProcessoCliente($perPage);
+                                    ->where('encerrado', 0)
+                                    ->groupStart()
+                                        ->like('numero_processo', $search)
+                                        ->orLike('titulo_processo', $search)
+                                    ->groupEnd()
+                                    ->orderBy($sortField, $sortOrder)
+                                    ->joinProcessoCliente($perPage);
     }
 
     public function listarProcessosCliente(int $clienteId, ?string $search, int $perPage = 25)
