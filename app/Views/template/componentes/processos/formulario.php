@@ -204,9 +204,9 @@ $clientes = model('ClientesModel')->findAll();
             <div class="form-group">
                 <label for="encerrado">Situação do Processo</label>
                 <div class="btn-group w-100" role="group" aria-label="Encerrado">
-                    <input type="checkbox" class="btn-check" id="encerrado" name="encerrado" value="<?= $processo['encerrado'] ?? 0 ?>" autocomplete="off" <?= ($processo['encerrado'] == 1) ? 'checked' : '' ?>>
+                    <input type="checkbox" class="btn-check" id="encerrado" name="encerrado" value="<?= $processo['encerrado'] ?? 0 ?>" autocomplete="off" <?= (($processo['encerrado']?? 0) == 1) ? 'checked' : '' ?>>
                     <label class="btn w-100" id="situacao" for="encerrado">
-                        <?= ($processo['encerrado'] == 1) ? 'Encerrado' : 'Ativo' ?>
+                        <?= (($processo['encerrado']?? 0) == 1) ? 'Encerrado' : 'Ativo' ?>
                     </label>
                 </div>
             </div>
