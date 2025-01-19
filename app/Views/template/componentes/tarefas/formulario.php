@@ -3,20 +3,19 @@ $processos = model('ProcessosModel')->findAll();
 $responsaveis = model('ResposavelModel')->getUsers();
 ?>
 
-
 <form method="post" id="form_tarefa" name="form_tarefa" action="<?= site_url('/tarefas/nova') ?>">
     <div class=" row py-1">
         <div class="form-group col-md-6">
             <label>Tarefa</label>
             <div class="input-group">
-                <input type="hidden" name="id_tarefa" class="form-control" value="">
-                <input type="text" name="tarefa" class="form-control" value="">
+                <input type="hidden" name="id_tarefa" class="form-control" value="<?= $tarefas['id_tarefa'] ?? '' ?>">
+                <input type="text" name="tarefa" class="form-control" value="<?= $tarefas['tarefa'] ?? ''?>">
             </div>
         </div>
         <div class="form-group col-md-6">
             <label>Prazo</label>
             <div class="input-group">
-                <input type="date" name="prazo" value="" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" spellcheck="false" data-ms-editor="true">
+                <input type="date" name="prazo" value="<?= $tarefas['prazo'] ?? '' ?>" class="form-control" data-inputmask-alias="datetime" data-inputmask-inputformat="dd/mm/yyyy" data-mask="" inputmode="numeric" spellcheck="false" data-ms-editor="true">
             </div>
         </div>
     </div>
@@ -39,7 +38,7 @@ $responsaveis = model('ResposavelModel')->getUsers();
                 <?php if (isset($responsaveis)) : ?>
                     <select name="responsavel" class="form-control" style="width: 100%;">
                         <?php foreach ($responsaveis as $responsavel) : ?>
-                            <option value="<?= $responsavel['id'] ?>"><?= $responsavel['username'] ?></option>
+                            <option value="<?= $responsavel['id'] ?>" <?= $responsavel['id'] == ($tarefas['responsavel']??"") ? 'selected' : ''?>><?= $responsavel['username'] ?></option>
                         <?php endforeach; ?>
                     </select>
                 <?php endif; ?>    
