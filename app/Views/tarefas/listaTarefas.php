@@ -58,7 +58,14 @@
                 <tbody>
                     <?php foreach ($tarefas as $tarefa): ?>
                         <tr>
-                            <td><?= esc($tarefa['tarefa']) ?></td>
+                            <td>
+                                <a href="<?=base_url("tarefas/editar")?>/<?= $tarefa['id_tarefa'] ?>" style="text-decoration: none;">
+
+                                <?= esc($tarefa['tarefa']) ?>
+
+                                </a>
+                            
+                            </td>
                             <td><?= esc(date('d/m/Y', strtotime($tarefa['prazo']))) ?></td>
                             <td>
                                 <select name="status" id="status" class="form-control  status-select" data-tarefa-id=<?= esc($tarefa['id_tarefa']) ?> style="padding: 0.1rem 0.25rem; font-size: 0.8rem;">

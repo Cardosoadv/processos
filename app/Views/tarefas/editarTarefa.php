@@ -24,6 +24,15 @@
                         <div class="col-lg-9">
                             <div class="container">
                                 
+
+                                <div class="d-flex justify-content-end mb-3">
+                                    <a href="<?= base_url('tarefas') ?>" 
+                                        class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left-square"></i>
+                                        Voltar
+                                    </a>
+                                </div>
+
                                 <?php if (isset($_SESSION['msg'])): ?>
                                     <div class="callout callout-info">
                                         <?= session()->get('msg') ?>
