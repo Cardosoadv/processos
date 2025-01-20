@@ -35,7 +35,6 @@ class Processos extends BaseController
             $data['s'],
             $data['sortField'],
             $data['sortOrder'],
-            $data['encerrado'],
         );
 
         $data['pager'] = $processos['pager'];
