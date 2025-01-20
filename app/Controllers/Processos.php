@@ -34,7 +34,8 @@ class Processos extends BaseController
         $processos = $this->processoService->listarProcessos(
             $data['s'],
             $data['sortField'],
-            $data['sortOrder']
+            $data['sortOrder'],
+            $data['encerrado'],
         );
 
         $data['pager'] = $processos['pager'];
