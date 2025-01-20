@@ -1,3 +1,14 @@
+<?php 
+    // Obtém os parâmetros atuais
+    $params = $_GET;
+
+     // Função auxiliar para remover um parâmetro específico
+        function removeParam($params, $key) {
+            unset($params[$key]);
+            return $params;
+        }
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -23,10 +34,28 @@
             <div class="app-content kanban">
                 <div class="container mt-4">
                     <div class="d-flex justify-content-end">
-                        <a href="<?= base_url("tarefas?minha=true")?>" class="btn btn-info mb-2 mx-2">Minhas Tarefas</a>
-                        <a href="<?= base_url("tarefas?view=Lista")?>" class="btn btn-secondary mb-2 mx-2">Exibir Lista</a>
-                        <a data-bs-toggle="modal" data-bs-target="#modal-tarefa" id="openModalTarefa" class="btn btn-success mb-2">Nova Tarefa</a>
-                    </div>
+                    <a href="<?= base_url('tarefas?' . http_build_query(array_merge($params, ['minhas' => 'true']))) ?>" 
+                        class="btn btn-secondary mb-2 mx-1">
+                        Minhas Tarefas
+                    </a>
+                    <?php if(isset($params['emAndamento'])): ?>
+                                    <a href="<?= base_url('tarefas?' . http_build_query(removeParam($params, 'emAndamento'))) ?>" 
+                                        class="btn btn-danger mb-2 mx-2">
+                                        Todas as Tarefas
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?= base_url('tarefas?' . http_build_query(array_merge($params, ['emAndamento' => 'true']))) ?>" 
+                                        class="btn btn-primary mb-2 mx-1">
+                                        Em Andamento
+                                    </a>
+                                <?php endif; ?>
+                    <a href="<?= base_url('tarefas?' . http_build_query(array_merge($params, ['view' => 'Lista']))) ?>" 
+                        class="btn btn-info mb-2 mx-1">
+                        Exibir Lista
+                    </a>
+                    <a data-bs-toggle="modal" data-bs-target="#modal-tarefa" id="openModalTarefa" class="btn btn-success mb-2">Nova Tarefa</a>
+                    
+                </div>
                 </div>
                 <div class="content">
                     <div class="container-fluid">

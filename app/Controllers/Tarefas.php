@@ -5,44 +5,49 @@ namespace App\Controllers;
 class Tarefas extends BaseController
 {
     public function index()
-    {
-        $data = [
-            'img'    => 'vazio.png',
-            'titulo' => 'Tarefas'
-        ];
-        
-        $view = $this->request->getGet('view');
-        $minhas = $this->request->getGet('minhas');
+{
+    $data = [
+        'img'    => 'vazio.png',
+        'titulo' => 'Tarefas'
+    ];
     
-        // Load initial data
-        $tarefasModel = model('TarefasModel');
-        $data['responsaveis'] = model('ResposavelModel')->getUsers();
-        
-        // Clear session message
-        session()->set(['msg' => null]);
+    $view = $this->request->getGet('view');
+    $minhas = $this->request->getGet('minhas');
+    $emAndamento = $this->request->getGet('emAndamento');
+
+    // Load initial data
+    $tarefasModel = model('TarefasModel');
+    $data['responsaveis'] = model('ResposavelModel')->getUsers();
     
-        // Filter tasks based on user preference
-        if ($minhas) {
-            $data['tarefas'] = $tarefasModel
-                ->where('responsavel', user_id())
-                ->orderBy('status', 'ASC')
-                ->findAll();
-        } else {
-            $data['tarefas'] = $tarefasModel
-                ->orderBy('status', 'ASC')
-                ->findAll();
-        }
-    
-        // Return appropriate view based on preference
-        if ($view == "Lista") {
-            return view('tarefas/listaTarefas', $data);
-        }
-    
-        helper('criarcartao');
-        $data['cartoes'] = criarcartao($data['tarefas']);
-        
-        return view('tarefas/kamban', $data);
+    // Clear session message
+    session()->set(['msg' => null]);
+
+    // Iniciar a consulta base
+    $query = $tarefasModel->orderBy('status', 'ASC');
+
+    // Filtrar por responsável se solicitado
+    if ($minhas) {
+        $query->where('responsavel', user_id());
     }
+
+    // Filtrar apenas tarefas em andamento (status 1, 2 e 3)
+    if ($emAndamento) {
+        $query->whereIn('status', [1, 2, 3]);
+    }
+
+    // Executar a consulta
+    $data['tarefas'] = $query->findAll();
+
+    // Return appropriate view based on preference
+    if ($view == "Lista") {
+        return view('tarefas/listaTarefas', $data);
+    }
+
+    helper('criarcartao');
+    $data['cartoes'] = criarcartao($data['tarefas']);
+    
+    return view('tarefas/kamban', $data);
+}
 
     public function editar (?int $id){
         $tarefasModel = model('TarefasModel');
