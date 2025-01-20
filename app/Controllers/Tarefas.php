@@ -7,22 +7,40 @@ class Tarefas extends BaseController
     public function index()
     {
         $data = [
-            'img'       =>  'vazio.png',
-            'titulo'    => 'Tarefas'
+            'img'    => 'vazio.png',
+            'titulo' => 'Tarefas'
         ];
         
         $view = $this->request->getGet('view');
+        $minhas = $this->request->getGet('minhas');
+    
+        // Load initial data
+        $tarefasModel = model('TarefasModel');
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
-        $data['tarefas'] = model('TarefasModel')->findAll();
-
-        Session()->set(['msg'=> null]);
-
-        if($view == "Lista"){
+        
+        // Clear session message
+        session()->set(['msg' => null]);
+    
+        // Filter tasks based on user preference
+        if ($minhas) {
+            $data['tarefas'] = $tarefasModel
+                ->where('responsavel', user_id())
+                ->orderBy('status', 'ASC')
+                ->findAll();
+        } else {
+            $data['tarefas'] = $tarefasModel
+                ->orderBy('status', 'ASC')
+                ->findAll();
+        }
+    
+        // Return appropriate view based on preference
+        if ($view == "Lista") {
             return view('tarefas/listaTarefas', $data);
         }
+    
         helper('criarcartao');
         $data['cartoes'] = criarcartao($data['tarefas']);
-
+        
         return view('tarefas/kamban', $data);
     }
 

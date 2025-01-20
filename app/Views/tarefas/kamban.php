@@ -23,6 +23,7 @@
             <div class="app-content kanban">
                 <div class="container mt-4">
                     <div class="d-flex justify-content-end">
+                        <a href="<?= base_url("tarefas?minha=true")?>" class="btn btn-info mb-2 mx-2">Minhas Tarefas</a>
                         <a href="<?= base_url("tarefas?view=Lista")?>" class="btn btn-secondary mb-2 mx-2">Exibir Lista</a>
                         <a data-bs-toggle="modal" data-bs-target="#modal-tarefa" id="openModalTarefa" class="btn btn-success mb-2">Nova Tarefa</a>
                     </div>

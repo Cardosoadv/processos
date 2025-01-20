@@ -24,6 +24,7 @@
                         <div class="col-lg-9">
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
+                                <a href="<?= base_url("tarefas?view=Lista&minha=true")?>" class="btn btn-info mx-2">Minhas Tarefas</a>
                                 <a href="<?= base_url("tarefas")?>" class="btn btn-secondary mx-2">Exibir Kamban</a>
 
 
