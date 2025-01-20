@@ -25,12 +25,37 @@ class Intimacoes extends BaseController
     public function receberIntimacoes()
     {
 
+        $hoje = date('Y-m-d', time());
+        $mesPassado = date('Y-m-d', strtotime('-30 days'));
+        
         $oab = "61061";
         $ufOab = "MG";
 
         $params = [
-            'numeroOab' => $oab,
-            'ufOab' => $ufOab
+            'numeroOab'                         => $oab,
+            'ufOab'                             => $ufOab,
+            'dataDisponibilizacaoInicio'        => $mesPassado,
+            'dataDisponibilizacaoFim'           => $hoje,
+        ];
+
+        $receberIntimacoes = new ReceberIntimacoes();
+        $receberIntimacoes->getIntimacoes($params);
+    }
+
+    public function receberIntimacoesFabiano()
+    {
+
+        $hoje = date('Y-m-d', time());
+        $mesPassado = date('Y-m-d', strtotime('-30 days'));
+        
+        $oab        = "164136";
+        $ufOab      = "MG";
+
+        $params = [
+            'numeroOab'                         => $oab,
+            'ufOab'                             => $ufOab,
+            'dataDisponibilizacaoInicio'        => $mesPassado,
+            'dataDisponibilizacaoFim'           => $hoje,
         ];
 
         $receberIntimacoes = new ReceberIntimacoes();
@@ -105,7 +130,7 @@ class Intimacoes extends BaseController
         $auditoriaRecebimentoIntimacoes = new AuditoriaRecebimentoIntimacoes();
         $auditoriaRecebimentoIntimacoes->registraProcessamentoIntimacoes($data);
         $data['titulo'] = 'Intimações';
-        return view('dashboard', $data);
+        return redirect()->to(base_url('intimacoes'));
     }
 
     /**
