@@ -25,7 +25,7 @@ class ProcessoService
         $this->tarefasModel                 = model('TarefasModel');
     }
 
-    public function listarProcessos(?string $search, string $sortField, string $sortOrder, int $perPage = 25, ?int $encerrado = null)
+    public function listarProcessos(?string $search, string $sortField, string $sortOrder, int $perPage = 25, ?int $encerrado = 0)
     {
         if($search === null) {
             return $this->processosModel
