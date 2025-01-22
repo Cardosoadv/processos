@@ -195,10 +195,18 @@ $clientes = model('ClientesModel')->findAll();
 
     <div class="row mt-3">
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="dataRevisao">Data da Revisão</label>
-                <input type="date" class="form-control" id="dataRevisao" name="dataRevisao" value="<?= $processo['dataRevisao'] ?? '' ?>">
+            <div class="row">
+                <div class="form-group col-6">
+                    <label for="dataRevisao">Data da Revisão</label>
+                    <input type="date" class="form-control" id="dataRevisao" name="dataRevisao" value="<?= $processo['dataRevisao'] ?? '' ?>">
+                </div>
+
+                <div id="dataEncerramento" class="form-group col-6 <?= (($processo['encerrado']?? 0) == 1) ? 'visually-hidden' : '' ?>">
+                    <label for="data_encerramento">Data do Encerramento</label>
+                    <input type="date" class="form-control" id="data_encerramento" name="data_encerramento" value="<?= $processo['data_encerramento'] ?? '' ?>">
+                </div>
             </div>
+
         </div>
         <div class="col-md-6">
             <div class="form-group">
@@ -210,6 +218,9 @@ $clientes = model('ClientesModel')->findAll();
                     </label>
                 </div>
             </div>
+            
+
+
         </div> 
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">Salvar</button>
@@ -221,6 +232,7 @@ $clientes = model('ClientesModel')->findAll();
 <script>
     const checkbox = document.getElementById('encerrado');
     const label = document.getElementById('situacao');
+    const dataEncerramento = document.getElementById('dataEncerramento');
 
     function atualizarBotao() {
         if (checkbox.checked) {
@@ -228,11 +240,13 @@ $clientes = model('ClientesModel')->findAll();
             label.classList.remove('btn-outline-success');
             label.classList.add('btn-outline-danger');
             this.value = 1;
+            dataEncerramento.classList.remove('visually-hidden');
         } else {
             label.textContent = 'Ativo';
             label.classList.remove('btn-outline-danger');
             label.classList.add('btn-outline-success');
             this.value = 0;
+            dataEncerramento.classList.add('visually-hidden');
         }
     }
 

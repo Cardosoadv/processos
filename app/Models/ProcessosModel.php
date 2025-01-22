@@ -33,6 +33,7 @@ class ProcessosModel extends Model
         'cliente_id',
         'dataRevisao',
         'encerrado',
+        'data_encerramento',
     ];
 
     protected bool $allowEmptyInserts = false;

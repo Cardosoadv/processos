@@ -157,6 +157,7 @@ class Processos extends BaseController
             'cliente_id'                => $this->request->getPost('cliente_id'),
             'dataRevisao'               => $this->request->getPost('dataRevisao'),
             'encerrado'                 => ($this->request->getPost('encerrado')) ? 1 : 0,
+            'data_encerramento'         => $this->request->getPost('data_encerramento'),
         ];
     }
     
