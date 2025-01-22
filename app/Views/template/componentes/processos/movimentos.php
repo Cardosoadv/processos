@@ -2,6 +2,12 @@
 <div class="card card-success card-outline mb-4"><!--begin::Header-->
     <div class="card-header">
         <div class="card-title">Movimentação</div>
+        <div class="card-tools">
+            <a data-bs-toggle="modal" data-bs-target="#modal_movimento" class="btn btn-secondary">
+                <i class="fas fa-plus"></i>
+                Movimentação
+            </a>
+        </div>
     </div><!--end::Header-->
     <!--begin::Body-->
     <div class="card-body">
@@ -12,7 +18,6 @@
                     <th scope="col">Movimento</th>
                 </tr>
             </thead>
-
             <?php if ($movimentacoes ?? null) : ?>
                 <?php foreach ($movimentacoes as $movimentos) : ?>
                     <tbody>

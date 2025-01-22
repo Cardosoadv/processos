@@ -194,4 +194,9 @@ class ProcessoService
         }
     }
 
+    public function salvarMovimento(array $data): void
+    {
+        $this->processosMovimentosModel->insert($data);
+    }
+
 }

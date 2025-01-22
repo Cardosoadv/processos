@@ -8,6 +8,7 @@ $selected = $processo['id_processo'] ?? "";
 <html lang="pt-BR">
 
 <!--begin::Head-->
+
 <head>
   <title><?= $titulo ?></title><!--begin::Primary Meta Tags-->
   <?= $this->include('template/header') ?>
@@ -15,9 +16,10 @@ $selected = $processo['id_processo'] ?? "";
 
 
 <!--begin::Body-->
+
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-  
-<!--begin::App Wrapper-->
+
+  <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <?= $this->include('template/nav') ?>
     <?= $this->include('template/sidebar') ?>
@@ -57,33 +59,30 @@ $selected = $processo['id_processo'] ?? "";
               <!-- Fim do Formulário -->
             </div>
             <div class="col-4">
-            <!-- Inicio SideBar do Formulario -->
+              <!-- Inicio SideBar do Formulario -->
 
-            <!-- Inicio das Tarefas -->
-            <div>
-              <?= $this->include('template/componentes/tarefas/sidebar') ?>
-            </div>
-            <!-- Fim das Tarefas -->
+              <!-- Inicio das Tarefas -->
+              <div>
+                <?= $this->include('template/componentes/tarefas/sidebar') ?>
+              </div>
+              <!-- Fim das Tarefas -->
 
-            <!-- Inicio das Anotações -->
-            <div>
-              <?= $this->include('template/componentes/processos/acordion') ?>
-            </div>
-            <!--end::Accordion-->
-            <!-- Fim das Anotações -->
-            <!-- Inicio das Intimações -->
-            <div>
-              <?= $this->include('template/componentes/processos/intimacoes') ?>
-            </div>
-            <!--end::Accordion-->
-            <!-- Fim das Intimações -->
-            
-            <!-- Inicio dos Movimentos -->
-            <div>
-              <?= $this->include('template/componentes/processos/movimentos') ?>
-            </div>
-            <!--end::Accordion-->
-            <!-- Fim dos Movimentos -->
+              <!-- Inicio das Anotações -->
+              <div>
+                <?= $this->include('template/componentes/processos/acordion') ?>
+              </div>
+              <!-- Fim das Anotações -->
+              <!-- Inicio dos Movimentos -->
+              <div>
+                <?= $this->include('template/componentes/processos/movimentos') ?>
+              </div>
+              <!-- Fim dos Movimentos -->
+              <!-- Inicio das Intimações -->
+              <div>
+                <?= $this->include('template/componentes/processos/intimacoes') ?>
+              </div>
+              <!-- Fim das Intimações -->
+
             </div>
           </div> <!-- Fim do SideBar do Formulario -->
         </div> <!-- Fim do Row -->
@@ -96,14 +95,15 @@ $selected = $processo['id_processo'] ?? "";
   <?= $this->include('template/modals/anotacao.php') ?>
   <?= $this->include('template/modals/badge.php') ?>
   <?= $this->include('template/modals/tarefas.php') ?>
+  <?= $this->include('template/modals/movimento.php') ?>
   <?= $this->include('template/footer') ?>
 
 
   <script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
-  <script src="<?= base_url('public/js/main.js')?>">
+  <script src="<?= base_url('public/js/main.js') ?>">
   </script>
 
-		
+
 
 </body><!--end::Body-->
 

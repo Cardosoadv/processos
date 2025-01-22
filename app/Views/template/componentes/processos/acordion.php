@@ -3,7 +3,9 @@
     <div class="card-header">
         <div class="card-title">Anotações</div>
         <div class="card-tools">
-            <a data-bs-toggle="modal" data-bs-target="#modal_anotacao" class="btn btn-secondary"><i class="fas fa-plus"></i> Nova Anotação</a>
+            <a data-bs-toggle="modal" data-bs-target="#modal_anotacao" class="btn btn-secondary">
+                <i class="fas fa-plus"></i> 
+                Anotação</a>
         </div>
     </div><!--end::Header-->
 

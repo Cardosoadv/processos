@@ -273,4 +273,12 @@ class Processos extends BaseController
         }
     }
 
+
+
+    public function salvarMovimento(){
+        $data = $this->request->getPost();
+        $this->processoService->salvarMovimento($data);
+        return redirect()->to(base_url('processos/editarpornumerodeprocesso/' . $data['numero_processo']));
+    }
+
 }

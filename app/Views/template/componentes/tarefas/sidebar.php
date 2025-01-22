@@ -3,7 +3,10 @@
     <div class="card-header">
         <div class="card-title">Tarefas deste Processo</div>
         <div class="card-tools">
-            <a data-bs-toggle="modal" data-bs-target="#modal-tarefa" id="openModalTarefa" class="btn btn-secondary"><i class="fas fa-plus"></i> Nova Tarefa</a>
+            <a data-bs-toggle="modal" data-bs-target="#modal-tarefa" id="openModalTarefa" class="btn btn-secondary">
+                <i class="fas fa-plus"></i> 
+                Tarefa
+            </a>
         </div>
     </div><!--end::Header-->
 
