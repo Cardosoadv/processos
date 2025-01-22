@@ -85,22 +85,22 @@ class ProcessoService
         $numeroProcesso = $processo['numero_processo'];
 
         return [
-            'processo' => $processo,
-            'poloAtivo' => $this->partesProcessoModel->getParteProcesso($id, 'A'),
-            'poloPassivo' => $this->partesProcessoModel->getParteProcesso($id, 'P'),
-            'anotacoes' => $this->processosAnotacoesModel->getAnotacoesPublicasOuDoUsuarioPorProcesso(user_id(), $id),
-            'movimentacoes' => $this->processosMovimentosModel->where('numero_processo', $numeroProcesso)
-                ->orderBy('dataHora', 'DESC')
-                ->limit(5)
-                ->get()
-                ->getResultArray(),
-            'intimacoes' => $this->intimacoesModel->where('numero_processo', $numeroProcesso)
-                ->orderBy('data_disponibilizacao', 'DESC')
-                ->limit(5)
-                ->get()
-                ->getResultArray(),
-            'etiquetas' => $this->processosModel->joinEtiquetasProcessos($id),
-            'tarefas' => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray()
+            'processo'          => $processo,
+            'poloAtivo'         => $this->partesProcessoModel->getParteProcesso($id, 'A'),
+            'poloPassivo'       => $this->partesProcessoModel->getParteProcesso($id, 'P'),
+            'anotacoes'         => $this->processosAnotacoesModel->getAnotacoesPublicasOuDoUsuarioPorProcesso(user_id(), $id),
+            'movimentacoes'     => $this->processosMovimentosModel->where('numero_processo', $numeroProcesso)
+                                                                    ->orderBy('dataHora', 'DESC')
+                                                                    ->limit(5)
+                                                                    ->get()
+                                                                    ->getResultArray(),
+            'intimacoes'        => $this->intimacoesModel->where('numero_processo', $numeroProcesso)
+                                                            ->orderBy('data_disponibilizacao', 'DESC')
+                                                            ->limit(5)
+                                                            ->get()
+                                                            ->getResultArray(),
+            'etiquetas'         => $this->processosModel->joinEtiquetasProcessos($id),
+            'tarefas'           => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray()
         ];
     }
 

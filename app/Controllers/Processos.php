@@ -147,6 +147,7 @@ class Processos extends BaseController
             'titulo_processo'           => $this->request->getPost('titulo_processo'),
             'nomeOrgao'                 => $this->request->getPost('nomeOrgao'),
             'numeroprocessocommascara'  => $this->request->getPost('numeroprocessocommascara'),
+            'numero_processo'           => preg_replace('/[^0-9]/', '', $this->request->getPost('numeroprocessocommascara')),
             'dataDistribuicao'          => $this->request->getPost('dataDistribuicao'),
             'valorCausa'                => $this->request->getPost('valorCausa'),
             'risco'                     => $this->request->getPost('risco'),

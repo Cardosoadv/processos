@@ -39,7 +39,7 @@ class Monitorar extends BaseController
         $processosMonitoradosModel = new ProcessosMonitoradosModel();
         $receberIntimacoes = new ReceberIntimacoes();
 
-        $processosMonitorados = $processosMonitoradosModel->findAll();
+        $processosMonitorados = $processosMonitoradosModel->orderBy('ultima_checagem', 'ASC')->limit(50)->findAll();
 
         foreach ($processosMonitorados as $processo){
             $numeroProcesso = preg_replace('/[^0-9]/', '', $processo['numero_processo']);

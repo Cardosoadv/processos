@@ -11,8 +11,16 @@ function criarcartao(array $items){
         $processo = $processoModel->where('id_processo', $item['processo_id'])->first();
         $numeroProcesso = $processo['numeroprocessocommascara'] ?? "";
         $idProcesso = $processo['id_processo'] ?? "";
-        $html = "<div class='tarefa draggable' id='tarefa_".$item['id_tarefa']."' draggable='true' data-id='".$item['id_tarefa']."'>
-                    <div class='card card-info card-outline mb-1'>
+
+        $html1 = "<div class='tarefa draggable' id='tarefa_".$item['id_tarefa']."' draggable='true' data-id='".$item['id_tarefa']."'>";
+        
+        if($item['responsavel'] == user_id()){
+            $html2 = "<div class='card card-info card-outline mb-1'>";
+        }else{
+            $html2 = "<div class='card card-warning card-outline mb-1'>";
+        }
+
+        $html3 = "<div class='card card-info card-outline mb-1'>
                         <div class='card-header'>
                             <h5 class='card-title'>".$item['tarefa']."</h5>
                             <div class='card-tools'>
@@ -38,6 +46,8 @@ function criarcartao(array $items){
                     </div>
                 </div>";
         $status = $item['status'];
+
+        $html = $html1 . $html2 . $html3;
         array_push($data,[ 'html' => $html, 'status' => $status]);
     }
     return $data; 
