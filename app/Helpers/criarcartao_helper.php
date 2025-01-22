@@ -20,8 +20,7 @@ function criarcartao(array $items){
             $html2 = "<div class='card card-warning card-outline mb-1'>";
         }
 
-        $html3 = "<div class='card card-info card-outline mb-1'>
-                        <div class='card-header'>
+        $html3 = "      <div class='card-header'>
                             <h5 class='card-title'>".$item['tarefa']."</h5>
                             <div class='card-tools'>
                                 <a class='btn btn-tool btn-link'>".$item['id_tarefa']."</a>
