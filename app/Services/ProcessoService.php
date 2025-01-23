@@ -25,34 +25,33 @@ class ProcessoService
         $this->tarefasModel                 = model('TarefasModel');
     }
 
-    public function listarProcessos(?string $search, string $sortField, string $sortOrder, int $perPage = 25, ?int $encerrado = 0)
+    public function listarProcessos(?string $search, string $sortField, string $sortOrder, ?int $encerrado = 0, ?int $etiqueta = null, int $perPage = 25)
     {
-        if($search === null) {
-            return $this->processosModel
-                                        ->where('encerrado', 0)
-                                        ->orderBy($sortField, $sortOrder)
-                                        ->joinProcessoCliente($perPage);
+        $builder = $this->processosModel;
+    
+        // Filtro por encerrado
+        if ($encerrado !== null) {
+            $builder->where('encerrado', $encerrado);
         }
-
-        if($encerrado === null) {
-            return $this->processosModel
-                                        ->orderBy($sortField, $sortOrder)
-                                        ->groupStart()
-                                        ->like('numero_processo', $search)
-                                        ->orLike('titulo_processo', $search)
-                                    ->groupEnd()
-                                    ->orderBy($sortField, $sortOrder)
-                                    ->joinProcessoCliente($perPage);
+    
+        // Filtro por busca (numero_processo ou titulo_processo)
+        if ($search !== null) {
+            $builder->groupStart()
+                    ->like('numero_processo', $search)
+                    ->orLike('titulo_processo', $search)
+                    ->groupEnd();
         }
-
-        return $this->processosModel
-                                    ->where('encerrado', 0)
-                                    ->groupStart()
-                                        ->like('numero_processo', $search)
-                                        ->orLike('titulo_processo', $search)
-                                    ->groupEnd()
-                                    ->orderBy($sortField, $sortOrder)
-                                    ->joinProcessoCliente($perPage);
+    
+        // Filtro por etiqueta
+        if ($etiqueta !== null) {
+            // Use um join para relacionar com a tabela de etiquetas (assumindo que você tenha uma tabela de junção)
+            $builder->join('processos_etiquetas', 'processos.id_processo = processos_etiquetas.processo_id')
+                    ->where('processos_etiquetas.etiqueta_id', $etiqueta);
+        }
+    
+        $builder->orderBy($sortField, $sortOrder);
+    
+        return $builder->joinProcessoCliente($perPage);
     }
 
     public function listarProcessosCliente(int $clienteId, ?string $search, int $perPage = 25)

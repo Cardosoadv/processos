@@ -25,8 +25,9 @@ class Processos extends BaseController
             'titulo'    => 'Processos',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
-            's'         => $this->request->getGet('s'),
+            's'         => $this->request->getGet('s') ?? null,
             'encerrado' => $this->request->getGet('encerrado') ?? 0,
+            'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
         ];
         
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
@@ -35,8 +36,10 @@ class Processos extends BaseController
             $data['s'],
             $data['sortField'],
             $data['sortOrder'],
+            $data['encerrado'],
+            $data['etiqueta'],
         );
-
+ 
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
 

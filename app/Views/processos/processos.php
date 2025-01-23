@@ -3,10 +3,12 @@
 use App\Models\ProcessosModel;
 
 function etiquetasDosProcesso($id_processo){
-    $etiquetas = new ProcessosModel();
+    $etiquetas = model('ProcessosModel');
     $etiquetas = $etiquetas->joinEtiquetasProcessos($id_processo);
     return $etiquetas;
 }
+
+$tags = model('EtiquetasModel')->findAll();
 
 ?>
 
@@ -34,21 +36,35 @@ function etiquetasDosProcesso($id_processo){
                     <div class="row">
                         <!-- Main Content Column -->
                         <div class="col-lg-9">
-                            <!-- Search Form -->
-                            <form action="" method="get" class="mb-3">
-                                <div class="input-group">
-                                    <input 
-                                        type="text" 
-                                        name="s" 
-                                        class="form-control" 
-                                        placeholder="Pesquisar..." 
-                                        aria-label="Pesquisar">
-                                    <button class="btn btn-outline-secondary" type="submit">
-                                        Pesquisar
-                                    </button>
+                            <div class="row">
+                                <div class="col-8">
+                                    <!-- Search Form -->
+                                    <form action="" method="get" class="mb-3">
+                                        <div class="input-group">
+                                            <input 
+                                                type="text" 
+                                                name="s" 
+                                                class="form-control" 
+                                                placeholder="Pesquisar..." 
+                                                aria-label="Pesquisar">
+                                            <button class="btn btn-outline-secondary" type="submit">
+                                                Pesquisar
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
+                                <div class="col-4">
+                                    <select class="form-control" id="tagSelect" name="selected_tag_id">
+                                        <option value="">Selecione uma Tag</option> <?php foreach ($tags as $tag): ?>
+                                            <option value="<?= $tag['id_etiqueta'] ?>">
+                                                <?= htmlspecialchars($tag['nome'], ENT_QUOTES, 'UTF-8') ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
 
+
+                            </div>
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
@@ -247,6 +263,26 @@ function etiquetasDosProcesso($id_processo){
             fetchProcessos();
             fetchIntimacoes();
         });
+
+        // Filtrar pela etiqueta
+        const tagSelect = document.getElementById('tagSelect');
+
+        tagSelect.addEventListener('change', function() {
+        const selectedTagId = this.value;
+
+        if (selectedTagId) {
+            // Obtém a URL base da página atual
+            const baseUrl = window.location.href.split('?')[0];
+            // Cria a nova URL com o parâmetro GET
+            const newUrl = `${baseUrl}?etiqueta=${selectedTagId}`;
+            // Redireciona para a nova URL
+            window.location.href = newUrl;
+        } else {
+            // Se nenhuma tag for selecionada, você pode redirecionar para uma URL sem o parâmetro, ou fazer outra coisa
+            window.location.href = baseUrl; // Redireciona para a página sem filtro
+        }
+    });
+
     </script>
 </body>
 </html>
