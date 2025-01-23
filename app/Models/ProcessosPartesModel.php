@@ -57,6 +57,13 @@ class ProcessosPartesModel extends Model
         return $parte;
     }
 
+    public function jaExisteParteProcesso(int $id_processo){
+        $parte = $this->db->table('processos_partes_dos_processos as pdp')
+        ->where('id_processo', $id_processo)
+        ->get()->getResultArray();
+        return $parte;
+    }
+
     public function salvarParteDoProcesso(array $parteDoProcesso){
         $this->db->table('processos_partes_dos_processos')->insert($parteDoProcesso);
     }

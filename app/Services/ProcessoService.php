@@ -140,11 +140,16 @@ class ProcessoService
             $idParteProcesso = $this->partesProcessoModel->insertID();
         }
 
-        $this->partesProcessoModel->salvarParteDoProcesso([
-            'id_parte' => $idParteProcesso,
-            'id_processo' => $idProcesso,
-            'polo' => $parte['polo']
-        ]);
+        $jaExisteParteProcesso = $this->partesProcessoModel->jaExisteParteProcesso($idProcesso);
+        if($jaExisteParteProcesso){
+            return;
+        }else{
+            $this->partesProcessoModel->salvarParteDoProcesso([
+                'id_parte' => $idParteProcesso,
+                'id_processo' => $idProcesso,
+                'polo' => $parte['polo']
+            ]);
+        }
     }
 
     public function salvarAnotacao(array $data): void
