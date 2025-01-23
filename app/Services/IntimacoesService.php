@@ -80,8 +80,14 @@ class IntimacoesService
             'numeroprocessocommascara' => $item['numeroprocessocommascara'],
         ];
 
+        $jaExisteProcesso = $this->processoService->processoJaExiste($item['numero_processo']);
+        
+        if ($jaExisteProcesso) {
+            $idProcesso = $jaExisteProcesso['id_processo'];
+        }else{
         // Usar o ProcessoService existente para salvar o processo
         $idProcesso = $this->processoService->salvarProcesso($dadosProcesso, null);
+        }
         
         $this->salvarIntimacao($item);
         

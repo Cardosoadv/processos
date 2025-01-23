@@ -203,4 +203,9 @@ class ProcessoService
         $this->processosMovimentosModel->insert($data);
     }
 
+    public function processoJaExiste(string $numeroProcesso): array
+    {
+        return $this->processosModel->where('numero_processo', $numeroProcesso)->first();
+    }
+
 }
