@@ -64,7 +64,7 @@ class Processos extends BaseController
         return view('processos/processos', $data);
     }
 
-    public function ProcessosMovimentados($dias)
+    public function processosMovimentados($dias)
     {
         $processos = $this->processoService->getProcessosMovimentados($dias);
         return $this->response->setJSON($processos);

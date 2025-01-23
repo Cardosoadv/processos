@@ -7,7 +7,7 @@ use App\Services\IntimacoesService;
 use App\Services\ProcessosService;
 use App\Services\AuditoriaService;
 
-class IntimacoesController extends BaseController
+class Intimacoes extends BaseController
 {
     private $intimacoesService;
     private $processosService;
@@ -50,8 +50,6 @@ class IntimacoesController extends BaseController
         $resultado = $this->intimacoesService->processarIntimacoes($data, $filename, user_id());
         return redirect()->to(base_url('intimacoes'));
     }
-
-
 
     public function intimacoesPorPeriodo($dias)
     {
