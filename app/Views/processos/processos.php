@@ -91,7 +91,7 @@ $tags = model('EtiquetasModel')->findAll();
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th class="col-4">
+                                                    <th class="col-3">
                                                         <a href="<?= base_url('processos?sort=numero_processo&order=' . 
                                                             ($sortField === 'numero_processo' ? $nextOrder : 'asc')) . 
                                                             ($s ? '&s=' . $s : '') ?>" 
@@ -102,7 +102,7 @@ $tags = model('EtiquetasModel')->findAll();
                                                             <?php endif; ?>
                                                         </a>    
                                                     </th>
-                                                    <th class="col-6">
+                                                    <th class="col-4">
                                                         <a href="<?= base_url('processos?sort=titulo_processo&order=' . 
                                                             ($sortField === 'titulo_processo' ? $nextOrder : 'asc')) .
                                                             ($s ? '&s=' . $s : '') ?>" 
@@ -111,7 +111,19 @@ $tags = model('EtiquetasModel')->findAll();
                                                             <?php if($sortField === 'titulo_processo'): ?>
                                                                 <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
                                                             <?php endif; ?>
-                                                        </a> / Cliente</th>
+                                                        </a> / Cliente
+                                                    </th>
+                                                    <th class="col-2">
+                                                        <a href="<?= base_url('processos?sort=dataRevisao&order=' . 
+                                                            ($sortField === 'dataRevisao' ? $nextOrder : 'desc')) . 
+                                                            ($s ? '&s=' . $s : '') ?>" 
+                                                            class="text-decoration-none text-dark">
+                                                                Data Revisão
+                                                            <?php if($sortField === 'dataRevisao'): ?>
+                                                                <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
+                                                            <?php endif; ?>
+                                                        </a>    
+                                                    </th>
                                                     <th class="col-2">Ações</th>
                                                 </tr>
                                             </thead>
@@ -140,6 +152,7 @@ $tags = model('EtiquetasModel')->findAll();
                                                         <td><?= esc($processo['titulo_processo']) ?><br/>
                                                         <?= esc($processo['nome']) ?>
                                                         </td>
+                                                        <td><?= date('d-m-Y',strtotime(esc($processo['dataRevisao'] ?? "01-01-2000"))) ?></td>
                                                         <td>
                                                             <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
                                                                 class="btn btn-sm btn-primary"
