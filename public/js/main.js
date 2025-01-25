@@ -148,5 +148,5 @@ const editorConfig = {
 	}
 };
 
-ClassicEditor.create(document.querySelector('#editor'), editorConfig);
-ClassicEditor.create(document.querySelector('#anotacao-editor'), editorConfig);
+//ClassicEditor.create(document.querySelector('#editor'), editorConfig);
+//ClassicEditor.create(document.querySelector('#anotacao-editor'), editorConfig);
