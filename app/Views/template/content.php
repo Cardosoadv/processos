@@ -27,7 +27,7 @@
                             <i class="nav-icon bi bi-bank"></i>
                         </div>
                         <a href="<?=base_url('processos')?>" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            Mais informções
+                            Mais informações
                             <i class="bi bi-link-45deg"></i>
                         </a>
                     </div><!--end::Small Box Widget 1-->
@@ -43,7 +43,7 @@
                         <i class="nav-icon bi bi-person"></i>
                         </div>
                         <a href="<?=base_url('clientes')?>" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            Mais informções
+                            Mais informações
                             <i class="bi bi-link-45deg"></i>
                         </a>
                     </div><!--end::Small Box Widget 2-->
@@ -59,7 +59,7 @@
                         <i class="nav-icon bi bi-check2-square"></i>
                         </div>
                         <a href="<?=base_url('tarefas')?>" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            Mais informções
+                            Mais informações
                             <i class="bi bi-link-45deg"></i>
                         </a>
                     </div><!--end::Small Box Widget 3-->
@@ -75,7 +75,7 @@
                         <i class="nav-icon bi bi-cash"></i>
                         </div>
                         <a href="#" class="small-box-footer link-light link-underline-opacity-0 link-underline-opacity-50-hover">
-                            Mais informções
+                            Mais informações
                             <i class="bi bi-link-45deg"></i>
                         </a>
                     </div><!--end::Small Box Widget 4-->
