@@ -29,9 +29,9 @@ class ProcessoObjeto extends BaseController
         $dados = $this->request->getPost();
 
  
-        $id = $this->service->salvarObjeto($dados, $dados['processo_id']);
+        $id = $this->service->salvarObjeto($dados);
         if ($id) {
-            return redirect()->to(base_url('/processoobjeto'))->with('success', 'Objeto salvo com sucesso!');
+            return redirect()->to(base_url('processos/consultarprocesso/').$dados['processo_id'])->with('success', 'Objeto salvo com sucesso!');
         } else {
             return redirect()->back()->withInput()->with('erro', 'Erro ao salvar o objeto.');
         }

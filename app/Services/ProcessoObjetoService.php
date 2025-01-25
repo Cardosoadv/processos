@@ -13,9 +13,9 @@ class ProcessoObjetoService
         $this->model = new ProcessoObjetoModel();
     }
 
-    public function salvarObjeto(array $dados, $idProcesso): int
+    public function salvarObjeto(array $dados): int
     {
-        return $this->model->salvarObjeto($dados, $idProcesso);
+        return $this->model->salvarObjeto($dados);
     }
 
     public function obterObjeto(int $id): ?array
