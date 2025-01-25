@@ -46,8 +46,6 @@ class CreateProcessoAuditTable extends Migration
         ]);
 
         $this->forge->addKey('id_audit', true);
-        $this->forge->addForeignKey('processo_id', 'processos', 'id_processo', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'SET NULL', 'SET NULL');
         $this->forge->createTable('auditoria_processo');
     }
 
