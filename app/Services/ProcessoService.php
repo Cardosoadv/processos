@@ -13,6 +13,7 @@ class ProcessoService
     protected $processosMovimentosModel;
     protected $intimacoesModel;
     protected $tarefasModel;
+    protected $processosObjetoModel;
 
     public function __construct()
     {
@@ -23,6 +24,7 @@ class ProcessoService
         $this->processosMovimentosModel     = model('ProcessosMovimentosModel');
         $this->intimacoesModel              = model('IntimacoesModel');
         $this->tarefasModel                 = model('TarefasModel');
+        $this->processosObjetoModel         = model('ProcessoObjetoModel');
     }
 
     public function listarProcessos(?string $search, string $sortField, string $sortOrder, ?int $encerrado = 0, ?int $etiqueta = null, int $perPage = 25)
@@ -82,7 +84,7 @@ class ProcessoService
     {
         $processo = $this->processosModel->where('id_processo', $id)->get()->getRowArray();
         $numeroProcesso = $processo['numero_processo'];
-
+ 
         return [
             'processo'          => $processo,
             'poloAtivo'         => $this->partesProcessoModel->getParteProcesso($id, 'A'),
@@ -99,7 +101,8 @@ class ProcessoService
                                                             ->get()
                                                             ->getResultArray(),
             'etiquetas'         => $this->processosModel->joinEtiquetasProcessos($id),
-            'tarefas'           => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray()
+            'tarefas'           => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray(),
+            'objetos'           => $this->processosObjetoModel->listarObjetoProcesso($id),
         ];
     }
 

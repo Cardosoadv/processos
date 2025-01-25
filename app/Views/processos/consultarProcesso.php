@@ -106,6 +106,11 @@ $selected = $processo['id_processo'] ?? "";
                 <?= $this->include('template/componentes/processos/intimacoes') ?>
               </div>
               <!-- Fim das Intimações -->
+              <!-- Inicio das Imóveis -->
+              <div>
+              <?= $this->include('template/componentes/processos/objeto') ?>
+              </div>
+              <!-- Fim dos Imoveis -->
 
             </div>
           </div> <!-- Fim do SideBar do Formulario -->
@@ -120,6 +125,7 @@ $selected = $processo['id_processo'] ?? "";
   <?= $this->include('template/modals/badge.php') ?>
   <?= $this->include('template/modals/tarefas.php') ?>
   <?= $this->include('template/modals/movimento.php') ?>
+  <?= $this->include('template/modals/objeto.php') ?>
   <?= $this->include('template/footer') ?>
 
 

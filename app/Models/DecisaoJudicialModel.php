@@ -33,11 +33,11 @@ class DecisaoJudicialModel extends Model
 
     public function obterDecisao(int $id): ?array
     {
-       $decisao = $this->find($id);
-       if ($decisao && $decisao['dados']) {
-           $decisao['dados'] = json_decode($decisao['dados'], true);
-       }
-       return $decisao;
+        $decisao = $this->find($id);
+        if ($decisao && $decisao['dados']) {
+            $decisao['dados'] = json_decode($decisao['dados'], true);
+        }
+        return $decisao;
     }
 
         public function listarDecisoes(): array

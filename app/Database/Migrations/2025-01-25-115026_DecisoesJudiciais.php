@@ -9,7 +9,7 @@ class DecisoesJudiciais extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_decisao'               => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
+            'id_decisao'                => ['type' => 'int', 'constraint' => 11, 'auto_increment' => true],
             'dados'                     => ['type' => 'json', 'null' => true],    
             'created_at'                => ['type' => 'datetime', 'null' => true],
             'updated_at'                => ['type' => 'datetime', 'null' => true],
