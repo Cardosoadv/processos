@@ -74,9 +74,12 @@ $tags = model('EtiquetasModel')->findAll();
                                     </a>
                                 </div>
 
-                                <?php if (isset($_SESSION['msg'])): ?>
+                                <?php if (null !== (session()->get('msg'))
+                                                || (session()->get('success')) 
+                                                || (session()->get('errors'))): ?>
                                     <div class="callout callout-info">
                                         <?= session()->get('msg') ?>
+                                        <?= session()->get('success') ?>
                                         <?= session()->get('errors') ?>
                                     </div>
                                 <?php endif; ?>

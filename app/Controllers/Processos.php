@@ -21,7 +21,7 @@ class Processos extends BaseController
     public function index()
     {
         $data = [
-            'img'       => 'vazio.png',
+            
             'titulo'    => 'Processos',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
@@ -50,7 +50,6 @@ class Processos extends BaseController
     public function processosDoCliente(?int $cliente_id)
     {
         $data = [
-            'img'    => 'vazio.png',
             'titulo' => 'Processos',
             's'      => $this->request->getGet('s')
         ];
@@ -129,7 +128,12 @@ class Processos extends BaseController
     private function validarDadosProcesso(): bool
     {
         $rules = [
-            'titulo_processo' => 'required|min_length[3]',
+            'titulo_processo' => [
+                'rules' => 'required|min_length[3]',
+                'errors' => [
+                            'required' => 'O Título do processo é obrigatório',
+                        ],
+            ],
             'numeroprocessocommascara' => [
                     'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
                     'errors' => [
