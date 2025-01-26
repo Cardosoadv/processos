@@ -1,14 +1,26 @@
 <?php 
-
-use App\Models\ProcessosModel;
-
+/*
+* Busca as Etiquetas do Processo
+* @param $id_processo ID do processo
+* @return array
+*/
 function etiquetasDosProcesso($id_processo){
     $etiquetas = model('ProcessosModel');
     $etiquetas = $etiquetas->joinEtiquetasProcessos($id_processo);
     return $etiquetas;
 }
 
+//Carrega as etiquetas
 $tags = model('EtiquetasModel')->findAll();
+
+// Obtém os parâmetros atuais
+$params = $_GET;
+
+// Função auxiliar para remover um parâmetro específico
+function removeParam($params, $key) {
+   unset($params[$key]);
+   return $params;
+}
 
 ?>
 
@@ -65,11 +77,36 @@ $tags = model('EtiquetasModel')->findAll();
 
 
                             </div>
+
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
+
+                                <?php if(isset($params['encerrado'])): ?>
+                                <a href="<?= base_url('processos?' . http_build_query(removeParam($params, 'encerrado'))) ?>" 
+                                    class="btn btn-secondary mb-2 mx-1">
+                                    Todos os Processos
+                                </a>
+                                <?php if($params['encerrado']==1): ?>
+                                    <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['encerrado' => '0']))) ?>" 
+                                        class="btn btn-primary mb-2 mx-1">
+                                        Em Andamento
+                                    </a>
+                                    <?php elseif($params['encerrado']==0): ?>
+                                    <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['encerrado' => '1']))) ?>" 
+                                        class="btn btn-danger mb-2 mx-1">
+                                        Encerrados
+                                    </a>    
+                                <?php endif; ?>
+                                <?php else: ?>
+                                    <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['encerrado' => '0']))) ?>" 
+                                        class="btn btn-primary mb-2 mx-1">
+                                        Em Andamento
+                                    </a>
+                            <?php endif; ?>    
+
                                     <a href="<?= base_url('processos/novo/') ?>" 
-                                        class="btn btn-success">
+                                        class="btn btn-success mb-2 mx-1">
                                         Novo Processo
                                     </a>
                                 </div>

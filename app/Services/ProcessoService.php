@@ -27,7 +27,7 @@ class ProcessoService
         $this->processosObjetoModel         = model('ProcessoObjetoModel');
     }
 
-    public function listarProcessos(?string $search, string $sortField, string $sortOrder, ?int $encerrado = 0, ?int $etiqueta = null, int $perPage = 25)
+    public function listarProcessos(?string $search, string $sortField, string $sortOrder, ?int $encerrado, ?int $etiqueta = null, int $perPage = 25)
     {
         $builder = $this->processosModel;
     
@@ -35,7 +35,7 @@ class ProcessoService
         if ($encerrado !== null) {
             $builder->where('encerrado', $encerrado);
         }
-    
+     
         // Filtro por busca (numero_processo ou titulo_processo)
         if ($search !== null) {
             $builder->groupStart()

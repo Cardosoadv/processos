@@ -31,7 +31,7 @@ class Processos extends BaseController
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
             's'         => $this->request->getGet('s') ?? null,
-            'encerrado' => $this->request->getGet('encerrado') ?? 0,
+            'encerrado' => $this->request->getGet('encerrado') ?? null,
             'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
         ];
         
