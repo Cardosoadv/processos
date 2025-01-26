@@ -19,7 +19,7 @@ class Home extends BaseController
                                         ->get()->getResultArray();
         $qteTarefas = count($tarefasUsuario);
         $qteClientes = count($clientesModel->findAll());
-        $processos = $processosModel->findAll();
+        $processos = $processosModel->where('encerrado', 0)->get()->getResultArray();
         $qteProcessos = count($processos);
 
         $data = [
