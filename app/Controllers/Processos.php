@@ -18,6 +18,11 @@ class Processos extends BaseController
         $this->processoService = new ProcessoService();
     }
 
+    /**
+     * Lista todos os processos
+     * Com Filtro e pesquisa
+     * @return string
+     */
     public function index()
     {
         $data = [
@@ -46,7 +51,13 @@ class Processos extends BaseController
         Session()->set(['msg'=> null]);
         return view('processos/processos', $data);
     }
-    
+
+    /**
+     * Lista os processos de um cliente
+     * 
+     * @param int $cliente_id
+     * @return string
+     */
     public function processosDoCliente(?int $cliente_id)
     {
         $data = [
@@ -63,17 +74,45 @@ class Processos extends BaseController
         return view('processos/processos', $data);
     }
 
+    /**
+     * Retorna os processos movimentados nos últimos dias
+     * 
+     * @param int $dias
+     * @return json
+     */
     public function processosMovimentados($dias)
     {
         $processos = $this->processoService->getProcessosMovimentados($dias);
         return $this->response->setJSON($processos);
     }
 
-    public function editar(int $id = null)
-    {
-        return redirect()->to(base_url('processos/consultarprocesso/' . $id));
+    ############################################################################################ 
+    #                                                                                          #
+    #                Metódos Reacionados à Edição dos Pocessos                                 #
+    #                                                                                          #
+    ############################################################################################
+
+    /**
+     * Exibe o Formulário de Novo Processo
+     */
+    public function novo(){
+        $data = [
+            'titulo'    => 'Novo Processo',
+            'processo'  => ['cliente_id'=>null],
+        ];
+        $data['img'] = 'vazio.png';
+        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
+        $data['etiquetas'] = [];
+        return view('processos/consultarProcesso', $data);
     }
     
+    /**
+     * Exibe todos os detalhes de um processo
+     * Consulta um processo
+     * 
+     * @param int $id ID do processo
+     * @return string
+     */
     public function consultarProcesso(int $id = null)
     {
         $data = array_merge(
@@ -85,6 +124,11 @@ class Processos extends BaseController
         return view('processos/consultarProcesso', $data);
     }
 
+    /**
+     * Salva um processo
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function salvar()
     {
         if (!$this->validarDadosProcesso()) {
@@ -113,61 +157,45 @@ class Processos extends BaseController
     }
 
     /**
-     * Este função apenas redireciona para o editar por id
+     * Deleta um processo e seus registros relacionados
+     * 
+     * @param int $id ID do processo
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function editarPorNumerodeProcesso(string $numeroProcesso){
-
-        $processosModel = model('ProcessosModel');
-        $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
-        return redirect()->to(base_url('processos/consultarprocesso/' . $processo['id_processo']));
-    }
-
-    /** 
-     * Realiza a validacao dos dados vindos do formulário
-     */
-    private function validarDadosProcesso(): bool
+    public function excluir(int $id)
     {
-        $rules = [
-            'titulo_processo' => [
-                'rules' => 'required|min_length[3]',
-                'errors' => [
-                            'required' => 'O Título do processo é obrigatório',
-                        ],
-            ],
-            'numeroprocessocommascara' => [
-                    'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
-                    'errors' => [
-                        'required' => 'O número do processo é obrigatório',
-                        'regex_match' => 'O número do processo está em formato inválido',
-                    ]
-            ],
-        ];
-        
-        return $this->validate($rules);
+        try {
+            $this->processoService->deletarProcesso($id);
+            
+            return redirect()
+                ->to(base_url('processos'))
+                ->with('success', 'Processo deletado com sucesso');
+                
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Erro ao deletar processo: ' . $e->getMessage());
+        }
     }
 
 
-    private function prepararDadosProcesso()
-    {
-        return [
-            'tipoDocumento'             => $this->request->getPost('tipoDocumento'),
-            'titulo_processo'           => $this->request->getPost('titulo_processo'),
-            'nomeOrgao'                 => $this->request->getPost('nomeOrgao'),
-            'numeroprocessocommascara'  => $this->request->getPost('numeroprocessocommascara'),
-            'numero_processo'           => preg_replace('/[^0-9]/', '', $this->request->getPost('numeroprocessocommascara')),
-            'dataDistribuicao'          => $this->request->getPost('dataDistribuicao'),
-            'valorCausa'                => $this->request->getPost('valorCausa'),
-            'risco'                     => $this->request->getPost('risco'),
-            'valorCondenacao'           => $this->request->getPost('valorCondenacao'),
-            'comentario'                => $this->request->getPost('comentario'),
-            'resultado'                 => $this->request->getPost('resultado'),
-            'cliente_id'                => $this->request->getPost('cliente_id'),
-            'dataRevisao'               => $this->request->getPost('dataRevisao'),
-            'encerrado'                 => ($this->request->getPost('encerrado')) ? 1 : 0,
-            'data_encerramento'         => $this->request->getPost('data_encerramento'),
-        ];
-    }
+    ############################################################################################ 
+    #                                                                                          #
+    #                Metódos Reacionados às Tabelas Auxiliares                                 #
+    #                                                                                          #
+    ############################################################################################
+
     
+
+
+    /**
+     * Processa as partes do processo
+     * 
+     * @param string $campo
+     * @param string $tipo
+     * @param int $processoId
+     * @return void
+     */
     private function processarPartes($campo, $tipo, $processoId)
     {
         $partes = $this->request->getPost($campo) ?? [];
@@ -220,21 +248,11 @@ class Processos extends BaseController
         $processosPartesModel->salvarParteDoProcesso($parteProcesso);
     }
 
-    
     /**
-     * Inserir novo processo
+     * Adiciona uma anotação a um processo
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function novo(){
-        $data = [
-            'titulo'    => 'Novo Processo',
-            'processo'  => ['cliente_id'=>null],
-        ];
-        $data['img'] = 'vazio.png';
-        $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
-        $data['etiquetas'] = [];
-        return view('processos/consultarProcesso', $data);
-    }
-
     public function adicionarAnotacao()
     {
         $data = $this->request->getPost();
@@ -245,6 +263,11 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
     }
 
+    /**
+     * Remove uma etiqueta a um processo
+     * 
+     * @return json
+     */
     public function removerEtiqueta()
     {
         $data = $this->request->getJSON();
@@ -252,6 +275,11 @@ class Processos extends BaseController
         return $this->response->setJSON(['success' => $success]);
     }
 
+    /**
+     * Adiciona uma etiqueta a um processo
+     * 
+     * @return json
+     */
     public function adicionarEtiqueta()
     {
         $data = $this->request->getJSON();
@@ -260,33 +288,115 @@ class Processos extends BaseController
     }
 
     /**
- * Deleta um processo e seus registros relacionados
- * 
- * @param int $id ID do processo
- * @return \CodeIgniter\HTTP\RedirectResponse
- */
-    public function excluir(int $id)
-    {
-        try {
-            $this->processoService->deletarProcesso($id);
-            
-            return redirect()
-                ->to(base_url('processos'))
-                ->with('success', 'Processo deletado com sucesso');
-                
-        } catch (\Exception $e) {
-            return redirect()
-                ->back()
-                ->with('error', 'Erro ao deletar processo: ' . $e->getMessage());
-        }
-    }
-
-
-
+     * Salva um movimento no processo
+     * 
+     * @return \CodeIgniter\HTTP\RedirectResponse
+     */
     public function salvarMovimento(){
         $data = $this->request->getPost();
         $this->processoService->salvarMovimento($data);
         return redirect()->to(base_url('processos/editarpornumerodeprocesso/' . $data['numero_processo']));
     }
+
+    ############################################################################################ 
+    #                                                                                          #
+    #        Metódos Auxiliares Relacionados à preparação dos dados do Pocessos                #
+    #                                                                                          #
+    ############################################################################################
+    
+    /**
+     * Prepara os dados do processo para serem salvos
+     * 
+     * @return array
+     */
+
+    private function prepararDadosProcesso()
+    {
+        return [
+            'tipoDocumento'             => $this->request->getPost('tipoDocumento'),
+            'titulo_processo'           => $this->request->getPost('titulo_processo'),
+            'nomeOrgao'                 => $this->request->getPost('nomeOrgao'),
+            'numeroprocessocommascara'  => $this->request->getPost('numeroprocessocommascara'),
+            'numero_processo'           => preg_replace('/[^0-9]/', '', $this->request->getPost('numeroprocessocommascara')),
+            'dataDistribuicao'          => $this->request->getPost('dataDistribuicao'),
+            'valorCausa'                => $this->request->getPost('valorCausa'),
+            'risco'                     => $this->request->getPost('risco'),
+            'valorCondenacao'           => $this->request->getPost('valorCondenacao'),
+            'comentario'                => $this->request->getPost('comentario'),
+            'resultado'                 => $this->request->getPost('resultado'),
+            'cliente_id'                => $this->request->getPost('cliente_id'),
+            'dataRevisao'               => $this->request->getPost('dataRevisao'),
+            'encerrado'                 => ($this->request->getPost('encerrado')) ? 1 : 0,
+            'data_encerramento'         => $this->request->getPost('data_encerramento'),
+        ];
+    }
+
+    /** 
+     * Realiza a validacao dos dados vindos do formulário
+     */
+    private function validarDadosProcesso(): bool
+    {
+        $rules = [
+            'titulo_processo' => [
+                'rules' => 'required|min_length[3]',
+                'errors' => [
+                            'required' => 'O Título do processo é obrigatório',
+                        ],
+            ],
+            'numeroprocessocommascara' => [
+                    'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
+                    'errors' => [
+                        'required' => 'O número do processo é obrigatório',
+                        'regex_match' => 'O número do processo está em formato inválido',
+                    ]
+            ],
+        ];
+        
+        return $this->validate($rules);
+    }
+
+    ############################################################################################ 
+    #                                                                                          #
+    #                            Metódos de Redirecionamento                                   #
+    #                                                                                          #
+    ############################################################################################
+
+    /**
+     * Apenas redireciona para a Consulta de Processo
+     * 
+     * @param int $id ID do processo
+     * @return string
+     */
+    public function editar(int $id = null)
+    {
+        return redirect()->to(base_url('processos/consultarprocesso/' . $id));
+    }
+
+    /**
+     * Este função apenas redireciona para o editar por id
+     */
+    public function editarPorNumerodeProcesso(string $numeroProcesso){
+
+        $processosModel = model('ProcessosModel');
+        $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
+        return redirect()->to(base_url('processos/consultarprocesso/' . $processo['id_processo']));
+    }
+
+    /**
+     * Este função apenas redireciona para o editar por id
+     */
+    public function verificaProcessoExiste(){
+
+        $numeroProcessoFormatado = $this->request->getJSON('numeroprocessocommascara');
+        $numeroProcesso = preg_replace('/[^0-9]/', '', $numeroProcessoFormatado);
+        $processosModel = model('ProcessosModel');
+        $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
+        if($processo){
+            return $this->response->setJSON(['success' => true, 'existe'=>true, 'idProcesso'=> $processo['id_processo'], $numeroProcesso, $numeroProcessoFormatado]);
+        }else{
+            return $this->response->setJSON(['success' => true, 'existe'=>false,'msg' => "Processo não encontrado. Cotinue o cadastramento.", $numeroProcesso,$numeroProcessoFormatado]);
+        }
+    }
+
 
 }

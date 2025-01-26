@@ -1,3 +1,4 @@
+<div id="toast-container" class="position-fixed top-0 end-0 p-5" style="z-index: 11"></div>
 <!--begin::Footer-->
 <footer class="app-footer"><!--begin::To the end-->
             <div class="float-end d-none d-sm-inline">Anything you want</div><!--end::To the end--><!--begin::Copyright--><strong>
@@ -17,5 +18,8 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.37.1/dist/apexcharts.min.js" integrity="sha256-+vh8GkaU7C9/wbSLIcwq82tQ2wTf44aOHA8HlBMwRI8=" crossorigin="anonymous"></script><!-- ChartJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin></script>
 
- 
-    </script><!--end::Script-->
+    <script>
+        function mostrarMensagem(mensagem, tipo) {
+            toastr[tipo](mensagem);
+}
+    </script>

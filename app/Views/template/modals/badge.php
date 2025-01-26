@@ -154,28 +154,7 @@ $listaetiquetas = model('EtiquetasModel')->findAll();
             tag.remove();
         }
 
-    function mostrarMensagem(mensagem, tipo) {
-    // Implementar de acordo com seu sistema de notificações
-    // Exemplo usando Toast do Bootstrap
-    const toastContainer = document.getElementById('toast-container');
-    if (!toastContainer) return;
 
-    const toastElement = document.createElement('div');
-    toastElement.className = `toast align-items-center text-white bg-${tipo === 'success' ? 'success' : 'danger'}`;
-    toastElement.setAttribute('role', 'alert');
-    toastElement.innerHTML = `
-        <div class="d-flex">
-            <div class="toast-body">
-                ${mensagem}
-            </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-        </div>
-    `;
-    
-    toastContainer.appendChild(toastElement);
-    const toast = new bootstrap.Toast(toastElement);
-    toast.show();
-}
     </script>
     <script>
 // Here we can adjust defaults for all color pickers on page:

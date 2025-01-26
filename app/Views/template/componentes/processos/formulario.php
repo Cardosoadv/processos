@@ -36,6 +36,8 @@ $clientes = model('ClientesModel')->findAll();
         const maskPartes = regex.exec(value);
         if (!maskPartes) {
             console.log("NUP inválida");
+            mostrarMensagem('Número de processo inválido', 'error');
+            return;
         }
         const primeiraParte = maskPartes[1];
         const segundaParte = maskPartes[2];
@@ -45,7 +47,48 @@ $clientes = model('ClientesModel')->findAll();
         const sextaParte = maskPartes[6];
         var mask = primeiraParte + "-" + segundaParte + "." + terceiraParte + "." + quartaParte + "." + quintaParte + "." + sextaParte;
         input.value = mask;
+        verificaExistenciaProcesso(mask);
     }
+
+    async function verificaExistenciaProcesso(numeroProcesso){
+        // Faz a chamada AJAX para remover a etiqueta do banco de dados
+        try {
+        const response = await fetch('<?= site_url('processos/verificaprocessoexiste') ?>', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({
+                numeroprocessocommascara: numeroProcesso,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (data.existe === true) {
+            const urlAtual = window.location.href;
+            const urlRedirecionamento = `<?= site_url('processos/consultarprocesso') ?>/${data.idProcesso}`;
+
+            if (urlAtual === urlRedirecionamento) {
+                return true; // Evita o redirecionamento
+            }
+            window.location.href = `<?= site_url('processos/consultarprocesso') ?>/${data.idProcesso}`;
+            return true;
+        } else {
+            mostrarMensagem(data.msg, 'success');
+            return false;
+        }
+
+    } catch (error) {
+        console.error('Erro ao pesquisar processo:', error);
+        mostrarMensagem('Erro ao pesquisar processo. Verifique o console para mais detalhes.', 'error');
+        return false;
+    }    
+                
+    }
+
+
 </script>
 
 
