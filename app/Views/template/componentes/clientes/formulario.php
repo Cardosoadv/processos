@@ -57,38 +57,38 @@
             <input type="text" class="form-control" name="cidade" id="cidade" value="<?= $cliente['cidade'] ?? '' ?>">
         </div>
         <div class="form-group col">
-    <label for="uf">UF</label>
-    <input class="form-control" list="ufs" name="uf" id="uf" value="<?= $cliente['uf'] ?? '' ?>" maxlength="2">
-    <datalist id="ufs">
-    <option value="AC">Acre</option>
-    <option value="AL">Alagoas</option>
-    <option value="AP">Amapá</option>
-    <option value="AM">Amazonas</option>
-    <option value="BA">Bahia</option>
-    <option value="CE">Ceará</option>
-    <option value="DF">Distrito Federal</option>
-    <option value="ES">Espírito Santo</option>
-    <option value="GO">Goiás</option>
-    <option value="MA">Maranhão</option>
-    <option value="MT">Mato Grosso</option>
-    <option value="MS">Mato Grosso do Sul</option>
-    <option value="MG">Minas Gerais</option>
-    <option value="PA">Pará</option>
-    <option value="PB">Paraíba</option>
-    <option value="PR">Paraná</option>
-    <option value="PE">Pernambuco</option>
-    <option value="PI">Piauí</option>
-    <option value="RJ">Rio de Janeiro</option>
-    <option value="RN">Rio Grande do Norte</option>
-    <option value="RS">Rio Grande do Sul</option>
-    <option value="RO">Rondônia</option>
-    <option value="RR">Roraima</option>
-    <option value="SC">Santa Catarina</option>
-    <option value="SP">São Paulo</option>
-    <option value="SE">Sergipe</option>
-    <option value="TO">Tocantins</option>
-    </datalist>
-</div>
+            <label for="uf">UF</label>
+            <input class="form-control" list="ufs" name="uf" id="uf" value="<?= $cliente['uf'] ?? '' ?>" maxlength="2">
+            <datalist id="ufs">
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+            </datalist>
+        </div>
     </div>
 
     <div class="row mb-3" id="razao_social_div" style="display: none;">
@@ -99,6 +99,10 @@
     </div>
 
     <div class="row mb-3">
+        <div class="form-group col">
+            <label for="dataAquisicao">Data de Aquisição</label>
+            <input type="date" class="form-control" name="dataAquisicao" id="dataAquisicao" value="<?= $cliente['dataAquisicao'] ?? '' ?>">
+        </div>
         <div class="form-group col">
             <label for="ativo">Ativo</label>
             <select class="form-control" name="ativo" id="ativo">

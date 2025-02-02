@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <!--begin::Head-->
+
 <head>
   <title><?= $titulo ?></title><!--begin::Primary Meta Tags-->
   <?= $this->include('template/header') ?>
@@ -9,9 +10,10 @@
 
 
 <!--begin::Body-->
+
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
-  
-<!--begin::App Wrapper-->
+
+  <!--begin::App Wrapper-->
   <div class="app-wrapper">
     <?= $this->include('template/nav') ?>
     <?= $this->include('template/sidebar') ?>
@@ -41,32 +43,34 @@
           <!--begin::Row-->
           <div class="row">
             <div class="col-8">
+              <!-- Inicio da Notificação -->
+              <?= $this->include('template/componentes/notificacaoSessao') ?>
 
               <!-- inicio formulário -->
               <?= $this->include('template/componentes/clientes/formulario') ?>
               <!-- Fim do Formulário -->
             </div>
             <div class="col-4">
-            <!-- Inicio SideBar do Formulario -->
-            <!-- Inicio das Anotações -->
-            <div>
-            <!-- Acordion -->
-            </div>
-            <!--end::Accordion-->
-            <!-- Fim das Anotações -->
-            <!-- Inicio das Intimações -->
-            <div>
-              <!-- Intimações -->
-            </div>
-            <!--end::Accordion-->
-            <!-- Fim das Intimações -->
-            
-            <!-- Inicio dos Movimentos -->
-            <div>
-              <!-- Movimentos -->
-            </div>
-            <!--end::Accordion-->
-            <!-- Fim dos Movimentos -->
+              <!-- Inicio SideBar do Formulario -->
+              <!-- Inicio das Anotações -->
+              <div>
+                <!-- Acordion -->
+              </div>
+              <!--end::Accordion-->
+              <!-- Fim das Anotações -->
+              <!-- Inicio das Intimações -->
+              <div>
+                <!-- Intimações -->
+              </div>
+              <!--end::Accordion-->
+              <!-- Fim das Intimações -->
+
+              <!-- Inicio dos Movimentos -->
+              <div>
+                <!-- Movimentos -->
+              </div>
+              <!--end::Accordion-->
+              <!-- Fim dos Movimentos -->
             </div>
           </div> <!-- Fim do SideBar do Formulario -->
         </div> <!-- Fim do Row -->
@@ -81,10 +85,10 @@
 
 
   <script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
-  <script src="<?= base_url('public/js/main.js')?>">
+  <script src="<?= base_url('public/js/main.js') ?>">
   </script>
 
-		
+
 
 </body><!--end::Body-->
 

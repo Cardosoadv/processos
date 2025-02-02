@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <title><?= $titulo ?></title>
     <?= $this->include('template/header') ?>
@@ -16,7 +17,7 @@
                     <?= $this->include('template/componentes/breadcrumbs') ?>
                 </div>
             </div>
-            
+
             <div class="app-content">
                 <div class="container-fluid">
                     <div class="row">
@@ -25,11 +26,11 @@
                             <!-- Search Form -->
                             <form action="" method="get" class="mb-3">
                                 <div class="input-group">
-                                    <input 
-                                        type="text" 
-                                        name="s" 
-                                        class="form-control" 
-                                        placeholder="Pesquisar..." 
+                                    <input
+                                        type="text"
+                                        name="s"
+                                        class="form-control"
+                                        placeholder="Pesquisar..."
                                         aria-label="Pesquisar">
                                     <button class="btn btn-outline-secondary" type="submit">
                                         Pesquisar
@@ -40,17 +41,16 @@
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
-                                    <a href="<?= base_url('clientes/novo/') ?>" 
+                                    <a href="<?= base_url('clientes/novo/') ?>"
                                         class="btn btn-success">
                                         Novo Cliente
                                     </a>
                                 </div>
-                                <?php if (session()->get('msg')): ?>
-                                    
-                                    <div class="callout callout-info">
-                                        <?= session()->get('msg') ?>
-                                    </div>
-                                <?php endif; ?>
+                                <!-- Inicio da Notificação -->
+                                <?= $this->include('template/componentes/notificacaoSessao') ?>
+
+
+
                                 <!-- Data Table -->
                                 <div class="mt-3">
                                     <?php if (empty($clientes)): ?>
@@ -70,20 +70,20 @@
                                                     <tr>
                                                         <td><?= esc($cliente['nome']) ?></td>
                                                         <td>
-                                                            <a href="<?= base_url('clientes/editar/' . $cliente['id_cliente']) ?>" 
+                                                            <a href="<?= base_url('clientes/editar/' . $cliente['id_cliente']) ?>"
                                                                 class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
-                                                            <a href="<?= base_url('clientes/excluir/' . $cliente['id_cliente']) ?>" 
+                                                            <a href="<?= base_url('clientes/excluir/' . $cliente['id_cliente']) ?>"
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
-                                                            <a href="<?= base_url('processos/processosdocliente/' . $cliente['id_cliente']) ?>" 
+                                                            <a href="<?= base_url('processos/processosdocliente/' . $cliente['id_cliente']) ?>"
                                                                 class="btn btn-sm btn-secondary">
                                                                 Processos
                                                             </a>
                                                         </td>
-                                                        </tr>
+                                                    </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
@@ -111,13 +111,13 @@
         </main>
 
         <?= $this->include('template/modals/change_user_img.php') ?>
-        
+
         <?= $this->include('template/footer') ?>
     </div>
 
     <script>
         const BASE_URL = '<?= base_url() ?>';
-        
+
         // Utility functions
         const formatDate = timestamp => {
             const date = new Date(timestamp);
@@ -164,11 +164,11 @@
                 const response = await fetch(`${BASE_URL}/processos/processosmovimentados/30`);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
-                
+
                 const container = document.getElementById('processoMovimentados');
-                container.innerHTML = Array.isArray(data) && data.length > 0
-                    ? data.map(renderProcessItem).join('')
-                    : '<div class="list-group-item">Nenhum processo encontrado</div>';
+                container.innerHTML = Array.isArray(data) && data.length > 0 ?
+                    data.map(renderProcessItem).join('') :
+                    '<div class="list-group-item">Nenhum processo encontrado</div>';
             } catch (error) {
                 handleFetchError(error, 'processoMovimentados');
             }
@@ -179,11 +179,11 @@
                 const response = await fetch(`${BASE_URL}/intimacoes/intimacoesporperiodo/30`);
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 const data = await response.json();
-                
+
                 const container = document.getElementById('intimacoes');
-                container.innerHTML = Array.isArray(data) && data.length > 0
-                    ? data.map(renderIntimacaoItem).join('')
-                    : '<div class="list-group-item">Nenhuma intimação encontrada</div>';
+                container.innerHTML = Array.isArray(data) && data.length > 0 ?
+                    data.map(renderIntimacaoItem).join('') :
+                    '<div class="list-group-item">Nenhuma intimação encontrada</div>';
             } catch (error) {
                 handleFetchError(error, 'intimacoes');
             }
@@ -196,4 +196,5 @@
         });
     </script>
 </body>
+
 </html>

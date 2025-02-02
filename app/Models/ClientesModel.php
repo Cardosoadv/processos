@@ -26,6 +26,7 @@ class ClientesModel extends Model
         'uf',
         'razao_social',
         'ativo', //'1 = Sim, 0 = Não'    
+        'dataAquisicao',
     ];
 
     protected bool $allowEmptyInserts = false;
