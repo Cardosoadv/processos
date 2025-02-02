@@ -51,11 +51,59 @@ class ClientesModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $afterInsert    = ['auditoriaNovoCliente'];
+    protected $beforeUpdate   = ['auditoriaAtualizarCliente'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['auditoriaDeletarCliente'];
     protected $afterDelete    = [];
+
+
+
+    public function auditoriaNovoCliente($dados_novos)
+    {
+        $auditoria = model('AuditoriaClientes');
+        $cliente_id = $this->getInsertID();
+        $auditoria->insert([
+            'cliente_id' => $cliente_id,
+            'user_id' => user_id(),
+            'action_type' => 'CREATE',
+            'dados_novos' => json_encode($dados_novos),
+            'ip_address' => service('request')->getIPAddress(),
+        ]);
+        return $dados_novos;
+    }
+
+    public function auditoriaAtualizarCliente($dados_novos)
+    {
+        $auditoria = model('AuditoriaClientes');
+        $cliente_id = $dados_novos['id'];
+        $dados_antigos = $this->find($cliente_id);
+        $auditoria->insert([
+            'cliente_id' => $cliente_id,
+            'user_id' => user_id(),
+            'action_type' => 'UPDATE',
+            'dados_antigos' => json_encode($dados_antigos),
+            'dados_novos' => json_encode($dados_novos),
+            'ip_address' => service('request')->getIPAddress(),
+        ]);
+        return $dados_novos;
+    }
+    public function auditoriaDeletarCliente($dados)
+    {
+        $auditoria = model('AuditoriaClientes');
+        $cliente_id = $dados['id'];
+        $dados_antigos = $this->find($cliente_id);
+        $auditoria->insert([
+            'cliente_id' => $cliente_id,
+            'user_id' => user_id(),
+            'action_type' => 'DELETE',
+            'dados_antigos' => json_encode($dados_antigos),
+            'ip_address' => service('request')->getIPAddress(),
+        ]);
+        return $dados;
+    }
+
+
 }

@@ -58,12 +58,12 @@ class ProcessosModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $afterInsert    = ['auditoriaNovoProcesso'];
+    protected $beforeUpdate   = ['auditoriaAtualizarProcesso'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['auditoriaDeletarProcesso'];
     protected $afterDelete    = [];
 
     public function getProcesso(string $parte){
@@ -135,6 +135,51 @@ class ProcessosModel extends Model
             'processos'  => $this->paginate($porPagina),
             'pager' => $this->pager,
         ];
+    }
+
+    
+    public function auditoriaNovoProcesso($dados_novos)
+    {
+        $auditoria = model('AuditoriaProcessos');
+        $processo_id = $this->getInsertID();
+        $auditoria->insert([
+            'processo_id' => $processo_id,
+            'user_id' => user_id(),
+            'action_type' => 'CREATE',
+            'dados_novos' => json_encode($dados_novos),
+            'ip_address' => service('request')->getIPAddress(),
+        ]);
+        return $dados_novos;
+    }
+
+    public function auditoriaAtualizarProcesso($dados_novos)
+    {
+        $auditoria = model('AuditoriaProcessos');
+        $processo_id = $dados_novos['id'];
+        $dados_antigos = $this->find($processo_id);
+        $auditoria->insert([
+            'processo_id' => $processo_id,
+            'user_id' => user_id(),
+            'action_type' => 'UPDATE',
+            'dados_antigos' => json_encode($dados_antigos),
+            'dados_novos' => json_encode($dados_novos),
+            'ip_address' => service('request')->getIPAddress(),
+        ]);
+        return $dados_novos;
+    }
+    public function auditoriaDeletarProcesso($dados)
+    {
+        $auditoria = model('AuditoriaProcessos');
+        $processo_id = $dados['id'];
+        $dados_antigos = $this->find($processo_id);
+        $auditoria->insert([
+            'cliente_id' => $processo_id,
+            'user_id' => user_id(),
+            'action_type' => 'DELETE',
+            'dados_antigos' => json_encode($dados_antigos),
+            'ip_address' => service('request')->getIPAddress(),
+        ]);
+        return $dados;
     }
 
 }

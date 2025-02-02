@@ -92,6 +92,16 @@ class Clientes extends BaseController
         return view('clientes/consultarClientes', $data);
     }
 
+    public function excluir($id){
+        try{
+            model('ClientesModel')->delete($id);
+            return redirect()->to(base_url('clientes'))->with('success', 'Cliente excluído com sucesso');
+        }
+        catch(Exception $e){
+            return redirect()->to(base_url('clientes'))->with('error', 'Erro ao excluir Cliente: ' . $e->getMessage());
+        }
+    }
+
 
     #------------------------------------------------------------------------------------------------
     #                            VALIDAÇÃO CPF OU CNPJ
