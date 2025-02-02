@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Database\Migrations\ProcessosPartes;
 use App\Libraries\ReceberIntimacoesJs;
 
 
@@ -9,16 +10,10 @@ class Testes extends BaseController
 {
     public function index()
     {
-        $apiUrl = 'https://comunicaapi.pje.jus.br/api/v1/comunicacao';
-        $params = [
-            'numeroOab' => '164136',
-            'ufOab' => 'mg'
-        ];
-        $query = http_build_query($params);
-        $apiUrl .= '?' . $query;
-        $data['apiUrl'] = $apiUrl;
-        // Iniciando a sessão cURL
-        return view('receberintimacoesjs2', $data);
+        $model = model('ProcessosPartesModel');
+        $partes = $model->getParteProcessoPorNome("Igara");
+        echo "<pre>";
+        print_r($partes);
     }
 
     public function processarIntimacoes()

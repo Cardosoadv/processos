@@ -61,9 +61,17 @@ class Processos extends BaseController
     public function processosDoCliente(?int $cliente_id)
     {
         $data = [
-            'titulo' => 'Processos',
-            's'      => $this->request->getGet('s')
+            
+            'titulo'    => 'Processos',
+            'sortField' => $this->request->getGet('sort') ?? 'id_processo',
+            'sortOrder' => $this->request->getGet('order') ?? 'asc',
+            's'         => $this->request->getGet('s') ?? null,
+            'encerrado' => $this->request->getGet('encerrado') ?? null,
+            'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
         ];
+        
+        $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
+
 
         $processos = $this->processoService->listarProcessosCliente($cliente_id, $data['s']);
         

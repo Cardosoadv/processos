@@ -57,6 +57,24 @@ class ProcessosPartesModel extends Model
         return $parte;
     }
 
+    public function getParteProcessoPorNome(string $nome){
+        $parte = $this->db->table('processos_partes as pp')
+        ->join('processos_partes_dos_processos as pdp', 'pp.id_parte = pdp.id_parte', 'left')
+        ->join('processos as p', 'pdp.id_processo = p.id_processo', 'left')
+        ->like('pp.nome', $nome)
+        ->get()->getResultArray();
+        return $parte;
+    }
+
+    public function getParteProcessoPorId(int $id){
+        $parte = $this->db->table('processos_partes as pp')
+        ->join('processos_partes_dos_processos as pdp', 'pp.id_parte = pdp.id_parte', 'left')
+        ->join('processos as p', 'pdp.id_processo = p.id_processo', 'left')
+        ->like('pp.id_parte', $id)
+        ->get()->getResultArray();
+        return $parte;
+    }
+
     public function jaExisteParteProcesso(int $id_processo){
         $parte = $this->db->table('processos_partes_dos_processos as pdp')
         ->where('id_processo', $id_processo)
