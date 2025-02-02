@@ -72,7 +72,7 @@ class ClientesModel extends Model
             'dados_novos' => json_encode($dados_novos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $dados_novos;
+        return $cliente_id;
     }
 
     public function auditoriaAtualizarCliente($dados_novos)
@@ -88,7 +88,7 @@ class ClientesModel extends Model
             'dados_novos' => json_encode($dados_novos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $dados_novos;
+        return $cliente_id;
     }
     public function auditoriaDeletarCliente($dados)
     {
@@ -102,7 +102,7 @@ class ClientesModel extends Model
             'dados_antigos' => json_encode($dados_antigos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $dados;
+        return $cliente_id;
     }
 
 

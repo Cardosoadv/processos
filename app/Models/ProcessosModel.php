@@ -149,7 +149,7 @@ class ProcessosModel extends Model
             'dados_novos' => json_encode($dados_novos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $dados_novos;
+        return $processo_id;
     }
 
     public function auditoriaAtualizarProcesso($dados_novos)
@@ -165,7 +165,7 @@ class ProcessosModel extends Model
             'dados_novos' => json_encode($dados_novos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $dados_novos;
+        return $processo_id;
     }
     public function auditoriaDeletarProcesso($dados)
     {
@@ -179,7 +179,7 @@ class ProcessosModel extends Model
             'dados_antigos' => json_encode($dados_antigos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $dados;
+        return $processo_id;
     }
 
 }

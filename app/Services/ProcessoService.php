@@ -113,7 +113,7 @@ class ProcessoService
         try {
             if (!is_numeric($id)) {
                 $this->processosModel->insert($data);
-                $id = $this->processosModel->insertID();
+                $id = $this->processosModel->getInsertID();
             } else {
                 $this->partesProcessoModel->deletarParteDoProcesso($id);
                 $this->processosModel->update($id, $data);

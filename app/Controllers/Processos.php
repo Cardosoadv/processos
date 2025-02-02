@@ -140,7 +140,7 @@ class Processos extends BaseController
             $id = $this->request->getPost('id_processo');
             $id = !empty($id) ? (int)$id : null;
             
-            $data = $this->prepararDadosProcesso();
+            $data = $this->prepararDadosProcesso(); 
             
             $idProcesso = $this->processoService->salvarProcesso($data, $id);
             
