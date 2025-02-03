@@ -26,7 +26,7 @@ class Processos extends BaseController
     public function index()
     {
         $data = [
-            
+
             'titulo'    => 'Processos',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
@@ -34,7 +34,7 @@ class Processos extends BaseController
             'encerrado' => $this->request->getGet('encerrado') ?? null,
             'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
         ];
-        
+
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
         $processos = $this->processoService->listarProcessos(
@@ -44,7 +44,7 @@ class Processos extends BaseController
             $data['encerrado'],
             $data['etiqueta'],
         );
- 
+
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
         return view('processos/processos', $data);
@@ -59,7 +59,7 @@ class Processos extends BaseController
     public function processosDoCliente(?int $cliente_id)
     {
         $data = [
-            
+
             'titulo'    => 'Processos',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
@@ -67,16 +67,16 @@ class Processos extends BaseController
             'encerrado' => $this->request->getGet('encerrado') ?? null,
             'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
         ];
-        
+
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
 
         $processos = $this->processoService->listarProcessosCliente($cliente_id, $data['s']);
-        
+
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
 
-        Session()->set(['msg'=> null]);
+        Session()->set(['msg' => null]);
         return view('processos/processos', $data);
     }
 
@@ -101,17 +101,18 @@ class Processos extends BaseController
     /**
      * Exibe o Formulário de Novo Processo
      */
-    public function novo(){
+    public function novo()
+    {
         $data = [
             'titulo'    => 'Novo Processo',
-            'processo'  => ['cliente_id'=>null],
+            'processo'  => ['cliente_id' => null],
         ];
         $data['img'] = 'vazio.png';
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
         $data['etiquetas'] = [];
         return view('processos/consultarProcesso', $data);
     }
-    
+
     /**
      * Exibe todos os detalhes de um processo
      * Consulta um processo
@@ -126,7 +127,7 @@ class Processos extends BaseController
             $this->processoService->getDetalhesProcesso($id)
         );
 
-        Session()->set(['msg'=> null]);
+        Session()->set(['msg' => null]);
         return view('processos/consultarProcesso', $data);
     }
 
@@ -137,28 +138,35 @@ class Processos extends BaseController
      */
     public function salvar()
     {
+
+    
         if (!$this->validarDadosProcesso()) {
+
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
-        
+    
         try {
             // Converte o id para int ou null se estiver vazio
             $id = $this->request->getPost('id_processo');
             $id = !empty($id) ? (int)$id : null;
-            
-            $data = $this->prepararDadosProcesso(); 
-            
+
+    
+            $data = $this->prepararDadosProcesso();
+
+    
             $idProcesso = $this->processoService->salvarProcesso($data, $id);
-            
+    
             $this->processarPartes('poloAtivo[]', 'A', $idProcesso);
             $this->processarPartes('poloPassivo[]', 'P', $idProcesso);
-            
-            return redirect()   ->to(base_url('processos/consultarprocesso/' . $idProcesso))
-                                ->with('success', 'Processo salvo com sucesso');
+    
+            return redirect()->to(base_url('processos/consultarprocesso/' . $idProcesso))
+                ->with('success', 'Processo salvo com sucesso');
+
         } catch (\Exception $e) {
-            return redirect()   ->back()
-                                ->withInput()
-                                ->with('error', 'Erro ao salvar processo: ' . $e->getMessage());
+
+            return redirect()->back()
+                ->withInput()
+                ->with('error', 'Erro ao salvar processo: ' . $e->getMessage());
         }
     }
 
@@ -172,11 +180,10 @@ class Processos extends BaseController
     {
         try {
             $this->processoService->deletarProcesso($id);
-            
+
             return redirect()
                 ->to(base_url('processos'))
                 ->with('success', 'Processo deletado com sucesso');
-                
         } catch (\Exception $e) {
             return redirect()
                 ->back()
@@ -191,7 +198,7 @@ class Processos extends BaseController
     #                                                                                          #
     ############################################################################################
 
-    
+
 
 
     /**
@@ -205,12 +212,12 @@ class Processos extends BaseController
     private function processarPartes($campo, $tipo, $processoId)
     {
         $partes = $this->request->getPost($campo) ?? [];
-        
+
         foreach ($partes as $parte) {
             if (empty($parte)) {
                 continue;
             }
-            
+
             $this->salvarPartes([
                 'nome' => $parte,
                 'polo' => $tipo
@@ -224,7 +231,8 @@ class Processos extends BaseController
      * @param int $idProcesso ID do processo
      * @return void
      */
-    public function salvarPartes(array $parte, int $idProcesso){
+    public function salvarPartes(array $parte, int $idProcesso)
+    {
         $processosPartesModel = new ProcessosPartesModel();
 
         // Confere se a parte já existe.
@@ -263,9 +271,9 @@ class Processos extends BaseController
     {
         $data = $this->request->getPost();
         $data['user_id'] = user_id();
-        
+
         $this->processoService->salvarAnotacao($data);
-        
+
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
     }
 
@@ -298,7 +306,8 @@ class Processos extends BaseController
      * 
      * @return \CodeIgniter\HTTP\RedirectResponse
      */
-    public function salvarMovimento(){
+    public function salvarMovimento()
+    {
         $data = $this->request->getPost();
         $this->processoService->salvarMovimento($data);
         return redirect()->to(base_url('processos/editarpornumerodeprocesso/' . $data['numero_processo']));
@@ -309,7 +318,7 @@ class Processos extends BaseController
     #        Metódos Auxiliares Relacionados à preparação dos dados do Pocessos                #
     #                                                                                          #
     ############################################################################################
-    
+
     /**
      * Prepara os dados do processo para serem salvos
      * 
@@ -318,26 +327,31 @@ class Processos extends BaseController
 
     private function prepararDadosProcesso()
     {
+        $valorCondenacao = $this->request->getPost('valorCondenacao')?:null;
+        $valorCondenacao = $this->formatarValorParaBanco($valorCondenacao);
+        $valorCausa                = $this->request->getPost('valorCausa')?:null;
+        $valorCausa                = $this->formatarValorParaBanco($valorCausa);
+        
         return [
-            'tipoDocumento'             => $this->request->getPost('tipoDocumento'),
+            'tipoDocumento'             => $this->request->getPost('tipoDocumento')?:null,
             'titulo_processo'           => $this->request->getPost('titulo_processo'),
-            'nomeOrgao'                 => $this->request->getPost('nomeOrgao'),
+            'nomeOrgao'                 => $this->request->getPost('nomeOrgao')?:null,
             'numeroprocessocommascara'  => $this->request->getPost('numeroprocessocommascara'),
             'numero_processo'           => preg_replace('/[^0-9]/', '', $this->request->getPost('numeroprocessocommascara')),
-            'dataDistribuicao'          => $this->request->getPost('dataDistribuicao'),
-            'valorCausa'                => $this->request->getPost('valorCausa'),
+            'dataDistribuicao'          => $this->request->getPost('dataDistribuicao')?:null,
+            'valorCausa'                => $valorCausa,
             'risco'                     => $this->request->getPost('risco'),
-            'valorCondenacao'           => $this->formatarValorParaBanco($this->request->getPost('valorCondenacao')),
-            'comentario'                => $this->request->getPost('comentario'),
-            'resultado'                 => $this->request->getPost('resultado'),
-            'cliente_id'                => $this->request->getPost('cliente_id'),
-            'dataRevisao'               => $this->request->getPost('dataRevisao'),
+            'valorCondenacao'           => $valorCondenacao,
+            'comentario'                => $this->request->getPost('comentario')?:null,
+            'resultado'                 => $this->request->getPost('resultado')?:null,
+            'cliente_id'                => $this->request->getPost('cliente_id') ?:null,
+            'dataRevisao'               => $this->request->getPost('dataRevisao')?:null,
             'encerrado'                 => ($this->request->getPost('encerrado')) ? 1 : 0,
-            'data_encerramento'         => $this->request->getPost('data_encerramento'),
+            'data_encerramento'         => $this->request->getPost('data_encerramento')?:null,
         ];
     }
 
-     /**
+    /**
      * Função para formatar o valor para o banco de dados
      *
      * @param string $valor Valor formatado (ex: "1.234,56")
@@ -345,6 +359,12 @@ class Processos extends BaseController
      */
     private function formatarValorParaBanco($valor)
     {
+
+        // If valor is null or empty, return null
+        if (empty($valor)) {
+            return null;
+        }
+
         // Remove os pontos (separadores de milhar)
         $valor = str_replace('.', '', $valor);
 
@@ -364,18 +384,18 @@ class Processos extends BaseController
             'titulo_processo' => [
                 'rules' => 'required|min_length[3]',
                 'errors' => [
-                            'required' => 'O Título do processo é obrigatório',
-                        ],
+                    'required' => 'O Título do processo é obrigatório',
+                ],
             ],
             'numeroprocessocommascara' => [
-                    'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
-                    'errors' => [
-                        'required' => 'O número do processo é obrigatório',
-                        'regex_match' => 'O número do processo está em formato inválido',
-                    ]
+                'rules' => 'required|regex_match[/^\d{7}-\d{2}\.\d{4}\.\d\.\d{2}\.\d{4}$/]',
+                'errors' => [
+                    'required' => 'O número do processo é obrigatório',
+                    'regex_match' => 'O número do processo está em formato inválido',
+                ]
             ],
         ];
-        
+
         return $this->validate($rules);
     }
 
@@ -399,7 +419,8 @@ class Processos extends BaseController
     /**
      * Este função apenas redireciona para o editar por id
      */
-    public function editarPorNumerodeProcesso(string $numeroProcesso){
+    public function editarPorNumerodeProcesso(string $numeroProcesso)
+    {
 
         $processosModel = model('ProcessosModel');
         $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
@@ -409,18 +430,17 @@ class Processos extends BaseController
     /**
      * Este função apenas redireciona para o editar por id
      */
-    public function verificaProcessoExiste(){
+    public function verificaProcessoExiste()
+    {
 
         $numeroProcessoFormatado = $this->request->getJSON('numeroprocessocommascara');
         $numeroProcesso = preg_replace('/[^0-9]/', '', $numeroProcessoFormatado);
         $processosModel = model('ProcessosModel');
         $processo = $processosModel->where('numero_processo', $numeroProcesso)->get()->getRowArray();
-        if($processo){
-            return $this->response->setJSON(['success' => true, 'existe'=>true, 'idProcesso'=> $processo['id_processo'], $numeroProcesso, $numeroProcessoFormatado]);
-        }else{
-            return $this->response->setJSON(['success' => true, 'existe'=>false,'msg' => "Processo não encontrado. Cotinue o cadastramento.", $numeroProcesso,$numeroProcessoFormatado]);
+        if ($processo) {
+            return $this->response->setJSON(['success' => true, 'existe' => true, 'idProcesso' => $processo['id_processo'], $numeroProcesso, $numeroProcessoFormatado]);
+        } else {
+            return $this->response->setJSON(['success' => true, 'existe' => false, 'msg' => "Processo não encontrado. Cotinue o cadastramento.", $numeroProcesso, $numeroProcessoFormatado]);
         }
     }
-
-
 }

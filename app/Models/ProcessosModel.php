@@ -13,6 +13,7 @@ class ProcessosModel extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
+
         'id_processo',
         'siglaTribunal',
         'nomeOrgao',
@@ -58,8 +59,8 @@ class ProcessosModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = ['auditoriaNovoProcesso'];
-    protected $beforeUpdate   = ['auditoriaAtualizarProcesso'];
+    protected $afterInsert    = [];
+    protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];

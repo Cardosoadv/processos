@@ -191,9 +191,12 @@ $clientes = model('ClientesModel')->findAll();
         </div>
 
         <div class="form-group col">
-            <label>Valor da Causa</label>
-            <input type="number" step="0.01" name="valorCausa" class="form-control" value="<?= $processo['valorCausa'] ?? '' ?>">
-        </div>
+                <label>Valor da Causa</label>
+                <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="text" name="valorCausa" id="valorCausa" class="form-control" value="<?= $processo['valorCausa'] ?? '' ?>">
+            </div>
+        </div> 
 
         <div class="form-group col">
             <label>Risco</label>
@@ -313,11 +316,16 @@ $clientes = model('ClientesModel')->findAll();
     // Formata o valor inicial ao carregar a página
     document.addEventListener('DOMContentLoaded', function () {
         const campoValor = document.getElementById('valorCondenacao');
+        const campoValorCausa = document.getElementById('valorCausa');
         campoValor.value = formatarNumero(campoValor.value);
+        campoValorCausa.value = formatarNumero(campoValorCausa.value);
     });
 
     // Formata o valor enquanto o usuário digita
     document.getElementById('valorCondenacao').addEventListener('input', function (e) {
+        e.target.value = formatarNumero(e.target.value);
+    });
+    document.getElementById('valorCausa').addEventListener('input', function (e) {
         e.target.value = formatarNumero(e.target.value);
     });
 

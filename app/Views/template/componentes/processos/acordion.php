@@ -4,7 +4,7 @@
         <div class="card-title">Anotações</div>
         <div class="card-tools">
             <a data-bs-toggle="modal" data-bs-target="#modal_anotacao" class="btn btn-secondary">
-                <i class="fas fa-plus"></i> 
+                <i class="fas fa-plus"></i>
                 Anotação</a>
         </div>
     </div><!--end::Header-->
@@ -20,9 +20,15 @@
                             </button></h2>
                         <div id="Anotacao<?= $anotacao['id_anotacao'] ?>" class="accordion-collapse collapse" data-bs-parent="#<?= $anotacao['titulo'] ?>">
                             <div class="accordion-body"><?= $anotacao['anotacao'] ?><br><br>
-                                Criada em <?= date('d/m/Y H:i', strtotime($anotacao['created_at'])) ?><br>
-                                atualizada em <?php if (($anotacao['updated_at']) != NULL) {
-                                                    date('d/m/Y H:i', strtotime($anotacao['updated_at']));
+                                Criada em <?= date('d/m/Y H:i', strtotime(($anotacao['created_at']??''))); ?><br>
+                                atualizada em <?php
+                                                if (isset($anotacao['updated_at']) && $anotacao['updated_at'] !== null && $anotacao['updated_at'] !== '') { // Check for existence and non-empty string
+                                                    $timestamp = strtotime($anotacao['updated_at']);
+                                                    if ($timestamp !== false) {
+                                                        echo date('d/m/Y H:i', $timestamp);
+                                                    } else {
+                                                        echo 'Erro ao formatar data'; // Or log the error
+                                                    }
                                                 } else {
                                                     echo 'Sem Atualização';
                                                 } ?>
