@@ -23,7 +23,7 @@ class Intimacoes extends BaseController
     {
         $data['titulo'] = 'Intimações';
         $data['intimacoes'] = $this->intimacoesService->listarIntimacoes();
-        Session()->set(['msg'=> null]);
+
         return view('intimacoes', $data);
     }
 
@@ -31,12 +31,16 @@ class Intimacoes extends BaseController
     {
         $params = $this->montarParametrosConsulta("61061", "MG");
         $this->intimacoesService->buscarIntimacoes($params);
+        return redirect()       ->back()
+                                ->with('success', 'Intimações recebidas com sucesso');
     }
 
     public function receberIntimacoesFabiano()
     {
         $params = $this->montarParametrosConsulta("164136", "MG");
         $this->intimacoesService->buscarIntimacoes($params);
+        return redirect()       ->back()
+                                ->with('success', 'Intimações recebidas com sucesso');
     }
 
     public function processo($numeroProcesso)

@@ -55,11 +55,6 @@ $permission = $permitions->permission();
                         <i class="nav-icon bi bi-circle"></i><p>Receber Intimacoes Fabiano</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="<?= site_url('intimacoesjs'); ?>" class="nav-link <?= ($active === 'receberintimacoesjs') ? 'active' : ''; ?>">
-                        <i class="nav-icon bi bi-circle"></i><p>Receber Intimacoes JS</p>
-                    </a>
-                </li>
             </ul>
         </li>
     <?php endif; ?>
