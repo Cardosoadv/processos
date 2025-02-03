@@ -47,8 +47,6 @@ class Processos extends BaseController
  
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
-
-        Session()->set(['msg'=> null]);
         return view('processos/processos', $data);
     }
 
@@ -329,7 +327,7 @@ class Processos extends BaseController
             'dataDistribuicao'          => $this->request->getPost('dataDistribuicao'),
             'valorCausa'                => $this->request->getPost('valorCausa'),
             'risco'                     => $this->request->getPost('risco'),
-            'valorCondenacao'           => $this->request->getPost('valorCondenacao'),
+            'valorCondenacao'           => $this->formatarValorParaBanco($this->request->getPost('valorCondenacao')),
             'comentario'                => $this->request->getPost('comentario'),
             'resultado'                 => $this->request->getPost('resultado'),
             'cliente_id'                => $this->request->getPost('cliente_id'),
@@ -337,6 +335,24 @@ class Processos extends BaseController
             'encerrado'                 => ($this->request->getPost('encerrado')) ? 1 : 0,
             'data_encerramento'         => $this->request->getPost('data_encerramento'),
         ];
+    }
+
+     /**
+     * Função para formatar o valor para o banco de dados
+     *
+     * @param string $valor Valor formatado (ex: "1.234,56")
+     * @return float Valor no formato numérico (ex: 1234.56)
+     */
+    private function formatarValorParaBanco($valor)
+    {
+        // Remove os pontos (separadores de milhar)
+        $valor = str_replace('.', '', $valor);
+
+        // Substitui a vírgula (separador decimal) por ponto
+        $valor = str_replace(',', '.', $valor);
+
+        // Converte para float
+        return (float) $valor;
     }
 
     /** 

@@ -35,12 +35,13 @@ class ProcessoService
         if ($encerrado !== null) {
             $builder->where('encerrado', $encerrado);
         }
-     
+    
         // Filtro por busca (numero_processo ou titulo_processo)
         if ($search !== null) {
+            log_message('debug', 'Search term: ' . $search);
             $builder->groupStart()
-                    ->like('numero_processo', preg_replace('/[^0-9]/', '',$search))
-                    ->orLike('titulo_processo', $search)
+                    ->like('numero_processo', preg_replace('/[.-]/', '',$search))
+                    ->orLike('LOWER(titulo_processo)', strtolower(trim($search)), 'both')
                     ->groupEnd();
         }
     
@@ -67,7 +68,7 @@ class ProcessoService
         return $this->processosModel
             ->where('cliente_id', $clienteId)
             ->groupStart()
-                ->like('numero_processo', preg_replace('/[^0-9]/', '',$search))
+                ->like('numero_processo', preg_replace('/[.-]/', '',$search))
                 ->orLike('titulo_processo', $search)
             ->groupEnd()
             ->joinProcessoCliente($perPage);

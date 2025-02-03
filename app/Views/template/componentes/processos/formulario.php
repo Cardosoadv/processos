@@ -50,45 +50,43 @@ $clientes = model('ClientesModel')->findAll();
         verificaExistenciaProcesso(mask);
     }
 
-    async function verificaExistenciaProcesso(numeroProcesso){
+    async function verificaExistenciaProcesso(numeroProcesso) {
         // Faz a chamada AJAX para remover a etiqueta do banco de dados
         try {
-        const response = await fetch('<?= site_url('processos/verificaprocessoexiste') ?>', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            body: JSON.stringify({
-                numeroprocessocommascara: numeroProcesso,
-            }),
-        });
+            const response = await fetch('<?= site_url('processos/verificaprocessoexiste') ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: JSON.stringify({
+                    numeroprocessocommascara: numeroProcesso,
+                }),
+            });
 
-        const data = await response.json();
+            const data = await response.json();
 
-        if (data.existe === true) {
-            const urlAtual = window.location.href;
-            const urlRedirecionamento = `<?= site_url('processos/consultarprocesso') ?>/${data.idProcesso}`;
+            if (data.existe === true) {
+                const urlAtual = window.location.href;
+                const urlRedirecionamento = `<?= site_url('processos/consultarprocesso') ?>/${data.idProcesso}`;
 
-            if (urlAtual === urlRedirecionamento) {
-                return true; // Evita o redirecionamento
+                if (urlAtual === urlRedirecionamento) {
+                    return true; // Evita o redirecionamento
+                }
+                window.location.href = `<?= site_url('processos/consultarprocesso') ?>/${data.idProcesso}`;
+                return true;
+            } else {
+                mostrarMensagem(data.msg, 'success');
+                return false;
             }
-            window.location.href = `<?= site_url('processos/consultarprocesso') ?>/${data.idProcesso}`;
-            return true;
-        } else {
-            mostrarMensagem(data.msg, 'success');
+
+        } catch (error) {
+            console.error('Erro ao pesquisar processo:', error);
+            mostrarMensagem('Erro ao pesquisar processo. Verifique o console para mais detalhes.', 'error');
             return false;
         }
 
-    } catch (error) {
-        console.error('Erro ao pesquisar processo:', error);
-        mostrarMensagem('Erro ao pesquisar processo. Verifique o console para mais detalhes.', 'error');
-        return false;
-    }    
-                
     }
-
-
 </script>
 
 
@@ -222,8 +220,11 @@ $clientes = model('ClientesModel')->findAll();
         </div>
 
         <div class="form-group col">
-            <label>Valor da Condenação</label>
-            <input type="number" step="0.01" name="valorCondenacao" class="form-control" value="<?= $processo['valorCondenacao'] ?? '' ?>">
+                <label>Valor da Condenação</label>
+                <div class="input-group">
+                <span class="input-group-text">R$</span>
+                <input type="text" name="valorCondenacao" id="valorCondenacao" class="form-control" value="<?= $processo['valorCondenacao'] ?? '' ?>">
+            </div>
         </div>
 
     </div>
@@ -244,7 +245,7 @@ $clientes = model('ClientesModel')->findAll();
                     <input type="date" class="form-control" id="dataRevisao" name="dataRevisao" value="<?= $processo['dataRevisao'] ?? '' ?>">
                 </div>
 
-                <div id="dataEncerramento" class="form-group col-6 <?= (($processo['encerrado']?? 0) == 1) ? 'visually-hidden' : '' ?>">
+                <div id="dataEncerramento" class="form-group col-6 <?= (($processo['encerrado'] ?? 0) == 1) ? 'visually-hidden' : '' ?>">
                     <label for="data_encerramento">Data do Encerramento</label>
                     <input type="date" class="form-control" id="data_encerramento" name="data_encerramento" value="<?= $processo['data_encerramento'] ?? '' ?>">
                 </div>
@@ -255,16 +256,16 @@ $clientes = model('ClientesModel')->findAll();
             <div class="form-group">
                 <label for="encerrado">Situação do Processo</label>
                 <div class="btn-group w-100" role="group" aria-label="Encerrado">
-                    <input type="checkbox" class="btn-check" id="encerrado" name="encerrado" value="<?= $processo['encerrado'] ?? 0 ?>" autocomplete="off" <?= (($processo['encerrado']?? 0) == 1) ? 'checked' : '' ?>>
+                    <input type="checkbox" class="btn-check" id="encerrado" name="encerrado" value="<?= $processo['encerrado'] ?? 0 ?>" autocomplete="off" <?= (($processo['encerrado'] ?? 0) == 1) ? 'checked' : '' ?>>
                     <label class="btn w-100" id="situacao" for="encerrado">
-                        <?= (($processo['encerrado']?? 0) == 1) ? 'Encerrado' : 'Ativo' ?>
+                        <?= (($processo['encerrado'] ?? 0) == 1) ? 'Encerrado' : 'Ativo' ?>
                     </label>
                 </div>
             </div>
-            
 
 
-        </div> 
+
+        </div>
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">Salvar</button>
             <a href="<?= site_url('/processos/') ?>" class="btn btn-outline-secondary right">Cancelar</a>
@@ -297,4 +298,29 @@ $clientes = model('ClientesModel')->findAll();
 
     // Chama a função inicialmente para definir o estado correto ao carregar a página
     atualizarBotao();
+
+    // Função para formatar o valor como número com separadores de milhar e casas decimais
+    function formatarNumero(valor) {
+        if (!valor) return '';
+        valor = valor.replace(/\D/g, ''); // Remove tudo que não é número
+        valor = (Number(valor) / 100).toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+        return valor;
+    }
+
+    // Formata o valor inicial ao carregar a página
+    document.addEventListener('DOMContentLoaded', function () {
+        const campoValor = document.getElementById('valorCondenacao');
+        campoValor.value = formatarNumero(campoValor.value);
+    });
+
+    // Formata o valor enquanto o usuário digita
+    document.getElementById('valorCondenacao').addEventListener('input', function (e) {
+        e.target.value = formatarNumero(e.target.value);
+    });
+
+
+
 </script>
