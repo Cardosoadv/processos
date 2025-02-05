@@ -66,20 +66,22 @@ class ProcessosPartesModel extends Model
      * @param string $nome Nome da parte
      * @return array Processos IDs
      */
-    public function getParteProcessoPorNome(string $nome){
-        $parte = $this->db->table('processos_partes as pp')
-        ->join('processos_partes_dos_processos as pdp', 'pp.id_parte = pdp.id_parte', 'left')
-        ->join('processos as p', 'pdp.id_processo = p.id_processo', 'left')
+    public function getParteProcessoPorNome(string $nome)
+{
+    $result = $this->db->table('processos_partes as pp')
+        ->select('pdp.id_processo')
+        ->join('processos_partes_dos_processos as pdp', 'pp.id_parte = pdp.id_parte')
         ->like('LOWER(pp.nome)', strtolower(trim($nome)))
-        ->select('p.id_processo') // Select only the process IDs
-        ->distinct() // Ensure unique process IDs (optional, but recommended)
-        ->get()->getResultArray();
-
-        // Extract the process IDs from the result array
-        $processosIds = array_column($parte, 'id_processo');
+        ->get()
+        ->getResultArray();
     
-        return $processosIds;
+    if (empty($result)) {
+        return [0]; // Retorna array com ID 0
     }
+    
+    // Extrai apenas os IDs do array de resultados
+    return array_column($result, 'id_processo');
+}
 
     public function getParteProcessoPorId(int $id){
         $parte = $this->db->table('processos_partes as pp')
