@@ -27,6 +27,11 @@ class ProcessoService
         $this->processosObjetoModel         = model('ProcessoObjetoModel');
     }
 
+    /**
+     * Lista os processos.
+     * Conforme filtros predefinidos
+     * Retorna um array com os processos paginados.
+     */
     public function listarProcessos(?string $search, string $sortField, string $sortOrder, ?int $encerrado, ?int $etiqueta = null, int $perPage = 25)
     {
         $builder = $this->processosModel;
@@ -40,23 +45,32 @@ class ProcessoService
         if ($search !== null) {
 
             $builder->groupStart()
+                //Pesquisa pelo numero do processo sem ponto ou traço
                 ->like('numero_processo', preg_replace('/[.-]/', '', $search))
+                //Ou, Pesquisa pelo titulo do processo
                 ->orLike('LOWER(titulo_processo)', strtolower(trim($search)), 'both')
+                //Ou, Pesquisa pelo nome da parte
+                ->orWhereIn('id_processo', $this->partesProcessoModel->getParteProcessoPorNome($search))
                 ->groupEnd();
         }
 
         // Filtro por etiqueta
         if ($etiqueta !== null) {
-            // Use um join para relacionar com a tabela de etiquetas (assumindo que você tenha uma tabela de junção)
+            // Filtra pela etiqueta
+            // Este filtro é cumulativo com o anterior
             $builder->join('processos_etiquetas', 'processos.id_processo = processos_etiquetas.processo_id')
                 ->where('processos_etiquetas.etiqueta_id', $etiqueta);
         }
-
+        // Ordena os processos
         $builder->orderBy($sortField, $sortOrder);
 
         return $builder->joinProcessoCliente($perPage);
     }
 
+    /**
+     * Lista os processos de um cliente.
+     * TODO: Implementar filtros de busca e ordenação.
+     */
     public function listarProcessosCliente(int $clienteId, ?string $search, int $perPage = 25)
     {
         if ($search === null) {
@@ -74,6 +88,11 @@ class ProcessoService
             ->joinProcessoCliente($perPage);
     }
 
+    /**
+     *  Lista os processos movimentados nos últimos dias.
+     * @param string $dias Quantidade de dias para buscar os processos movimentados.
+     * @return array Lista de processos movimentados.
+     */
     public function getProcessosMovimentados(string $dias): array
     {
         $hoje = date('Y-m-d', time());
@@ -81,6 +100,11 @@ class ProcessoService
         return $this->processosMovimentosModel->getProcessoMovimentadoPeriodo($dataInicial, $hoje);
     }
 
+    /*
+    * Retorna os detalhes de um processo
+    * @param int $id ID do processo
+    * @return array Detalhes do processo
+    */
     public function getDetalhesProcesso(int $id): array
     {
         $processo = $this->processosModel->where('id_processo', $id)->get()->getRowArray();
@@ -155,6 +179,10 @@ class ProcessoService
             throw $e; // Re-throw the exception
         }
     }
+
+    /*
+    * Salva uma parte do processo
+    */
     public function salvarPartes(array $parte, int $idProcesso): void
     {
         $jaExisteParte = $this->partesProcessoModel->where('nome', $parte['nome'])->first();
@@ -178,11 +206,21 @@ class ProcessoService
         }
     }
 
+    /**
+     * Salva uma anotação no processo
+     */
     public function salvarAnotacao(array $data): void
     {
         $this->processosAnotacoesModel->insert($data);
     }
 
+    /**
+     * Adiciona ou remove uma etiqueta de um processo
+     * @param int $processoId ID do processo
+     * @param int $etiquetaId ID da etiqueta
+     * @param bool $adicionar Se true, adiciona a etiqueta. Se false, remove a etiqueta.
+     * @return bool True se a operação foi bem sucedida, false caso contrário.
+     */
     public function gerenciarEtiquetas(int $processoId, int $etiquetaId, bool $adicionar): bool
     {
         if ($adicionar) {
@@ -191,6 +229,9 @@ class ProcessoService
         return $this->processosModel->removeEtiqueta($processoId, $etiquetaId);
     }
 
+    /*
+    * Deleta um processo e seus registros relacionados
+    */
     public function deletarProcesso(int $id): bool
     {
         $this->db->transStart();
@@ -224,11 +265,17 @@ class ProcessoService
         }
     }
 
+    /**
+     * Salva um movimento do processo
+     */
     public function salvarMovimento(array $data): void
     {
         $this->processosMovimentosModel->insert($data);
     }
 
+    /*
+    * Verifica se um processo já existe
+    */
     public function processoJaExiste(string $numeroProcesso): array
     {
         return $this->processosModel->where('numero_processo', $numeroProcesso)->first();

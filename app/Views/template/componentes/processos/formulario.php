@@ -328,7 +328,4 @@ $clientes = model('ClientesModel')->findAll();
     document.getElementById('valorCausa').addEventListener('input', function (e) {
         e.target.value = formatarNumero(e.target.value);
     });
-
-
-
 </script>

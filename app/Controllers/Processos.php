@@ -170,7 +170,7 @@ class Processos extends BaseController
         }
     }
 
-    /**
+    /** 
      * Deleta um processo e seus registros relacionados
      * 
      * @param int $id ID do processo
