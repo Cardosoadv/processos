@@ -90,23 +90,18 @@ class ProcessoObjetoModel extends Model
         $dados= [];
         foreach ($query as $dado) {
             if ($dado && $dado['dados']) {
+                
                 $item = json_decode($dado['dados'], true);
+                $item['id_objeto'] = $dado['id_objeto'];
                 array_push($dados, $item);
             }
         }
         return $dados;
-        
-        
-        
-        
-        
-        
-        echo '<pre>';
-        print_r($dados);
-        
+    }
 
-        
-        return $query;
+    public function deletarObjeto(int $id): bool
+    {
+        return $this->delete($id);
     }
 
 

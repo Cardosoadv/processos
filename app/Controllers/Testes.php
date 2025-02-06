@@ -10,10 +10,10 @@ class Testes extends BaseController
 {
     public function index()
     {
-        $model = model('ProcessosPartesModel');
-        $partes = $model->getParteProcessoPorNome("Igara");
+        $model = model('ProcessoObjetoModel');
+        $objeto = $model->listarObjetoProcesso(2);
         echo "<pre>";
-        print_r($partes);
+        print_r($objeto);
     }
 
     public function processarIntimacoes()

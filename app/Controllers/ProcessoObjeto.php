@@ -37,5 +37,11 @@ class ProcessoObjeto extends BaseController
         }
     }
 
+    public function deletar(int $id)
+    {
+        $this->service->deletarObjeto($id);
+        return redirect()->back()->with('success', 'Objeto deletado com sucesso!');
+    }
+   
 
 }
