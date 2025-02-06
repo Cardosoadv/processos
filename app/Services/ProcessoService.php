@@ -276,7 +276,7 @@ class ProcessoService
     /*
     * Verifica se um processo já existe
     */
-    public function processoJaExiste(string $numeroProcesso): array
+    public function processoJaExiste(string $numeroProcesso): ?array
     {
         return $this->processosModel->where('numero_processo', $numeroProcesso)->first();
     }
