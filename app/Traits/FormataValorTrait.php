@@ -1,30 +1,37 @@
 <?php
 
-class FormatarValorTrait{
+namespace app\Traits;
 
-
-
-        /**
-     * Função para formatar o valor para o banco de dados
+trait FormatarValorTrait
+{
+    /**
+     * Converte um valor formatado como string (ex: "1.234,56") para float (ex: 1234.56).
      *
-     * @param string $valor Valor formatado (ex: "1.234,56")
-     * @return float Valor no formato numérico (ex: 1234.56)
+     * @param string|null $valor Valor formatado (ex: "1.234,56").
+     * @return float|null Retorna o valor no formato numérico ou null se o valor for inválido.
+     * @throws \InvalidArgumentException Se o valor não puder ser convertido.
      */
-    private function formatarValorParaBanco($valor)
+    public function formatarValorParaBanco($valor)
     {
-
-        // If valor is null or empty, return null
-        if (empty($valor)) {
+        if ($valor === null || $valor === '') {
             return null;
         }
 
-        // Remove os pontos (separadores de milhar)
-        $valor = str_replace('.', '', $valor);
+        if (is_numeric($valor)) {
+            return (float) $valor;
+        }
 
-        // Substitui a vírgula (separador decimal) por ponto
+        if (!is_string($valor)) {
+            throw new \InvalidArgumentException('O valor deve ser uma string.');
+        }
+
+        $valor = str_replace('.', '', $valor);
         $valor = str_replace(',', '.', $valor);
 
-        // Converte para float
+        if (!is_numeric($valor)) {
+            throw new \InvalidArgumentException('O valor não pôde ser convertido para float.');
+        }
+
         return (float) $valor;
     }
 }

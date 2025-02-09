@@ -3,11 +3,14 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use app\Traits\FormatarValorTrait;
 
 use Exception;
 
 class Despesas extends BaseController
 {
+    use FormatarValorTrait;
+
     public function index()
     {
         $data = [
@@ -35,8 +38,10 @@ class Despesas extends BaseController
 
     public function salvar(){
 
+
         $id = $this->request->getPost('id_despesa') ?? null;
         $data = $this->request->getPost();
+        $data['valor'] = $this->formatarValorParaBanco($this->request->getPost('valor'));
 
         // Validação do CPF ou CNPJ
         $cpf_cnpj = $data['documento'] ?? null;
