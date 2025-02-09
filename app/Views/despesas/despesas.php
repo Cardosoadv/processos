@@ -61,14 +61,14 @@
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Nome</th>
+                                                    <th>Despesa</th>
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php foreach ($despesas as $despesa): ?>
                                                     <tr>
-                                                        <td><?= esc($despesa['nome']) ?></td>
+                                                        <td><?= esc($despesa['despesa']) ?></td>
                                                         <td>
                                                             <a href="<?= base_url('despesas/editar/' . $despesa['id_despesa']) ?>"
                                                                 class="btn btn-sm btn-primary">
@@ -78,10 +78,7 @@
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
-                                                            <a href="<?= base_url('processos/processosdodespesa/' . $despesa['id_despesa']) ?>"
-                                                                class="btn btn-sm btn-secondary">
-                                                                Processos
-                                                            </a>
+                                                            
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

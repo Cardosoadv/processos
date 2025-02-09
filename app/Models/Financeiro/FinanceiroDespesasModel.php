@@ -72,7 +72,7 @@ class FinanceiroDespesasModel extends Model
     protected $afterInsert    = [];
     protected $beforeUpdate   = ['preparaSetRateio'];
     protected $afterUpdate    = [];
-    protected $beforeFind     = [];
+    protected $beforeFind     = ['preparaGetRateio'];
     protected $afterFind      = ['preparaGetRateio'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
