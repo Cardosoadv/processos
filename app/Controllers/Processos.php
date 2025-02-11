@@ -4,12 +4,14 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Services\ProcessoService;
+use App\Traits\FormataValorTrait;
 
 
 use App\Models\ProcessosPartesModel;
 
 class Processos extends BaseController
 {
+    use FormataValorTrait;
 
     protected $processoService;
 
@@ -357,7 +359,7 @@ class Processos extends BaseController
      * @param string $valor Valor formatado (ex: "1.234,56")
      * @return float Valor no formato numérico (ex: 1234.56)
      */
-    private function formatarValorParaBanco($valor)
+    private function formatarValorParaBancos($valor)
     {
 
         // If valor is null or empty, return null

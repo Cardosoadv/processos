@@ -3,13 +3,13 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use app\Traits\FormatarValorTrait;
+use App\Traits\FormataValorTrait;
 
 use Exception;
 
 class Despesas extends BaseController
 {
-    use FormatarValorTrait;
+    use FormataValorTrait;
 
     public function index()
     {
