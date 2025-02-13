@@ -17,6 +17,7 @@
                     <th scope="col">Bairro</th>
                     <th scope="col">Quadra</th>
                     <th scope="col">Lote</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <?php if ($objetos ?? null) : ?>
@@ -24,9 +25,13 @@
                     
                         <tbody>
                             <tr>
-                            <td><?= esc($objeto['bairro']) ?></td>
+                                <td><?= esc($objeto['bairro']) ?></td>
                                 <td><?= esc($objeto['quadra']) ?></td>
                                 <td><?= esc($objeto['lote']) ?></td>
+                                <td><a href="<?= base_url('processoobjeto/deletar/' . $objeto['id_objeto']) ?>" >
+                                        <i class="fas fa-trash" style="cursor: pointer;"></i>
+                                    </a>
+                                </td>
 
                             </tr>
                         </tbody>

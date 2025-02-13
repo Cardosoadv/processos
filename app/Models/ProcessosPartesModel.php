@@ -48,6 +48,9 @@ class ProcessosPartesModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /** 
+     * Retorna as partes de um processo
+     */
     public function getParteProcesso(int $id_processo, string $polo){
         $parte = $this->db->table('processos_partes_dos_processos as pdp')
         ->join('processos_partes as pp', 'pdp.id_parte = pp.id_parte', 'left') 
@@ -57,14 +60,28 @@ class ProcessosPartesModel extends Model
         return $parte;
     }
 
-    public function getParteProcessoPorNome(string $nome){
-        $parte = $this->db->table('processos_partes as pp')
-        ->join('processos_partes_dos_processos as pdp', 'pp.id_parte = pdp.id_parte', 'left')
-        ->join('processos as p', 'pdp.id_processo = p.id_processo', 'left')
-        ->like('pp.nome', $nome)
-        ->get()->getResultArray();
-        return $parte;
+    /** 
+     * Retorna os processos de uma parte
+     * Pesquisando pelo $nome da parte
+     * @param string $nome Nome da parte
+     * @return array Processos IDs
+     */
+    public function getParteProcessoPorNome(string $nome)
+{
+    $result = $this->db->table('processos_partes as pp')
+        ->select('pdp.id_processo')
+        ->join('processos_partes_dos_processos as pdp', 'pp.id_parte = pdp.id_parte')
+        ->like('LOWER(pp.nome)', strtolower(trim($nome)))
+        ->get()
+        ->getResultArray();
+    
+    if (empty($result)) {
+        return [0]; // Retorna array com ID 0
     }
+    
+    // Extrai apenas os IDs do array de resultados
+    return array_column($result, 'id_processo');
+}
 
     public function getParteProcessoPorId(int $id){
         $parte = $this->db->table('processos_partes as pp')
@@ -75,6 +92,9 @@ class ProcessosPartesModel extends Model
         return $parte;
     }
 
+    /*
+    * Verifica se já existe uma parte no processo
+    */
     public function jaExisteParteProcesso(int $id_processo){
         $parte = $this->db->table('processos_partes_dos_processos as pdp')
         ->where('id_processo', $id_processo)
@@ -82,9 +102,16 @@ class ProcessosPartesModel extends Model
         return $parte;
     }
 
+    /*
+    * Salva uma parte do processo
+    */
     public function salvarParteDoProcesso(array $parteDoProcesso){
         $this->db->table('processos_partes_dos_processos')->insert($parteDoProcesso);
     }
+
+    /*
+    * Deleta uma parte do processo
+    */
     public function deletarParteDoProcesso(int $idProcesso){
         $this->db->table('processos_partes_dos_processos')->delete("id_processo = $idProcesso");
     }

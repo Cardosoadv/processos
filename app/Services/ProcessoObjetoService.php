@@ -27,4 +27,9 @@ class ProcessoObjetoService
     {
         return $this->model->listarObjetos();
     } 
+
+    public function deletarObjeto(int $id): void
+    {
+        $this->model->deletarObjeto($id);
+    }
 }
