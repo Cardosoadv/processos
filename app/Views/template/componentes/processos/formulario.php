@@ -191,12 +191,12 @@ $clientes = model('ClientesModel')->findAll();
         </div>
 
         <div class="form-group col">
-                <label>Valor da Causa</label>
-                <div class="input-group">
+            <label>Valor da Causa</label>
+            <div class="input-group">
                 <span class="input-group-text">R$</span>
                 <input type="text" name="valorCausa" id="valorCausa" class="form-control" value="<?= $processo['valorCausa'] ?? '' ?>">
             </div>
-        </div> 
+        </div>
 
         <div class="form-group col">
             <label>Risco</label>
@@ -223,8 +223,8 @@ $clientes = model('ClientesModel')->findAll();
         </div>
 
         <div class="form-group col">
-                <label>Valor da Condenação</label>
-                <div class="input-group">
+            <label>Valor da Condenação</label>
+            <div class="input-group">
                 <span class="input-group-text">R$</span>
                 <input type="text" name="valorCondenacao" id="valorCondenacao" class="form-control" value="<?= $processo['valorCondenacao'] ?? '' ?>">
             </div>
@@ -301,7 +301,6 @@ $clientes = model('ClientesModel')->findAll();
 
     // Chama a função inicialmente para definir o estado correto ao carregar a página
     atualizarBotao();
-
     
     function formatarNumero(valor) {
     if (!valor) return '';
@@ -316,13 +315,6 @@ $clientes = model('ClientesModel')->findAll();
     const partes = valor.split(',');
     if (partes.length > 2) {
         valor = partes[0] + ',' + partes[1];
-    }
-    
-    // Se existir parte decimal, limita a 2 dígitos
-    if (partes.length === 2) {
-        valor = partes[0] + ',' + partes[1].substring(0, 2);
-    }
-    
     return valor;
 }
 

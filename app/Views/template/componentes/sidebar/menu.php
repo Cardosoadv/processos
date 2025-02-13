@@ -11,6 +11,8 @@ $active = $uri->getSegment(1);
 $permitions = new Permissions();
 $permission = $permitions->permission();
 
+log_message('debug', $active);
+
 ?>
 
 <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
@@ -56,6 +58,14 @@ $permission = $permitions->permission();
                     </a>
                 </li>
             </ul>
+        </li>
+    <?php endif; ?>
+
+    <?php if ($permission['financeiro']): ?>
+        <li class="nav-item <?= ($active == 'financeiro') ? 'active' : ''; ?>">
+            <a href="<?= site_url('financeiro/despesas'); ?>" class="nav-link">
+                <i class="nav-icon bi bi-cash-coin"></i><p>Despesas</p>
+            </a>
         </li>
     <?php endif; ?>
 

@@ -4,27 +4,20 @@ namespace App\Controllers;
 
 use App\Database\Migrations\ProcessosPartes;
 use App\Libraries\ReceberIntimacoesJs;
-
+use App\Models\Financeiro\FinanceiroDespesasModel;
 
 class Testes extends BaseController
 {
     public function index()
     {
-        $model = model('ProcessoObjetoModel');
-        $objeto = $model->listarObjetoProcesso(2);
-        echo "<pre>";
-        print_r($objeto);
+
     }
 
-    public function processarIntimacoes()
+    public function exibirdespesas()
     {
-
-        $lib = new ReceberIntimacoesJs(); 
-
-        $json = $this->request->getJSON();
-
-        $resposta = $lib->getIntimacoes($json);
-        return $this->response->setJSON($resposta);
+        $model = model('Financeiro/FinanceiroDespesasModel')->findAll();
+        echo '<pre>';
+        print_r($model);
         
     }
 }

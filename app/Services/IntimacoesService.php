@@ -68,16 +68,16 @@ class IntimacoesService
     {
         // Preparar dados do processo
         $dadosProcesso = [
-            'siglaTribunal' => $item['siglaTribunal'],
-            'nomeOrgao' => $item['nomeOrgao'],
-            'numero_processo' => $item['numero_processo'],
-            'link' => $item['link'],
-            'tipoDocumento' => $item['tipoDocumento'],
-            'codigoClasse' => $item['codigoClasse'],
-            'ativo' => $item['ativo'],
-            'status' => $item['status'] ?? 'P',
-            'risco' => $item['risco'] ?? 'Possível',
-            'numeroprocessocommascara' => $item['numeroprocessocommascara'],
+            'siglaTribunal'                 => $item['siglaTribunal'],
+            'nomeOrgao'                     => $item['nomeOrgao'],
+            'numero_processo'               => $item['numero_processo'],
+            'link'                          => $item['link'],
+            'tipoDocumento'                 => $item['tipoDocumento'],
+            'codigoClasse'                  => $item['codigoClasse'],
+            'ativo'                         => $item['ativo'],
+            'status'                        => $item['status'] ?? 'P',
+            'risco'                         => $item['risco'] ?? 'Possível',
+            'numeroprocessocommascara'      => $item['numeroprocessocommascara'],
         ];
 
         $jaExisteProcesso = $this->processoService->processoJaExiste($item['numero_processo']);

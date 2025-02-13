@@ -38,8 +38,11 @@ $responsaveis = model('ResposavelModel')->getUsers();
                 <?php if (isset($responsaveis)) : ?>
                     <select name="responsavel" class="form-control" style="width: 100%;">
                         <?php foreach ($responsaveis as $responsavel) : ?>
+
                             <option value="<?= $responsavel['id'] ?>" <?= $responsavel['id'] == ($tarefas['responsavel']??"") ? 'selected' : ''?>><?= $responsavel['username'] ?></option>
-                        <?php endforeach; ?>
+                        
+                        
+                            <?php endforeach; ?>
                     </select>
                 <?php endif; ?>    
                 <!-- Responsaveis -->

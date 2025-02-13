@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Services\ProcessoService;
+use App\Traits\FormataValorTrait;
 
 
 use App\Models\ProcessosPartesModel;
@@ -12,6 +13,7 @@ use App\Traits\FormataValorTrait;
 class Processos extends BaseController
 {
     use FormataValorTrait;
+
     protected $processoService;
 
     public function __construct()
