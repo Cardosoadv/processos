@@ -315,6 +315,13 @@ $clientes = model('ClientesModel')->findAll();
     const partes = valor.split(',');
     if (partes.length > 2) {
         valor = partes[0] + ',' + partes[1];
+    }
+    
+    // Se existir parte decimal, limita a 2 dígitos
+    if (partes.length === 2) {
+        valor = partes[0] + ',' + partes[1].substring(0, 2);
+    }
+    
     return valor;
 }
 
