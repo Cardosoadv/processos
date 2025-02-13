@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Financeiro;
 
 use App\Controllers\BaseController;
 use App\Traits\FormataValorTrait;

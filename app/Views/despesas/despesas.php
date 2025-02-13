@@ -41,7 +41,7 @@
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
-                                    <a href="<?= base_url('despesas/novo/') ?>"
+                                    <a href="<?= base_url('financeiro/despesas/novo/') ?>"
                                         class="btn btn-success">
                                         Novo despesa
                                     </a>
@@ -62,6 +62,8 @@
                                             <thead>
                                                 <tr>
                                                     <th>Despesa</th>
+                                                    <th>Vencimento</th>
+                                                    <th>Valor</th>
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
@@ -69,6 +71,8 @@
                                                 <?php foreach ($despesas as $despesa): ?>
                                                     <tr>
                                                         <td><?= esc($despesa['despesa']) ?></td>
+                                                        <td><?= date('d/m/Y', strtotime($despesa['despesa'])) ?></td>
+                                                        <td><?= 'R$ ' . number_format($despesa['valor'], 2, ',', '.') ?></td>
                                                         <td>
                                                             <a href="<?= base_url('despesas/editar/' . $despesa['id_despesa']) ?>"
                                                                 class="btn btn-sm btn-primary">
