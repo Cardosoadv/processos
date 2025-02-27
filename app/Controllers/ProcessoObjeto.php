@@ -33,7 +33,7 @@ class ProcessoObjeto extends BaseController
         if ($id) {
             return redirect()->to(base_url('processos/consultarprocesso/').$dados['processo_id'])->with('success', 'Objeto salvo com sucesso!');
         } else {
-            return redirect()->back()->withInput()->with('erro', 'Erro ao salvar o objeto.');
+            return redirect()->to(base_url('processos/consultarprocesso/').$dados['processo_id'])->with('erro', 'Erro ao salvar o objeto.');
         }
     }
 
