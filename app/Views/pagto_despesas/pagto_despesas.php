@@ -53,7 +53,7 @@
 
                                 <!-- Data Table -->
                                 <div class="mt-3">
-                                    <?php if (empty($despesas)): ?>
+                                    <?php if (empty($pagtoDespesas)): ?>
                                         <div class="alert alert-info">
                                             Nenhum despesa encontrado.
                                         </div>
@@ -62,31 +62,26 @@
                                             <thead>
                                                 <tr>
                                                     <th>Despesa</th>
-                                                    <th>Vencimento</th>
+                                                    <th>Pagamento</th>
                                                     <th>Valor</th>
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php foreach ($despesas as $despesa): ?>
+                                                <?php foreach ($pagtoDespesas as $pagtoDespesa): ?>
                                                     <tr>
-                                                        <td><?= esc($despesa['despesa']) ?></td>
-                                                        <td><?= date('d/m/Y', strtotime($despesa['despesa'])) ?></td>
-                                                        <td><?= 'R$ ' . number_format($despesa['valor'], 2, ',', '.') ?></td>
+                                                        <td><?= esc($pagtoDespesa['despesa']) ?></td>
+                                                        <td><?= date('d/m/Y', strtotime($pagtoDespesa['pagamento_despesa_dt'])) ?></td>
+                                                        <td><?= 'R$ ' . number_format($pagtoDespesa['valor'], 2, ',', '.') ?></td>
                                                         <td>
-                                                            <a href="<?= base_url('despesas/editar/' . $despesa['id_despesa']) ?>"
+                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/editar/' . $pagtoDespesa['id_pgto_despesa']) ?>"
                                                                 class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
-                                                            <a href="<?= base_url('despesas/excluir/' . $despesa['id_despesa']) ?>"
+                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/excluir/' . $pagtoDespesa['id_pgto_despesa']) ?>"
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
-                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/pagarDespesa/' . $despesa['id_despesa']) ?>"
-                                                                class="btn btn-sm btn-secondary">
-                                                                Pagar
-                                                            </a>
-                                                            
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

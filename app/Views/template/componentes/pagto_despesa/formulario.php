@@ -1,12 +1,27 @@
 <?php
-$contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que você tem um model para contas
+
+$contas = model('Financeiro/FinanceiroContasModel')->findAll();
+$users  = model('ResposavelModel')->getUsers();
+$despesas = model('Financeiro/FinanceiroDespesasModel')->findAll();
 ?>
 
-<form method="post" id="form_pagamento_despesa" name="form_pagamento_despesa" action="<?= site_url('financeiro/pagamentos/salvar') ?>">
-    <input type="hidden" name="despesa_id" value="<?= $despesa['id_despesa'] ?>">  <div class="row mb-3">
+<form method="post" id="form_pagamento_despesa" name="form_pagamento_despesa" action="<?= site_url('financeiro/pagamentoDespesas/salvar') ?>">
+    <input type="hidden" name="id_pgto_despesa" value="<?= $pagtoDespesa['id_pgto_despesa']??'' ?>">  
+    <div class="row mb-3">
+        <div class="form-group col">
+            <label for="despesa_id">Despesa</label>
+            <select class="form-control" name="despesa_id" id="despesa_id" required>
+                <option value="">Selecione uma despesa</option>
+                <?php if (!empty($despesas)): ?>
+                    <?php foreach ($despesas as $despesa): ?>
+                        <option value="<?= $despesa['id_despesa'] ?>" <?=$despesa['id_despesa'] == ($pagtoDespesa['despesa_id']??'') ? 'selected' : ''?>><?= $despesa['despesa'] ?></option>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </select>
+        </div>
         <div class="form-group col">
             <label for="pagamento_despesa_dt">Data de Pagamento</label>
-            <input type="date" class="form-control" name="pagamento_despesa_dt" id="pagamento_despesa_dt" required>
+            <input type="date" class="form-control" name="pagamento_despesa_dt" id="pagamento_despesa_dt" value="<?= $pagtoDespesa['pagamento_despesa_dt'] ?? '' ?>" required>
         </div>
     </div>
 
@@ -15,7 +30,7 @@ $contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que
             <label for="valor">Valor do Pagamento</label>
             <div class="input-group">
                 <span class="input-group-text">R$</span>
-                <input type="text" class="form-control" name="valor" id="valor" required>
+                <input type="text" class="form-control" name="valor" id="valor" value="<?= $pagtoDespesa['valor'] ?? '' ?>" required>
             </div>
         </div>
     </div>
@@ -24,10 +39,10 @@ $contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que
         <div class="form-group col">
             <label for="conta_id">Conta</label>
             <select class="form-control" name="conta_id" id="conta_id" required>
-                <option value="">Selecione uma conta</option>
+                <option value="0">Selecione uma conta</option>
                 <?php if (!empty($contas)): ?>
                     <?php foreach ($contas as $conta): ?>
-                        <option value="<?= $conta['id_conta'] ?>"><?= $conta['nome_conta'] ?></option>
+                        <option value="<?= $conta['id_conta'] ?? '' ?>" <?= $conta['id_conta'] == ($pagtoDespesa['conta_id']??'') ? 'selected' : ''?>><?= $conta['conta'] ?></option>
                     <?php endforeach; ?>
                 <?php endif; ?>
             </select>
@@ -47,7 +62,7 @@ $contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que
             <div id="container-rateio-pagamento">
                 <?php if (!empty($users)): ?>
                     <?php
-                    $rateio = $despesa['rateio'] ?? []; // Use o rateio da despesa
+                    $rateio = $pagtoDespesa['rateio'] ?? []; // Use o rateio da despesa
                     $numero_de_despesas = count($rateio);
                     for ($i = 0; $i < max(2, $numero_de_despesas); $i++): // Exibe pelo menos 2 linhas
                         ?>
@@ -86,12 +101,95 @@ $contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que
 
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Salvar Pagamento</button>
-        <a href="<?= site_url('/despesas/') ?>" class="btn btn-outline-secondary">Cancelar</a>
+        <a href="<?= site_url('financeiro/pagamentoDespesas/') ?>" class="btn btn-outline-secondary">Cancelar</a>
     </div>
 </form>
 
 <script>
-    // ... (funções formatarNumero e formatarAoPerderFoco do código anterior) ...
+    // Função para inicializar os campos de rateio
+    function inicializarCamposRateio() {
+        // Seleciona todos os campos de valor-rateio existentes
+        const camposRateio = document.querySelectorAll('.valor-rateio');
+        
+        // Adiciona os eventos a cada campo
+        camposRateio.forEach(campo => {
+            // Formatação inicial (se já tiver valor)
+            let valor = campo.value;
+            if (valor) {
+                valor = formatarNumero(valor);
+                valor = formatarAoPerderFoco(valor);
+                campo.value = valor;
+            }
+            
+            // Remove eventos existentes para evitar duplicação
+            campo.removeEventListener('input', handleInput);
+            campo.removeEventListener('blur', handleBlur);
+            
+            // Adiciona novos event listeners
+            campo.addEventListener('input', handleInput);
+            campo.addEventListener('blur', handleBlur);
+        });
+    }
+
+    // Funções de manipulação de eventos para reutilização
+    function handleInput(e) {
+        let valorAtual = e.target.value;
+        e.target.value = formatarNumero(valorAtual);
+    }
+
+    function handleBlur(e) {
+        let valor = e.target.value;
+        e.target.value = formatarAoPerderFoco(valor);
+    }
+
+    function formatarNumero(valor) {
+        if (!valor) return '';
+        
+        // Substitui ponto por vírgula
+        valor = valor.replace(/\./g, ',');
+        
+        // Remove tudo que não é número ou vírgula
+        valor = valor.replace(/[^\d,]/g, '');
+        
+        // Garante que só existe uma vírgula
+        const partes = valor.split(',');
+        if (partes.length > 2) {
+            valor = partes[0] + ',' + partes[1];
+        }
+        
+        // Se existir parte decimal, limita a 2 dígitos
+        if (partes.length === 2) {
+            valor = partes[0] + ',' + partes[1].substring(0, 2);
+        }
+        
+        return valor;
+    }
+
+    function formatarAoPerderFoco(valor) {
+        if (!valor) {
+            return '0,00';
+        }
+        
+        // Se não tem vírgula, adiciona ,00
+        if (!valor.includes(',')) {
+            valor = valor + ',00';
+        } else {
+            // Se tem vírgula mas não tem 2 casas decimais
+            const partes = valor.split(',');
+            if (partes[1].length === 0) {
+                valor = valor + '00';
+            } else if (partes[1].length === 1) {
+                valor = valor + '0';
+            }
+        }
+        
+        // Formata com separadores de milhar
+        const partes = valor.split(',');
+        const parteInteira = partes[0].replace(/\D/g, '');
+        const numeroFormatado = Number(parteInteira).toLocaleString('pt-BR').replace(/,/g, '.') + ',' + partes[1];
+        
+        return numeroFormatado;
+    }
 
     function adicionarRateioPagamento() {
         const container = document.getElementById('container-rateio-pagamento');
@@ -123,17 +221,9 @@ $contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que
         `;
 
         container.appendChild(novaLinha);
-
-        // Adiciona o evento de formatação para o novo campo de valor
-        const novoCampoValor = novaLinha.querySelector('.valor-rateio');
-        novoCampoValor.addEventListener('input', function(e) {
-            let valorAtual = e.target.value;
-            e.target.value = formatarNumero(valorAtual);
-        });
-        novoCampoValor.addEventListener('blur', function(e) {
-            let valor = e.target.value;
-            e.target.value = formatarAoPerderFoco(valor);
-        });
+        
+        // Agora inicializa os campos, incluindo o novo campo adicionado
+        inicializarCamposRateio();
     }
 
     function removerRateio(button) {
@@ -151,27 +241,24 @@ $contas = model('Financeiro/FinanceiroContasModel')->findAll(); // Assumindo que
         }
     }
 
-    // ... (resto do código de formatação do valor principal) ...
-
-    // Formatação dos campos de rateio ao carregar a página
+    // Inicialização quando a página carrega
     document.addEventListener('DOMContentLoaded', function() {
-        const camposRateio = document.querySelectorAll('.valor-rateio');
-        camposRateio.forEach(campo => {
-            let valor = campo.value;
+        // Inicializa o campo de valor principal
+        const campoValor = document.getElementById('valor');
+        if (campoValor) {
+            let valor = campoValor.value;
             if (valor) {
                 valor = formatarNumero(valor);
                 valor = formatarAoPerderFoco(valor);
-                campo.value = valor;
+                campoValor.value = valor;
             }
-            campo.addEventListener('input', function(e) {
-                let valorAtual = e.target.value;
-                e.target.value = formatarNumero(valorAtual);
-            });
-            campo.addEventListener('blur', function(e) {
-                let valor = e.target.value;
-                e.target.value = formatarAoPerderFoco(valor);
-            });
-        });
+            
+            // Adiciona eventos ao campo de valor principal
+            campoValor.addEventListener('input', handleInput);
+            campoValor.addEventListener('blur', handleBlur);
+        }
+        
+        // Inicializa os campos de rateio
+        inicializarCamposRateio();
     });
-
 </script>
