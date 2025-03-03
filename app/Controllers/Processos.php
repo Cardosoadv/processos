@@ -315,6 +315,39 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/editarpornumerodeprocesso/' . $data['numero_processo']));
     }
 
+    /**
+     * Salva Vinculo entre processos
+     */
+    public function salvarVinculo()
+    {
+        $data = $this->request->getPost();
+        try{
+        $this->processoService->salvarVinculo($data);
+        return redirect()   ->to(base_url('processos/editar/' . $data['id_processo_a']))
+                            ->with('success', 'Vínculo salvo com sucesso');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Erro ao salvar vinculo: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Exclui um vinculo entre processos
+     */
+    public function excluirVinculo($id, $idProcesso){
+        try{
+        $this->processoService->excluirVinculo($id);
+        return redirect()   ->to(base_url('processos/consultarprocesso/' . $idProcesso))
+                            ->with('success', 'Vínculo excluido com sucesso');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Erro ao excluir vinculo: ' . $e->getMessage());
+        }
+    }
+
+
     ############################################################################################ 
     #                                                                                          #
     #        Metódos Auxiliares Relacionados à preparação dos dados do Pocessos                #

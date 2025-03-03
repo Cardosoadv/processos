@@ -14,6 +14,7 @@ class ProcessoService
     protected $intimacoesModel;
     protected $tarefasModel;
     protected $processosObjetoModel;
+    protected $processosVinculadosModel;
 
     public function __construct()
     {
@@ -25,6 +26,7 @@ class ProcessoService
         $this->intimacoesModel              = model('IntimacoesModel');
         $this->tarefasModel                 = model('TarefasModel');
         $this->processosObjetoModel         = model('ProcessoObjetoModel');
+        $this->processosVinculadosModel    = model('ProcessosVinculadosModel');
     }
 
     /**
@@ -127,6 +129,7 @@ class ProcessoService
                 ->getResultArray(),
             'etiquetas'         => $this->processosModel->joinEtiquetasProcessos($id),
             'tarefas'           => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray(),
+            'vinculos'          => $this->processosVinculadosModel->getVinculosProcesso($id),
             'objetos'           => $this->processosObjetoModel->listarObjetoProcesso($id),
         ];
     }
@@ -155,6 +158,7 @@ class ProcessoService
             } else {
                 $this->partesProcessoModel->deletarParteDoProcesso($id);
                 $result = $this->processosModel->update($id, $data);
+                
 
                 if (!$result) { // Check if update was successful
                     throw new \Exception('Failed to update process.');
@@ -279,5 +283,20 @@ class ProcessoService
     public function processoJaExiste(string $numeroProcesso): ?array
     {
         return $this->processosModel->where('numero_processo', $numeroProcesso)->first();
+    }
+
+    /**
+     * Salva Vinculo de Processos
+     */
+    public function salvarVinculo(array $data): void
+    {
+        $this->processosVinculadosModel->insert($data);
+    }
+    /**
+     * Excluir Vinculo de Processos
+     */
+    public function excluirVinculo(int $id): void
+    {
+        $this->processosVinculadosModel->delete($id);
     }
 }

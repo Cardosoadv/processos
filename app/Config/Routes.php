@@ -7,6 +7,4 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 
-// $routes->get('/processoobjeto/salvar', 'ProcessoObjeto::salvar');
-
 service('auth')->routes($routes);

@@ -57,14 +57,14 @@ class ProcessosModel extends Model
     protected $cleanValidationRules = true;
 
     // Callbacks
-    protected $allowCallbacks = true;
+    protected $allowCallbacks = false;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['auditoriaDeletarProcesso'];
+    protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
     public function getProcesso(string $parte){
@@ -76,6 +76,22 @@ class ProcessosModel extends Model
         ->distinct()
         ->get();
         return $query->getResultArray();
+    }
+
+    public function getNumeroProcessoComMascara($id) : string
+    {
+        $query = $this->db->table('processos')
+        ->select('numeroprocessocommascara')
+        ->where('id_processo', $id)
+        ->get();
+
+    $row = $query->getRowArray(); // Obtém a primeira linha como um array associativo
+
+    if ($row) {
+        return $row['numeroprocessocommascara'];
+    } else {
+        return ''; // Retorna uma string vazia se o processo não for encontrado
+    }
     }
     
     public function joinEtiquetasProcessos($id_processo){
@@ -166,8 +182,13 @@ class ProcessosModel extends Model
             'dados_novos' => json_encode($dados_novos),
             'ip_address' => service('request')->getIPAddress(),
         ]);
-        return $processo_id;
     }
+
+    public function getResultUpdate($data){
+        return $data;
+    }
+
+
     public function auditoriaDeletarProcesso($dados)
     {
         $auditoria = model('AuditoriaProcessos');
