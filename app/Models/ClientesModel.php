@@ -51,15 +51,18 @@ class ClientesModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = ['auditoriaNovoCliente'];
-    protected $beforeUpdate   = ['auditoriaAtualizarCliente'];
+    protected $afterInsert    = [];
+    protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = ['auditoriaDeletarCliente'];
+    protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-
+    public function jaExisteCliente($documento): bool
+    {
+        return $this->where('documento', $documento)->countAllResults() > 0;
+    }
 
     public function auditoriaNovoCliente($dados_novos)
     {

@@ -13,7 +13,7 @@ trait ValidacoesTrait
      /**
      * Função para validar CPF ou CNPJ
      */
-    private function validarCpfCnpj($cpf_cnpj)
+    public function validarCpfCnpj($cpf_cnpj)
     {
         // Remove caracteres não numéricos
         $cpf_cnpj = preg_replace('/[^0-9]/', '', $cpf_cnpj);
@@ -78,8 +78,4 @@ trait ValidacoesTrait
 
         return true;
     }
-
-
-
-
 }
