@@ -167,4 +167,4 @@ class FinanceiroDespesasModel extends Model
             return $carry + ($item['valor'] ?? 0);
         }, 0.0);
     }
-}
+} 

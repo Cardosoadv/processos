@@ -14,12 +14,12 @@ class FinanceiroContasModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
 
-            'conta',
-            'banco' ,
-            'agencia',
-            'numero_conta',
-            'pix',
-            'comentarios',
+        'conta',
+        'banco',
+        'agencia',
+        'numero_conta',
+        'pix',
+        'comentarios',
 
     ];
 
@@ -52,4 +52,10 @@ class FinanceiroContasModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+
+    public function getNomeConta($id=null){
+        $conta = $this->find($id);
+        return $conta['conta'] ?? '';
+    }
 }

@@ -41,9 +41,9 @@
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
-                                    <a href="<?= base_url('financeiro/despesas/novo/') ?>"
+                                    <a href="<?= base_url('financeiro/receitas/novo/') ?>"
                                         class="btn btn-success">
-                                        Novo despesa
+                                        Novo receita
                                     </a>
                                 </div>
                                 <!-- Inicio da Notificação -->
@@ -53,35 +53,40 @@
 
                                 <!-- Data Table -->
                                 <div class="mt-3">
-                                    <?php if (empty($pagtoDespesas)): ?>
+                                    <?php if (empty($receitas)): ?>
                                         <div class="alert alert-info">
-                                            Nenhum despesa encontrado.
+                                            Nenhum receita encontrado.
                                         </div>
                                     <?php else: ?>
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Despesa</th>
-                                                    <th>Pagamento</th>
+                                                    <th>Receita</th>
+                                                    <th>Vencimento</th>
                                                     <th>Valor</th>
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php foreach ($pagtoDespesas as $pagtoDespesa): ?>
+                                                <?php foreach ($receitas as $receita): ?>
                                                     <tr>
-                                                        <td><?= esc($pagtoDespesa['despesa']) ?></td>
-                                                        <td><?= date('d/m/Y', strtotime($pagtoDespesa['pagamento_despesa_dt'])) ?></td>
-                                                        <td><?= 'R$ ' . number_format($pagtoDespesa['valor'], 2, ',', '.') ?></td>
+                                                        <td><?= esc($receita['receita']) ?></td>
+                                                        <td><?= date('d/m/Y', strtotime($receita['vencimento_dt'])) ?></td>
+                                                        <td><?= 'R$ ' . number_format($receita['valor'], 2, ',', '.') ?></td>
                                                         <td>
-                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/editar/' . $pagtoDespesa['id_pgto_despesa']) ?>"
+                                                            <a href="<?= base_url('receitas/editar/' . $receita['id_receita']) ?>"
                                                                 class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
-                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/excluir/' . $pagtoDespesa['id_pgto_despesa']) ?>"
+                                                            <a href="<?= base_url('receitas/excluir/' . $receita['id_receita']) ?>"
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
+                                                            <a href="<?= base_url('financeiro/pagamentoReceitas/pagarReceita/' . $receita['id_receita']) ?>"
+                                                                class="btn btn-sm btn-secondary">
+                                                                Receber
+                                                            </a>
+                                                            
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

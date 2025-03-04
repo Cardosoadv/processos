@@ -96,7 +96,7 @@ class Processos extends BaseController
 
     ############################################################################################ 
     #                                                                                          #
-    #                Metódos Reacionados à Edição dos Pocessos                                 #
+    #                Metódos Relacionados à Edição dos Pocessos                                 #
     #                                                                                          #
     ############################################################################################
 
@@ -419,10 +419,10 @@ class Processos extends BaseController
     /**
      * Apenas redireciona para a Consulta de Processo
      * 
-     * @param int $id ID do processo
+     * @param int||null $id ID do processo
      * @return string
      */
-    public function editar(int $id = null)
+    public function editar(?int $id)
     {
         return redirect()->to(base_url('processos/consultarprocesso/' . $id));
     }

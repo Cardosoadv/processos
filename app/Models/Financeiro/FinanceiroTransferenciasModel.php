@@ -4,19 +4,21 @@ namespace App\Models\Financeiro;
 
 use CodeIgniter\Model;
 
-class FinanceiroCategoriasModel extends Model
+class FinanceiroTransferenciasModel extends Model
 {
-    protected $table            = 'fin_categorias';
-    protected $primaryKey       = 'id_categoria';
+    protected $table            = 'fin_transferencias';
+    protected $primaryKey       = 'id_transferencia';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
- 
-        'categoria',
-        'cor',
-        'comentarios'  
+        'transferencia',
+        'data_transferencia',
+        'id_conta_origem',
+        'id_conta_destino',
+        'valor',
+        'comentarios',
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -26,7 +28,7 @@ class FinanceiroCategoriasModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -48,4 +50,11 @@ class FinanceiroCategoriasModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getNomeTransferencia($id = null)
+    {
+        $transferencia = $this->find($id);
+        return $transferencia['transferencia'] ?? '';
+    }
+
 }

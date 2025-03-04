@@ -1,3 +1,13 @@
+<?php
+function nomeConta($id = null)
+{
+    return model('Financeiro/FinanceiroContasModel')->getNomeConta($id);
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -41,9 +51,9 @@
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
-                                    <a href="<?= base_url('financeiro/despesas/novo/') ?>"
+                                    <a href="<?= base_url('financeiro/transferencias/novo/') ?>"
                                         class="btn btn-success">
-                                        Novo despesa
+                                        Nova transferencias
                                     </a>
                                 </div>
                                 <!-- Inicio da Notificação -->
@@ -53,32 +63,36 @@
 
                                 <!-- Data Table -->
                                 <div class="mt-3">
-                                    <?php if (empty($pagtoDespesas)): ?>
+                                    <?php if (empty($transferencias)): ?>
                                         <div class="alert alert-info">
-                                            Nenhum despesa encontrado.
+                                            Nenhuma transferencia encontrada.
                                         </div>
                                     <?php else: ?>
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
-                                                    <th>Despesa</th>
-                                                    <th>Pagamento</th>
+                                                    <th>Data</th>
+                                                    <th>Transferencia</th>
+                                                    <th>De</th>
+                                                    <th>Para</th>
                                                     <th>Valor</th>
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php foreach ($pagtoDespesas as $pagtoDespesa): ?>
+                                                <?php foreach ($transferencias as $transferencia): ?>
                                                     <tr>
-                                                        <td><?= esc($pagtoDespesa['despesa']) ?></td>
-                                                        <td><?= date('d/m/Y', strtotime($pagtoDespesa['pagamento_despesa_dt'])) ?></td>
-                                                        <td><?= 'R$ ' . number_format($pagtoDespesa['valor'], 2, ',', '.') ?></td>
+                                                        <td><?= esc($transferencia['transferencia']) ?></td>
+                                                        <td><?= !empty($transferencia['data_transferencia']) ? date('d/m/Y', strtotime($transferencia['data_transferencia'])) : 'Data inválida' ?></td>
+                                                        <td><?= nomeConta(esc($transferencia['id_conta_origem'])) ?></td>
+                                                        <td><?= nomeConta(esc($transferencia['id_conta_destino'])) ?></td>
+                                                        <td>R$ <?= number_format($transferencia['valor'], 2, ',', '.') ?></td>
                                                         <td>
-                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/editar/' . $pagtoDespesa['id_pgto_despesa']) ?>"
+                                                            <a href="<?= base_url('financeiro/transferencias/editar/' . $transferencia['id_transferencia']) ?>"
                                                                 class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
-                                                            <a href="<?= base_url('financeiro/pagamentoDespesas/excluir/' . $pagtoDespesa['id_pgto_despesa']) ?>"
+                                                            <a href="<?= base_url('financeiro/transferencias/excluir/' . $transferencia['id_transferencia']) ?>"
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
@@ -94,7 +108,7 @@
                         </div>
 
                         <!-- Sidebar -->
-                        
+
                     </div>
                 </div>
             </div>
@@ -104,7 +118,6 @@
 
         <?= $this->include('template/footer') ?>
     </div>
-
 
 </body>
 

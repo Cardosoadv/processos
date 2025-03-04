@@ -60,10 +60,10 @@ class ProcessosMovimentosModel extends Model
     public function getProcessoMovimentadoPeriodo($dataInicial, $dataFinal){
         $dtInicial = date('Y-m-d', strtotime($dataInicial));
         $dtFinal = date('Y-m-d', strtotime($dataFinal));
-        $data = $this->where('dataHora >=',$dtInicial)
-                     ->where('dataHora <=',$dtFinal)
-                     ->orderBy('dataHora', 'DESC')
-                     ->get()->getResultArray();
+        $data = $this   ->where('dataHora >=',$dtInicial)
+                        ->where('dataHora <=',$dtFinal)
+                        ->orderBy('dataHora', 'ASC')
+                        ->get()->getResultArray();
         return $data;
     }
 

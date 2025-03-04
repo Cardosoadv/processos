@@ -4,12 +4,13 @@ namespace App\Controllers\Financeiro;
 
 use App\Controllers\BaseController;
 use App\Traits\FormataValorTrait;
-
+use App\Traits\ValidacoesTrait;
 use Exception;
 
 class Despesas extends BaseController
 {
     use FormataValorTrait;
+    use ValidacoesTrait;
 
     public function index()
     {
@@ -58,7 +59,7 @@ class Despesas extends BaseController
             try{
                 model('Financeiro/FinanceiroDespesasModel')->insert($data);
             $id = model('Financeiro/FinanceiroDespesasModel')->getInsertID();
-            return redirect()->to(base_url('despesas/editar/'.$id))->with('success', 'Despesa salvo com sucesso');
+            return redirect()->to(base_url('financeiro/despesas/editar/'.$id))->with('success', 'Despesa salvo com sucesso');
             }
             catch(Exception $e){
 
@@ -70,7 +71,7 @@ class Despesas extends BaseController
 
         try{
             model('Financeiro/FinanceiroDespesasModel')->update($id, $data);
-            return redirect()->to(base_url('despesas/editar/'.$id))->with('success', 'Dados do despesa atualizado com sucesso');
+            return redirect()->to(base_url('financeiro/despesas/editar/'.$id))->with('success', 'Dados do despesa atualizado com sucesso');
             }
             catch(Exception $e){
 
@@ -101,84 +102,10 @@ class Despesas extends BaseController
     public function excluir($id){
         try{
             model('Financeiro/FinanceiroDespesasModel')->delete($id);
-            return redirect()->to(base_url('despesas'))->with('success', 'Despesa excluído com sucesso');
+            return redirect()->to(base_url('financeiro/despesas'))->with('success', 'Despesa excluído com sucesso');
         }
         catch(Exception $e){
-            return redirect()->to(base_url('despesas'))->with('error', 'Erro ao excluir Despesa: ' . $e->getMessage());
+            return redirect()->to(base_url('financeiro/despesas'))->with('error', 'Erro ao excluir Despesa: ' . $e->getMessage());
         }
-    }
-
-
-    #------------------------------------------------------------------------------------------------
-    #                            VALIDAÇÃO CPF OU CNPJ
-    #------------------------------------------------------------------------------------------------
-
-     /**
-     * Função para validar CPF ou CNPJ
-     */
-    private function validarCpfCnpj($cpf_cnpj)
-    {
-        // Remove caracteres não numéricos
-        $cpf_cnpj = preg_replace('/[^0-9]/', '', $cpf_cnpj);
-
-        // Verifica se é CPF
-        if (strlen($cpf_cnpj) == 11) {
-            return $this->validarCpf($cpf_cnpj);
-        }
-
-        // Verifica se é CNPJ
-        if (strlen($cpf_cnpj) == 14) {
-            return $this->validarCnpj($cpf_cnpj);
-        }
-
-        return false;
-    }
-
-    /**
-     * Função para validar CPF
-     */
-    private function validarCpf($cpf)
-    {
-        // Verifica se todos os dígitos são iguais
-        if (preg_match('/(\d)\1{10}/', $cpf)) {
-            return false;
-        }
-
-        // Validação do CPF
-        for ($t = 9; $t < 11; $t++) {
-            for ($d = 0, $c = 0; $c < $t; $c++) {
-                $d += $cpf[$c] * (($t + 1) - $c);
-            }
-            $d = ((10 * $d) % 11) % 10;
-            if ($cpf[$c] != $d) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Função para validar CNPJ
-     */
-    private function validarCnpj($cnpj)
-    {
-        // Verifica se todos os dígitos são iguais
-        if (preg_match('/(\d)\1{13}/', $cnpj)) {
-            return false;
-        }
-
-        // Validação do CNPJ
-        for ($t = 12; $t < 14; $t++) {
-            for ($d = 0, $p = $t - 7, $c = 0; $c < $t; $c++) {
-                $d += $cnpj[$c] * $p;
-                $p = ($p == 2 || $p == 9) ? 9 : --$p;
-            }
-            $d = ((10 * $d) % 11) % 10;
-            if ($cnpj[$c] != $d) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

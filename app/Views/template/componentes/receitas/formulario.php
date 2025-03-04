@@ -1,29 +1,28 @@
 <?php
-$fornecedores = model('Financeiro/FinanceiroFornecedoresModel')->findAll();
+$clientes = model('ClientesModel')->findAll();
 $categorias = model('Financeiro/FinanceiroCategoriasModel')->findAll();
 $users = model('ResposavelModel')->findAll();
 ?>
-<form method="post" id="form_despesa" name="form_despesa" action="<?= site_url('despesas/salvar') ?>">
-    <input type="hidden" name="id_despesa" value="<?= $despesa['id_despesa'] ?? '' ?>">
+<form method="post" id="form_receita" name="form_receita" action="<?= site_url('financeiro/receitas/salvar') ?>">
+    <input type="hidden" name="id_receita" value="<?= $receita['id_receita'] ?? '' ?>">
     <div class="row mb-3">
         <div class="form-group col">
-            <label for="despesa">Despesa</label>
-            <input type="text" class="form-control" name="despesa" id="despesa" value="<?= $despesa['despesa'] ?? '' ?>" required>
+            <label for="receita">Receita</label>
+            <input type="text" class="form-control" name="receita" id="receita" value="<?= $receita['receita'] ?? '' ?>" required>
         </div>
     </div>
     <div class="row mb-3">
         <div class="form-group col">
             <label for="vencimento_dt">Data de Vencimento</label>
-            <input type="date" class="form-control" name="vencimento_dt" id="vencimento_dt" value="<?= $despesa['vencimento_dt'] ?? '' ?>" required>
+            <input type="date" class="form-control" name="vencimento_dt" id="vencimento_dt" value="<?= $receita['vencimento_dt'] ?? '' ?>" required>
         </div>
         <div class="form-group col">
             <label for="valor">Valor</label>
             <div class="input-group">
                 <span class="input-group-text">R$</span>
-                <input type="text" class="form-control" name="valor" id="valor" value="<?= $despesa['valor'] ?? '' ?>" required>
+                <input type="text" class="form-control" name="valor" id="valor" value="<?= $receita['valor'] ?? '' ?>" required>
             </div>
         </div>
-    </div>
         <div class="row mb-3">
             <div class="form-group col">
                 <label for="categoria">Categoria</label>
@@ -31,7 +30,7 @@ $users = model('ResposavelModel')->findAll();
                     <option value="">Selecione uma categoria</option>
                     <?php if (!empty($categorias)): ?>
                         <?php foreach ($categorias as $categoria): ?>
-                            <option value="<?= $categoria['id_categoria'] ?>" <?= isset($despesa['categoria']) && $despesa['categoria'] == $categoria['id_categoria'] ? 'selected' : '' ?>>
+                            <option value="<?= $categoria['id_categoria'] ?>" <?= isset($receita['categoria']) && $receita['categoria'] == $categoria['id_categoria'] ? 'selected' : '' ?>>
                                 <?= $categoria['categoria'] ?>
                             </option>
                         <?php endforeach; ?>
@@ -39,13 +38,13 @@ $users = model('ResposavelModel')->findAll();
                 </select>
             </div>
             <div class="form-group col">
-                <label for="fornecedor">Fornecedor</label>
-                <select class="form-control" name="fornecedor" id="fornecedor">
-                    <option value="">Selecione um fornecedor</option>
-                    <?php if (!empty($fornecedores)): ?>
-                        <?php foreach ($fornecedores as $fornecedor): ?>
-                            <option value="<?= $fornecedor['id_fornecedor'] ?>" <?= isset($despesa['fornecedor']) && $despesa['fornecedor'] == $fornecedor['id_fornecedor'] ? 'selected' : '' ?>>
-                                <?= $fornecedor['nome'] ?>
+                <label for="cliente">Cliente</label>
+                <select class="form-control" name="cliente" id="cliente">
+                    <option value="">Selecione um cliente</option>
+                    <?php if (!empty($clientes)): ?>
+                        <?php foreach ($clientes as $cliente): ?>
+                            <option value="<?= $cliente['id_cliente'] ?>" <?= isset($receita['cliente']) && $receita['cliente'] == $cliente['id_cliente'] ? 'selected' : '' ?>>
+                                <?= $cliente['nome'] ?>
                             </option>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -55,7 +54,7 @@ $users = model('ResposavelModel')->findAll();
         <div class="row mb-3">
             <div class="form-group col">
                 <label for="comentario">Comentário</label>
-                <textarea class="form-control" name="comentario" id="comentario"><?= $despesa['comentario'] ?? '' ?></textarea>
+                <textarea class="form-control" name="comentario" id="comentario"><?= $receita['comentario'] ?? '' ?></textarea>
             </div>
         </div>
 
@@ -70,13 +69,13 @@ $users = model('ResposavelModel')->findAll();
                 <div id="container-rateio">
                     <?php if (!empty($users)): ?>
                         <?php
-                        if (isset($despesa['rateio']) && !is_array($despesa['rateio'])) {
-                            $despesa['rateio'] = json_decode($despesa['rateio'], true);
+                        if (isset($receita['rateio']) && !is_array($receita['rateio'])) {
+                            $receita['rateio'] = json_decode($receita['rateio'], true);
                         }
 
-                        $rateio = $despesa['rateio'] ?? [];
-                        $numero_de_despesas = count($rateio);
-                        for ($i = 0; $i < max(2, $numero_de_despesas); $i++):
+                        $rateio = $receita['rateio'] ?? [];
+                        $numero_de_receitas = count($rateio);
+                        for ($i = 0; $i < max(2, $numero_de_receitas); $i++):
                         ?>
                             <div class="row mt-1 rateio-row">
                                 <div class="col-8">
@@ -109,7 +108,7 @@ $users = model('ResposavelModel')->findAll();
 
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">Salvar</button>
-            <a href="<?= site_url('/despesas/') ?>" class="btn btn-outline-secondary">Cancelar</a>
+            <a href="<?= site_url('financeiro/receitas/') ?>" class="btn btn-outline-secondary">Cancelar</a>
         </div>
 </form>
 
