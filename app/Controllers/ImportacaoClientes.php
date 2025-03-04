@@ -57,7 +57,7 @@ class ImportacaoClientes extends BaseController
 
         $resultado = $this->processarArquivoTxt($arquivo);
 
-        return redirect()->to('importacaoclientes')->with('message', $resultado);
+        return redirect()->to('importacaoClientes')->with('message', $resultado);
     }
 
     /**
@@ -121,7 +121,7 @@ class ImportacaoClientes extends BaseController
                 $linhasErro++;
                 continue;
             }
-            
+
             $dados['documento'] = $this->formataValorCpf_cnpj($dados['documento']); 
             // Verifica se o cliente já existe no banco de dados
             if ($this->clientesModel->jaExisteCliente($dados['documento'])) {
