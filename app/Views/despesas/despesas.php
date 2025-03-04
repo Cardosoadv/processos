@@ -43,7 +43,7 @@
                                 <div class="d-flex justify-content-end mb-3">
                                     <a href="<?= base_url('financeiro/despesas/novo/') ?>"
                                         class="btn btn-success">
-                                        Novo despesa
+                                        Nova despesa
                                     </a>
                                 </div>
                                 <!-- Inicio da Notificação -->
@@ -74,11 +74,11 @@
                                                         <td><?= date('d/m/Y', strtotime($despesa['despesa'])) ?></td>
                                                         <td><?= 'R$ ' . number_format($despesa['valor'], 2, ',', '.') ?></td>
                                                         <td>
-                                                            <a href="<?= base_url('despesas/editar/' . $despesa['id_despesa']) ?>"
+                                                            <a href="<?= base_url('financeiro/despesas/editar/' . $despesa['id_despesa']) ?>"
                                                                 class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
-                                                            <a href="<?= base_url('despesas/excluir/' . $despesa['id_despesa']) ?>"
+                                                            <a href="<?= base_url('financeiro/despesas/excluir/' . $despesa['id_despesa']) ?>"
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>

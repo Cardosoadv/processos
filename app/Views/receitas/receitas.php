@@ -43,7 +43,7 @@
                                 <div class="d-flex justify-content-end mb-3">
                                     <a href="<?= base_url('financeiro/receitas/novo/') ?>"
                                         class="btn btn-success">
-                                        Novo receita
+                                        Nova receita
                                     </a>
                                 </div>
                                 <!-- Inicio da Notificação -->
@@ -74,11 +74,11 @@
                                                         <td><?= date('d/m/Y', strtotime($receita['vencimento_dt'])) ?></td>
                                                         <td><?= 'R$ ' . number_format($receita['valor'], 2, ',', '.') ?></td>
                                                         <td>
-                                                            <a href="<?= base_url('receitas/editar/' . $receita['id_receita']) ?>"
+                                                            <a href="<?= base_url('financeiro/receitas/editar/' . $receita['id_receita']) ?>"
                                                                 class="btn btn-sm btn-primary">
                                                                 Editar
                                                             </a>
-                                                            <a href="<?= base_url('receitas/excluir/' . $receita['id_receita']) ?>"
+                                                            <a href="<?= base_url('financeiro/receitas/excluir/' . $receita['id_receita']) ?>"
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>

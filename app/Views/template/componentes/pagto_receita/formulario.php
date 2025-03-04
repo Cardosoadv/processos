@@ -51,7 +51,7 @@ $receitas = model('Financeiro/FinanceiroReceitasModel')->findAll();
     <div class="row mb-3">
         <div class="form-group col">
             <label for="comentario">Comentário</label>
-            <textarea class="form-control" name="comentario" id="comentario"></textarea>
+            <textarea class="form-control" name="comentario" id="comentario"><?= $pagtoReceita['comentario'] ?? '' ?></textarea>
         </div>
     </div>
 

@@ -3,7 +3,7 @@ $fornecedores = model('Financeiro/FinanceiroFornecedoresModel')->findAll();
 $categorias = model('Financeiro/FinanceiroCategoriasModel')->findAll();
 $users = model('ResposavelModel')->findAll();
 ?>
-<form method="post" id="form_despesa" name="form_despesa" action="<?= site_url('despesas/salvar') ?>">
+<form method="post" id="form_despesa" name="form_despesa" action="<?= site_url('financeiro/despesas/salvar') ?>">
     <input type="hidden" name="id_despesa" value="<?= $despesa['id_despesa'] ?? '' ?>">
     <div class="row mb-3">
         <div class="form-group col">
@@ -109,7 +109,7 @@ $users = model('ResposavelModel')->findAll();
 
         <div class="mt-3">
             <button type="submit" class="btn btn-primary">Salvar</button>
-            <a href="<?= site_url('/despesas/') ?>" class="btn btn-outline-secondary">Cancelar</a>
+            <a href="<?= site_url('financeiro/despesas/') ?>" class="btn btn-outline-secondary">Cancelar</a>
         </div>
 </form>
 
