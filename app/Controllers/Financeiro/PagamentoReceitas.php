@@ -54,7 +54,7 @@ class PagamentoReceitas extends BaseController
                 model('Financeiro/FinanceiroPagtoReceitasModel')->insert($data);
                 $id = model('Financeiro/FinanceiroPagtoReceitasModel')->getInsertID();
                 return redirect()
-                    ->to(base_url('financeiro/pagamentoreceitas/editar/'.$id))
+                    ->to(base_url('financeiro/pagamentoReceitas/editar/'.$id))
                     ->with('success', 'Pagamento salvo com sucesso');
             } catch (Exception $e) {
                 return redirect()
