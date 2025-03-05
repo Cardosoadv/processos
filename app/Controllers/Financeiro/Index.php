@@ -68,8 +68,11 @@ class Index extends BaseController
                         $rateioAcumuladoPorId[$id] = 0;
                     }
 
+                    // Ajustar o valor baseado no tipo de registro (subtrair para despesas)
+                    $valorAjustado = $registro['tipo'] === 'despesa' ? -$valor : $valor;
+
                     // Acumular o valor para este ID
-                    $rateioAcumuladoPorId[$id] += $valor;
+                    $rateioAcumuladoPorId[$id] += $valorAjustado;
 
                     // Adicionar ao rateio detalhado do registro
                     $registro['rateio_detalhado'][] = [
