@@ -3,10 +3,20 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Traits\ValidacoesTrait;
 use Exception;
 
 class Fornecedores extends BaseController
 {
+    use ValidacoesTrait;
+
+    protected $fornecedoresModel;
+
+    public function __construct()
+    {
+        $this->fornecedoresModel = model('FornecedoresModel');
+    }
+
     public function index()
     {
         $data = [
@@ -14,19 +24,18 @@ class Fornecedores extends BaseController
         ];
         $s = $this->request->getGet('s');
         
-        $fornecedoresModel = model('Financeiro/FinanceiroFornecedoresModel');
 
         if($s !== null){
-            $fornecedoresModel  ->like('nome', $s);
+            $this->fornecedoresModel  ->like('nome', $s);
             
-            $data['fornecedores'] = $fornecedoresModel->paginate(25);
-            $data['pager'] = $fornecedoresModel->pager;
+            $data['fornecedores'] = $this->fornecedoresModel->paginate(25);
+            $data['pager'] = $this->fornecedoresModel->pager;
 
             return view('fornecedores/fornecedores', $data);                    
             }
         
-        $data['fornecedores'] = $fornecedoresModel->paginate(25);
-        $data['pager'] = $fornecedoresModel->pager;
+        $data['fornecedores'] = $this->fornecedoresModel->paginate(25);
+        $data['pager'] = $this->fornecedoresModel->pager;
 
         return view('fornecedores/fornecedores', $data);
 
@@ -36,6 +45,7 @@ class Fornecedores extends BaseController
 
         $id = $this->request->getPost('id_fornecedor') ?? null;
         $data = $this->request->getPost();
+        log_message('info', 'Dados do formulário: ' . json_encode($data));
 
         // Validação do CPF ou CNPJ
         $cpf_cnpj = $data['documento'] ?? null;
@@ -50,12 +60,12 @@ class Fornecedores extends BaseController
         if(! is_numeric($id)){
 
             try{
-                model('Financeiro/FinanceiroFornecedoresModel')->insert($data);
-            $id = model('Financeiro/FinanceiroFornecedoresModel')->getInsertID();
+                $this->fornecedoresModel->insert($data);
+            $id = $this->fornecedoresModel->getInsertID();
             return redirect()->to(base_url('fornecedores/editar/'.$id))->with('success', 'Fornecedor salvo com sucesso');
             }
             catch(Exception $e){
-
+                log_message('info', 'Erro ao inserir Fornecedor: ' . $e->getMessage());
                 return redirect()   ->back()
                                     ->withInput()
                                     ->with('error', 'Erro ao salvar Fornecedor: ' . $e->getMessage());
@@ -63,7 +73,8 @@ class Fornecedores extends BaseController
         }
 
         try{
-            model('Financeiro/FinanceiroFornecedoresModel')->update($id, $data);
+            log_message('info', 'Atualizando dados do Fornecedor: ' . $id);
+            $this->fornecedoresModel->update($id, $data);
             return redirect()->to(base_url('fornecedores/editar/'.$id))->with('success', 'Dados do fornecedor atualizado com sucesso');
             }
             catch(Exception $e){
@@ -79,7 +90,7 @@ class Fornecedores extends BaseController
         $data = [  
             'titulo'    => 'Editar Dados do Fornecedor',
         ];
-        $data['fornecedor'] = model('Financeiro/FinanceiroFornecedoresModel')->find($id);
+        $data['fornecedor'] = $this->fornecedoresModel->find($id);
 
         return view('fornecedores/consultarFornecedores', $data);
     }
@@ -94,85 +105,11 @@ class Fornecedores extends BaseController
 
     public function excluir($id){
         try{
-            model('Financeiro/FinanceiroFornecedoresModel')->delete($id);
+            $this->fornecedoresModel->delete($id);
             return redirect()->to(base_url('fornecedores'))->with('success', 'Fornecedor excluído com sucesso');
         }
         catch(Exception $e){
             return redirect()->to(base_url('fornecedores'))->with('error', 'Erro ao excluir Fornecedor: ' . $e->getMessage());
         }
-    }
-
-
-    #------------------------------------------------------------------------------------------------
-    #                            VALIDAÇÃO CPF OU CNPJ
-    #------------------------------------------------------------------------------------------------
-
-     /**
-     * Função para validar CPF ou CNPJ
-     */
-    private function validarCpfCnpj($cpf_cnpj)
-    {
-        // Remove caracteres não numéricos
-        $cpf_cnpj = preg_replace('/[^0-9]/', '', $cpf_cnpj);
-
-        // Verifica se é CPF
-        if (strlen($cpf_cnpj) == 11) {
-            return $this->validarCpf($cpf_cnpj);
-        }
-
-        // Verifica se é CNPJ
-        if (strlen($cpf_cnpj) == 14) {
-            return $this->validarCnpj($cpf_cnpj);
-        }
-
-        return false;
-    }
-
-    /**
-     * Função para validar CPF
-     */
-    private function validarCpf($cpf)
-    {
-        // Verifica se todos os dígitos são iguais
-        if (preg_match('/(\d)\1{10}/', $cpf)) {
-            return false;
-        }
-
-        // Validação do CPF
-        for ($t = 9; $t < 11; $t++) {
-            for ($d = 0, $c = 0; $c < $t; $c++) {
-                $d += $cpf[$c] * (($t + 1) - $c);
-            }
-            $d = ((10 * $d) % 11) % 10;
-            if ($cpf[$c] != $d) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Função para validar CNPJ
-     */
-    private function validarCnpj($cnpj)
-    {
-        // Verifica se todos os dígitos são iguais
-        if (preg_match('/(\d)\1{13}/', $cnpj)) {
-            return false;
-        }
-
-        // Validação do CNPJ
-        for ($t = 12; $t < 14; $t++) {
-            for ($d = 0, $p = $t - 7, $c = 0; $c < $t; $c++) {
-                $d += $cnpj[$c] * $p;
-                $p = ($p == 2 || $p == 9) ? 9 : --$p;
-            }
-            $d = ((10 * $d) % 11) % 10;
-            if ($cnpj[$c] != $d) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }

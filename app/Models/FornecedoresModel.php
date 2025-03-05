@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models\Financeiro;
+namespace App\Models;
 
 use CodeIgniter\Model;
 
-class FinanceiroFornecedoresModel extends Model
+class FornecedoresModel extends Model
 {
     protected $table            = 'fin_fornecedores';
     protected $primaryKey       = 'id_fornecedor';
@@ -13,7 +13,6 @@ class FinanceiroFornecedoresModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        
             'tipo_pessoa',
             'nome',
             'documento',
@@ -26,7 +25,6 @@ class FinanceiroFornecedoresModel extends Model
             'uf',
             'razao_social',
             'ativo',
-            
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -50,12 +48,38 @@ class FinanceiroFornecedoresModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
+    protected $beforeInsert   = ['beforeInsert'];
+    protected $afterInsert    = ['afterInsert'];
+    protected $beforeUpdate   = ['beforeUpdate'];
+    protected $afterUpdate    = ['afterUpdate'];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    protected function beforeInsert(array $data)
+    {
+        log_message('info', 'FornecedoresModel::beforeInsert - Dados: ' . json_encode($data['data']));
+        return $data;
+    }
+
+    protected function afterInsert(array $data)
+    {
+        log_message('info', 'FornecedoresModel::afterInsert - Resultado: ' . json_encode($data));
+        return $data;
+    }
+
+    protected function beforeUpdate(array $data)
+    {
+        log_message('info', 'FornecedoresModel::beforeUpdate - Dados: ' . json_encode($data['data']));
+        return $data;
+    }
+
+    protected function afterUpdate(array $data)
+    {
+        log_message('info', 'FornecedoresModel::afterUpdate - Resultado: ' . json_encode($data));
+        return $data;
+    }
+
+
 }
