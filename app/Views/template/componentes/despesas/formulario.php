@@ -1,5 +1,5 @@
 <?php
-$fornecedores = model('Financeiro/FinanceiroFornecedoresModel')->findAll();
+$fornecedores = model('FornecedoresModel')->findAll();
 $categorias = model('Financeiro/FinanceiroCategoriasModel')->findAll();
 $users = model('ResposavelModel')->findAll();
 ?>

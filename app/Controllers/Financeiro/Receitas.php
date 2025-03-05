@@ -48,7 +48,7 @@ class Receitas extends BaseController
             try{
                 model('Financeiro/FinanceiroReceitasModel')->insert($data);
             $id = model('Financeiro/FinanceiroReceitasModel')->getInsertID();
-            return redirect()->to(base_url('financeiro/receitas/editar/'.$id))->with('success', 'Receita salvo com sucesso');
+            return redirect()->to(base_url('financeiro/pagamentoReceitas/pagarReceita/'.$id))->with('success', 'Receita salva com sucesso');
             }
             catch(Exception $e){
 

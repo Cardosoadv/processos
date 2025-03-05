@@ -53,13 +53,13 @@ class Despesas extends BaseController
                                     ->with('error', 'CPF ou CNPJ inválido.');
             }
         }
-
+ 
         if(! is_numeric($id)){
 
             try{
                 model('Financeiro/FinanceiroDespesasModel')->insert($data);
             $id = model('Financeiro/FinanceiroDespesasModel')->getInsertID();
-            return redirect()->to(base_url('financeiro/despesas/editar/'.$id))->with('success', 'Despesa salvo com sucesso');
+            return redirect()->to(base_url('financeiro/pagamentoDespesas/pagarDespesa/'.$id))->with('success', 'Despesa salvo com sucesso');
             }
             catch(Exception $e){
 
