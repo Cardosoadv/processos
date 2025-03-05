@@ -71,7 +71,7 @@
                                                 <?php foreach ($despesas as $despesa): ?>
                                                     <tr>
                                                         <td><?= esc($despesa['despesa']) ?></td>
-                                                        <td><?= date('d/m/Y', strtotime($despesa['despesa'])) ?></td>
+                                                        <td><?= date('d/m/Y', strtotime($despesa['vencimento_dt'])) ?></td>
                                                         <td><?= 'R$ ' . number_format($despesa['valor'], 2, ',', '.') ?></td>
                                                         <td>
                                                             <a href="<?= base_url('financeiro/despesas/editar/' . $despesa['id_despesa']) ?>"
