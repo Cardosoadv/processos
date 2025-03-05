@@ -18,6 +18,7 @@ class FinanceiroReceitasModel extends Model
             'receita',
             'vencimento_dt',
             'valor',
+            'categoria',
             'cliente_id',
             'comentario',
             'rateio',
@@ -144,5 +145,6 @@ class FinanceiroReceitasModel extends Model
             return $carry + ($item['valor'] ?? 0);
         }, 0.0);
     }
+
 
 }

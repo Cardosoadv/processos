@@ -12,26 +12,31 @@ class Receitas extends BaseController
     use FormataValorTrait;
     use ValidacoesTrait;
 
+    protected $receitasModel;
+
+    public function __construct(){
+        $this->receitasModel = model('Financeiro/FinanceiroReceitasModel');
+    }
+
     public function index()
     {
         $data = [
             'titulo'    => 'Receitas',
         ];
         $s = $this->request->getGet('s');
-        
-        $receitasModel = model('Financeiro/FinanceiroReceitasModel');
+
 
         if($s !== null){
-            $receitasModel  ->like('nome', $s);
+            $this->receitasModel  ->like('nome', $s);
             
-            $data['receitas'] = $receitasModel->paginate(25);
-            $data['pager'] = $receitasModel->pager;
+            $data['receitas'] = $this->receitasModel->paginate(25);
+            $data['pager'] = $this->receitasModel->pager;
 
             return view('receitas/receitas', $data);                    
             }
         
-        $data['receitas'] = $receitasModel->paginate(25);
-        $data['pager'] = $receitasModel->pager;
+        $data['receitas'] = $this->receitasModel->paginate(25);
+        $data['pager'] = $this->receitasModel->pager;
 
         return view('receitas/receitas', $data);
 
@@ -42,12 +47,15 @@ class Receitas extends BaseController
         $id = $this->request->getPost('id_receita') ?? null;
         $data = $this->request->getPost();
         $data['valor'] = $this->formatarValorParaBanco($this->request->getPost('valor'));
+        $data['categoria'] = (int)$this->request->getPost('categoria');
+        $data['cliente_id'] = (int)$this->request->getPost('cliente_id');
+        log_message('info', 'Dados do formulário de Receitas: ' . json_encode($data));
 
         if(! is_numeric($id)){
 
             try{
-                model('Financeiro/FinanceiroReceitasModel')->insert($data);
-            $id = model('Financeiro/FinanceiroReceitasModel')->getInsertID();
+                $this->receitasModel->insert($data);
+                $id = $this->receitasModel->getInsertID();
             return redirect()->to(base_url('financeiro/pagamentoReceitas/pagarReceita/'.$id))->with('success', 'Receita salva com sucesso');
             }
             catch(Exception $e){
@@ -59,7 +67,7 @@ class Receitas extends BaseController
         }
 
         try{
-            model('Financeiro/FinanceiroReceitasModel')->update($id, $data);
+            $this->receitasModel->update($id, $data);
             return redirect()->to(base_url('financeiro/receitas/editar/'.$id))->with('success', 'Dados da receita atualizado com sucesso');
             }
             catch(Exception $e){
@@ -75,7 +83,7 @@ class Receitas extends BaseController
         $data = [  
             'titulo'    => 'Editar Dados da Receita',
         ];
-        $data['receita'] = model('Financeiro/FinanceiroReceitasModel')->find($id);
+        $data['receita'] = $this->receitasModel->find($id);
 
         return view('receitas/consultarReceitas', $data);
     }
@@ -90,13 +98,11 @@ class Receitas extends BaseController
 
     public function excluir($id){
         try{
-            model('Financeiro/FinanceiroReceitasModel')->delete($id);
+            $this->receitasModel->delete($id);
             return redirect()->to(base_url('financeiro/receitas'))->with('success', 'Receita excluída com sucesso');
         }
         catch(Exception $e){
             return redirect()->to(base_url('financeiro/receitas'))->with('error', 'Erro ao excluir Receita: ' . $e->getMessage());
         }
     }
-
-
 }

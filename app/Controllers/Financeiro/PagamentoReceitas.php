@@ -141,7 +141,7 @@ class PagamentoReceitas extends BaseController
         try {
             model('Financeiro/FinanceiroPagtoReceitasModel')->delete($id);
             return redirect()
-                ->to(base_url('financeiro/pagamentoreceitas'))
+                ->to(base_url('financeiro/pagamentoReceitas'))
                 ->with('success', 'Pagamento excluído com sucesso');
         } catch (Exception $e) {
             return redirect()

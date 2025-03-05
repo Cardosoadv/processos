@@ -38,12 +38,12 @@ $users = model('ResposavelModel')->findAll();
                 </select>
             </div>
             <div class="form-group col">
-                <label for="cliente">Cliente</label>
-                <select class="form-control" name="cliente" id="cliente">
+                <label for="cliente_id">Cliente</label>
+                <select class="form-control" name="cliente_id" id="cliente_id">
                     <option value="">Selecione um cliente</option>
                     <?php if (!empty($clientes)): ?>
                         <?php foreach ($clientes as $cliente): ?>
-                            <option value="<?= $cliente['id_cliente'] ?>" <?= isset($receita['cliente']) && $receita['cliente'] == $cliente['id_cliente'] ? 'selected' : '' ?>>
+                            <option value="<?= $cliente['id_cliente'] ?>" <?= isset($receita['cliente_id']) && $receita['cliente_id'] == $cliente['id_cliente'] ? 'selected' : '' ?>>
                                 <?= $cliente['nome'] ?>
                             </option>
                         <?php endforeach; ?>
