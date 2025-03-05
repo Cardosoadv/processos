@@ -54,7 +54,7 @@ class PagamentoDespesas extends BaseController
                 model('Financeiro/FinanceiroPagtoDespesasModel')->insert($data);
                 $id = model('Financeiro/FinanceiroPagtoDespesasModel')->getInsertID();
                 return redirect()
-                    ->to(base_url('financeiro/pagamentodespesas/editar/'.$id))
+                    ->to(base_url('financeiro/pagamentoDespesas/editar/'.$id))
                     ->with('success', 'Pagamento salvo com sucesso');
             } catch (Exception $e) {
                 return redirect()
@@ -67,7 +67,7 @@ class PagamentoDespesas extends BaseController
         try {
             model('Financeiro/FinanceiroPagtoDespesasModel')->update($id, $data);
             return redirect()
-                ->to(base_url('financeiro/pagamentodespesas/editar/'.$id))
+                ->to(base_url('financeiro/pagamentoDespesas/editar/'.$id))
                 ->with('success', 'Dados do pagamento atualizados com sucesso');
         } catch (Exception $e) {
             return redirect()
@@ -141,11 +141,11 @@ class PagamentoDespesas extends BaseController
         try {
             model('Financeiro/FinanceiroPagtoDespesasModel')->delete($id);
             return redirect()
-                ->to(base_url('financeiro/pagamentodespesas'))
+                ->to(base_url('financeiro/pagamentoDespesas'))
                 ->with('success', 'Pagamento excluído com sucesso');
         } catch (Exception $e) {
             return redirect()
-                ->to(base_url('financeiro/pagamentodespesas'))
+                ->to(base_url('financeiro/pagamentoDespesas'))
                 ->with('error', 'Erro ao excluir Pagamento: ' . $e->getMessage());
         }
     }

@@ -67,7 +67,7 @@ class PagamentoReceitas extends BaseController
         try {
             model('Financeiro/FinanceiroPagtoReceitasModel')->update($id, $data);
             return redirect()
-                ->to(base_url('financeiro/pagamentoreceitas/editar/'.$id))
+                ->to(base_url('financeiro/pagamentoReceitas/editar/'.$id))
                 ->with('success', 'Dados do pagamento atualizados com sucesso');
         } catch (Exception $e) {
             return redirect()
@@ -145,7 +145,7 @@ class PagamentoReceitas extends BaseController
                 ->with('success', 'Pagamento excluído com sucesso');
         } catch (Exception $e) {
             return redirect()
-                ->to(base_url('financeiro/pagamentoreceitas'))
+                ->to(base_url('financeiro/pagamentoReceitas'))
                 ->with('error', 'Erro ao excluir Pagamento: ' . $e->getMessage());
         }
     }
