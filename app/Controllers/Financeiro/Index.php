@@ -5,6 +5,22 @@ use App\Controllers\BaseController;
 
 class Index extends BaseController 
 {
+    
+    public function index(){
+        $data = [
+            'titulo' => 'Financeiro',
+        ];
+        $repository = new \App\Repositories\ExtratoRepository();
+        $data['despesas'] = $repository->getDespesasPorConta(1);
+        $data['receitas'] = $repository->getReceitasPorConta(1);
+        $data['transferenciasDe'] = $repository->getTransferenciasDePorConta(1);
+        $data['transferenciasPara'] = $repository->getTransferenciasParaPorConta(1);
+        
+        return view('financeiro/index', $data);
+    }
+    
+    
+    
     public function extrato($conta_id)
     {
         // Instanciar os models
@@ -12,8 +28,8 @@ class Index extends BaseController
         $receitasModel = model('Financeiro/FinanceiroPagtoReceitasModel');
 
         // Buscar despesas da conta
-        $despesas = $despesasModel->where('conta_id', $conta_id)
-                                  ->findAll();
+        $despesas = $despesasModel  ->where('conta_id', $conta_id)
+                                    ->findAll();
 
         // Adicionar campo 'tipo' para identificar despesas e calcular rateio
         foreach ($despesas as &$despesa) {
@@ -26,8 +42,8 @@ class Index extends BaseController
         }
 
         // Buscar receitas da conta
-        $receitas = $receitasModel->where('conta_id', $conta_id)
-                                  ->findAll();
+        $receitas = $receitasModel  ->where('conta_id', $conta_id)
+                                    ->findAll();
 
         // Adicionar campo 'tipo' para identificar receitas e calcular rateio
         foreach ($receitas as &$receita) {
