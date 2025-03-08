@@ -10,7 +10,7 @@ $uri = service('uri');
 $active = $uri->getSegment(1);
 $subActive = null;
 
-if ($uri->getSegment(2) !== null) {
+if ($uri->getTotalSegments() >= 2) {
     $subActive = $uri->getSegment(2);
 }
 
