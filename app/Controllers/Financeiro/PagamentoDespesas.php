@@ -32,6 +32,9 @@ class PagamentoDespesas extends BaseController
         
         // Formata o valor do pagamento
         $data['valor'] = $this->formatarValorParaBanco($this->request->getPost('valor'));
+
+        $pagarDespesa = $this->request->getPost('pagarDespesa');
+        $data['pagarDespesa'] = $pagarDespesa;
         
         // Processa o rateio
         if (isset($data['rateio'])) {
@@ -53,9 +56,16 @@ class PagamentoDespesas extends BaseController
             try {
                 model('Financeiro/FinanceiroPagtoDespesasModel')->insert($data);
                 $id = model('Financeiro/FinanceiroPagtoDespesasModel')->getInsertID();
-                return redirect()
-                    ->to(base_url('financeiro/pagamentoDespesas/editar/'.$id))
-                    ->with('success', 'Pagamento salvo com sucesso');
+
+                if($pagarDespesa == 1){
+                    return redirect()
+                        ->to(base_url('financeiro/despesas/novo?pagarDespesa=1'))
+                        ->with('success', 'Pagamento salvo com sucesso');
+                } else {
+                    return redirect()
+                        ->to(base_url('financeiro/pagamentoDespesas/editar/'.$id))
+                        ->with('success', 'Pagamento salvo com sucesso');
+                }
             } catch (Exception $e) {
                 return redirect()
                     ->back()
@@ -66,9 +76,15 @@ class PagamentoDespesas extends BaseController
 
         try {
             model('Financeiro/FinanceiroPagtoDespesasModel')->update($id, $data);
-            return redirect()
-                ->to(base_url('financeiro/pagamentoDespesas/editar/'.$id))
-                ->with('success', 'Dados do pagamento atualizados com sucesso');
+            if($pagarDespesa == 1){
+                return redirect()
+                    ->to(base_url('financeiro/despesas/novo?pagarDespesa=1'))
+                    ->with('success', 'Pagamento salvo com sucesso');
+            } else {
+                return redirect()
+                    ->to(base_url('financeiro/pagamentoDespesas/editar/'.$id))
+                    ->with('success', 'Pagamento salvo com sucesso');
+            }
         } catch (Exception $e) {
             return redirect()
                 ->back()
@@ -82,6 +98,8 @@ class PagamentoDespesas extends BaseController
             'titulo' => 'Pagar Despesa',
         ];
         $despesa = model('Financeiro/FinanceiroDespesasModel')->find($despesa_id);
+        $pagarDespesa = $this->request->getGet('pagarDespesa');
+        $data['pagarDespesa'] = $pagarDespesa;
         $rateioEmReais = [];
         if(!empty($despesa['rateio'])){
             if (!is_array($despesa['rateio'])) {
@@ -110,6 +128,8 @@ class PagamentoDespesas extends BaseController
         ];
         
         $pagamento = model('Financeiro/FinanceiroPagtoDespesasModel')->find($id);
+        $pagarDespesa = $this->request->getGet('pagarDespesa');
+        $data['pagarDespesa'] = $pagarDespesa;
         
         // Decodifica o rateio se existir
         if (!empty($pagamento['rateio'])) {

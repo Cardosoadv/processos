@@ -1,12 +1,19 @@
 <?php
 
-$contas = model('Financeiro/FinanceiroContasModel')->findAll();
-$users  = model('ResposavelModel')->getUsers();
-$despesas = model('Financeiro/FinanceiroDespesasModel')->findAll();
+$contas = model('Financeiro/FinanceiroContasModel')->orderBy('conta')->findAll();
+$users  = model('ResposavelModel')->orderBy('username')->findAll();
+$despesas = model('Financeiro/FinanceiroDespesasModel')->orderBy('despesa')->findAll();
 ?>
+<div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="togglePagarDespesa" <?= $pagarDespesa == '1' ? 'checked' : '' ?>>
+            <label class="form-check-label" for="togglePagarDespesa">Pagar ao Salvar</label>
+        </div>
+
 
 <form method="post" id="form_pagamento_despesa" name="form_pagamento_despesa" action="<?= site_url('financeiro/pagamentoDespesas/salvar') ?>">
     <input type="hidden" name="id_pgto_despesa" value="<?= $pagtoDespesa['id_pgto_despesa']??'' ?>">  
+    <input type="hidden" name="pagarDespesa" id="pagarDespesaInput" value="<?= $pagarDespesa ?>">
+    
     <div class="row mb-3">
         <div class="form-group col">
             <label for="despesa_id">Despesa</label>
@@ -106,6 +113,23 @@ $despesas = model('Financeiro/FinanceiroDespesasModel')->findAll();
 </form>
 
 <script>
+
+    // Toggle para o parâmetro pagarDespesa
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('togglePagarDespesa');
+        const inputPagarDespesa = document.getElementById('pagarDespesaInput');
+        
+        toggleBtn.addEventListener('change', function() {
+            // Atualizar o valor do input hidden
+            inputPagarDespesa.value = this.checked ? '1' : '0';
+            
+            // Atualizar a URL com o novo parâmetro sem recarregar a página
+            const url = new URL(window.location.href);
+            url.searchParams.set('pagarDespesa', this.checked ? '1' : '0');
+            window.history.pushState({}, '', url.toString());
+        });
+    });
+
     // Função para inicializar os campos de rateio
     function inicializarCamposRateio() {
         // Seleciona todos os campos de valor-rateio existentes

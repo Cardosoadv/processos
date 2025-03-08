@@ -1,5 +1,5 @@
 <?php
-$clientes = model('ClientesModel')->findAll();
+$clientes = model('ClientesModel')->orderBy('nome')->findAll();
 ?>
 
 <script>

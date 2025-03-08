@@ -1,7 +1,7 @@
 <?php
-$contas = model('Financeiro/FinanceiroContasModel')->findAll();
-$users  = model('ResposavelModel')->getUsers();
-$receitas = model('Financeiro/FinanceiroReceitasModel')->findAll();
+$contas = model('Financeiro/FinanceiroContasModel')->orderBy('conta')->findAll();
+$users = model('ResposavelModel')->orderBy('username')->findAll();
+$receitas = model('Financeiro/FinanceiroReceitasModel')->orderBy('receita')->findAll();
 ?>
 
 <form method="post" id="form_pagamento_receita" name="form_pagamento_receita" action="<?= site_url('financeiro/pagamentoReceitas/salvar') ?>">

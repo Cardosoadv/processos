@@ -1,10 +1,22 @@
 <?php
-$fornecedores = model('FornecedoresModel')->findAll();
-$categorias = model('Financeiro/FinanceiroCategoriasModel')->findAll();
-$users = model('ResposavelModel')->findAll();
+
+$fornecedores = model('FornecedoresModel')->orderBy('nome')->findAll();
+$categorias = model('Financeiro/FinanceiroCategoriasModel')->orderBy('categoria')->findAll();
+$users = model('ResposavelModel')->orderBy('username')->findAll();
+
+// Verificar se o parâmetro pagarDespesa existe na URL
+$pagarDespesa = isset($_GET['pagarDespesa']) ? $_GET['pagarDespesa'] : '0';
+
 ?>
+
+<div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="togglePagarDespesa" <?= $pagarDespesa == '1' ? 'checked' : '' ?>>
+            <label class="form-check-label" for="togglePagarDespesa">Pagar ao Salvar</label>
+        </div>
+
 <form method="post" id="form_despesa" name="form_despesa" action="<?= site_url('financeiro/despesas/salvar') ?>">
     <input type="hidden" name="id_despesa" value="<?= $despesa['id_despesa'] ?? '' ?>">
+    <input type="hidden" name="pagarDespesa" id="pagarDespesaInput" value="<?= $pagarDespesa ?>">
     <div class="row mb-3">
         <div class="form-group col">
             <label for="despesa">Despesa</label>
@@ -114,6 +126,25 @@ $users = model('ResposavelModel')->findAll();
 </form>
 
 <script>
+    // Toggle para o parâmetro pagarDespesa
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleBtn = document.getElementById('togglePagarDespesa');
+        const inputPagarDespesa = document.getElementById('pagarDespesaInput');
+        
+        toggleBtn.addEventListener('change', function() {
+            // Atualizar o valor do input hidden
+            inputPagarDespesa.value = this.checked ? '1' : '0';
+            
+            // Atualizar a URL com o novo parâmetro sem recarregar a página
+            const url = new URL(window.location.href);
+            url.searchParams.set('pagarDespesa', this.checked ? '1' : '0');
+            window.history.pushState({}, '', url.toString());
+        });
+    });
+
+
+
+
     function adicionarRateio() {
         const container = document.getElementById('container-rateio');
         const index = container.getElementsByClassName('rateio-row').length;

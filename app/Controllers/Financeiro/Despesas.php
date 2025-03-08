@@ -18,6 +18,8 @@ class Despesas extends BaseController
             'titulo'    => 'Despesas',
         ];
         $s = $this->request->getGet('s');
+        $pagarDespesa = $this->request->getGet('pagarDespesa');
+
         
         $despesasModel = model('Financeiro/FinanceiroDespesasModel');
 
@@ -44,6 +46,10 @@ class Despesas extends BaseController
         $data = $this->request->getPost();
         $data['valor'] = $this->formatarValorParaBanco($this->request->getPost('valor'));
 
+        $pagarDespesa = $this->request->getPost('pagarDespesa');
+        $data['pagarDespesa'] = $pagarDespesa;
+
+
         // Validação do CPF ou CNPJ
         $cpf_cnpj = $data['documento'] ?? null;
         if ($cpf_cnpj) {
@@ -59,8 +65,17 @@ class Despesas extends BaseController
             try{
                 model('Financeiro/FinanceiroDespesasModel')->insert($data);
             $id = model('Financeiro/FinanceiroDespesasModel')->getInsertID();
-            return redirect()->to(base_url('financeiro/pagamentoDespesas/pagarDespesa/'.$id))->with('success', 'Despesa salvo com sucesso');
+
+
+            if($pagarDespesa == 1){
+
+                return redirect()->to(base_url('financeiro/pagamentoDespesas/pagarDespesa/'.$id.'?pagarDespesa=1'))->with('success', 'Despesa salvo com sucesso');
+            
+            }else{
+
+                return redirect()->to(base_url('financeiro/despesas/editar/'.$id))->with('success', 'Despesa salvo com sucesso');
             }
+        }
             catch(Exception $e){
 
                 return redirect()   ->back()
@@ -71,8 +86,17 @@ class Despesas extends BaseController
 
         try{
             model('Financeiro/FinanceiroDespesasModel')->update($id, $data);
-            return redirect()->to(base_url('financeiro/despesas/editar/'.$id))->with('success', 'Dados do despesa atualizado com sucesso');
+
+            if($pagarDespesa == 1){
+
+                return redirect()->to(base_url('financeiro/pagamentoDespesas/pagarDespesa/'.$id.'?pagarDespesa=1'))->with('success', 'Despesa salvo com sucesso');
+            
+            }else{
+
+                return redirect()->to(base_url('financeiro/despesas/editar/'.$id))->with('success', 'Despesa salvo com sucesso');
+            
             }
+        }
             catch(Exception $e){
 
                 return redirect()   ->back()
@@ -87,6 +111,8 @@ class Despesas extends BaseController
             'titulo'    => 'Editar Dados do Despesa',
         ];
         $data['despesa'] = model('Financeiro/FinanceiroDespesasModel')->find($id);
+        $pagarDespesa = $this->request->getGet('pagarDespesa');
+        $data['pagarDespesa'] = $pagarDespesa;
 
         return view('despesas/consultarDespesas', $data);
     }

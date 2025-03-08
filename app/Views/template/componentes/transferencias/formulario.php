@@ -1,5 +1,5 @@
 <?php
-$contas = model('Financeiro/FinanceiroContasModel')->findAll();
+$contas = model('Financeiro/FinanceiroContasModel')->orderBy('conta')->findAll();
 ?>
 
 <form method="post" id="form_transferencia" name="form_transferencia" action="<?= site_url('financeiro/transferencias/salvar') ?>">
