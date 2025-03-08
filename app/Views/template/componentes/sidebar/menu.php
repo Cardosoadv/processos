@@ -8,7 +8,7 @@ use App\Libraries\Permissions;
 
 $uri = service('uri');
 $active = $uri->getSegment(1);
-$subActive = $uri->getSegment(2);
+$subActive = $uri->getSegment(2) ?? null;
 
 $permitions = new Permissions();
 $permission = $permitions->permission();
