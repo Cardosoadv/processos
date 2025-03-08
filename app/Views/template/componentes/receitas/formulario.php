@@ -1,7 +1,7 @@
 <?php
-$clientes = model('ClientesModel')->findAll();
-$categorias = model('Financeiro/FinanceiroCategoriasModel')->findAll();
-$users = model('ResposavelModel')->findAll();
+$clientes = model('ClientesModel')->orderBy('nome')->findAll();
+$categorias = model('Financeiro/FinanceiroCategoriasModel')->orderBy('categoria')->findAll();
+$users = model('ResposavelModel')->orderBy('username')->findAll();
 ?>
 <form method="post" id="form_receita" name="form_receita" action="<?= site_url('financeiro/receitas/salvar') ?>">
     <input type="hidden" name="id_receita" value="<?= $receita['id_receita'] ?? '' ?>">

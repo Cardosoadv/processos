@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 
-
 class ExtratoRepository
 {
     protected $receitaModel;
@@ -24,15 +23,34 @@ class ExtratoRepository
 
     public function getDespesasPorConta($conta_id)
     {
-        // Buscar despesas da conta
 
         // Buscar despesas da conta
         $despesas = $this->pagtoDespesasModel
-            ->select('pd.pagamento_despesa_dt as data, d.despesa as descricao, pd.valor as valor, pd.rateio as rateio')
-            ->from('fin_pgto_despesas as pd')  // Alias the main table
+            ->select('pd.pagamento_despesa_dt as data, d.despesa as descricao, (pd.valor * -1) as valor, pd.rateio as rateio')
+            ->from('fin_pgto_despesas as pd')
             ->where('pd.conta_id', $conta_id)
             ->join('fin_despesas as d', 'd.id_despesa = pd.despesa_id', 'right')
             ->findAll();
+
+        foreach ($despesas as &$despesa) {
+            $rateioArray = []; // Inicializa $rateioArray fora do loop interno
+
+            // Verifica se $despesa['rateio'] é uma string antes de decodificar
+            if (is_string($despesa['rateio'])) {
+                $rateio = json_decode($despesa['rateio'], true);
+
+                // Verifica se $rateio é um array antes de iterar
+                if (is_array($rateio)) {
+                    foreach ($rateio as $item) {
+                        $rateioArray[] = [
+                            'id' => $item['id'],
+                            'valor' => floatval(-$item['valor']),
+                        ];
+                    }
+                }
+            }
+            $despesa['rateio'] = $rateioArray; // Substitui o valor original pelo array processado
+        }
 
         return $despesas;
     }
@@ -46,14 +64,36 @@ class ExtratoRepository
             ->where('pr.conta_id', $conta_id)
             ->join('fin_receitas as r', 'r.id_receita = pr.receita_id', 'right')
             ->findAll();
-        return $receitas;
-    }
+
+            foreach ($receitas as &$receita) {
+                $rateioArray = []; // Inicializa $rateioArray fora do loop interno
+    
+                // Verifica se $despesa['rateio'] é uma string antes de decodificar
+                if (is_string($receita['rateio'])) {
+                    $rateio = json_decode($receita['rateio'], true);
+    
+                    // Verifica se $rateio é um array antes de iterar
+                    if (is_array($rateio)) {
+                        foreach ($rateio as $item) {
+                            $rateioArray[] = [
+                                'id' => $item['id'],
+                                'valor' => floatval($item['valor']),
+                            ];
+                        }
+                    }
+                }
+                $receita['rateio'] = $rateioArray; // Substitui o valor original pelo array processado
+            }
+    
+            return $receitas;
+        }
+
 
     public function getTransferenciasDePorConta($conta_id)
     {
         // Buscar transferencias da conta
         $transferencias = $this->transferenciaModel
-            ->select('data_transferencia as data, transferencia as descricao, valor, NULL as rateio')
+            ->select('data_transferencia as data, transferencia as descricao, (valor * -1) as valor, NULL as rateio')
             ->where('id_conta_origem', $conta_id)
             ->findAll();
         return $transferencias;
