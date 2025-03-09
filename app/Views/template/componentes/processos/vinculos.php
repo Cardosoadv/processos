@@ -11,10 +11,10 @@
     </div><!--end::Header-->
     <!--begin::Body-->
     <div class="card-body">
-        <table class="table table-striped">
+        <table class="table table-striped" >
             <thead>
                 <tr>
-                    <th scope="col">Processo</th>
+                    <th scope="col">Processo</th> 
                     <th scope="col">Tipo</th>
                     <th scope="col">Ação</th>
                 </tr>
@@ -23,11 +23,19 @@
                 <?php foreach ($vinculos as $vinculo) : ?>
                     <tbody>
                         <tr>
-                            <td><?= $vinculo['numeroprocessocommascara'] ?></td>
-                            <td><?= $vinculo['tipo_vinculo'] ?></td>
+                            <td style="text-align: center;">
+                                <a href="<?= base_url('processos/editar/' . $vinculo['id_processo_vinculado']) ?>" style="font-size: 0.8rem; text-decoration: none; color: inherit;">
+                                    <?= $vinculo['numeroprocessocommascara'] ?>
+                                </a>
+                            </td>
+                            <td style="font-size: 0.7rem; text-decoration: none; color: inherit; text-align: center;">
+                                <a href="<?= base_url('processos/editar/' . $vinculo['id_processo_vinculado']) ?>" style="font-size: 0.8rem; text-decoration: none; color: inherit;">    
+                                    <?= $vinculo['tipo_vinculo'] ?>
+                                </a>
+                            </td>
                             <td>
-                                <a href="<?= base_url('processos/excluirvinculo/' . $vinculo['id_vinculo'] . '/'.$processo['id_processo']) ?>">
-                                    <i class="fas fa-trash danger"></i>
+                                <a href="<?= base_url('processos/excluirvinculo/' . $vinculo['id_vinculo'] . '/'.$processo['id_processo']) ?>" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i>
                                 </a>
                             </td>
                         </tr>

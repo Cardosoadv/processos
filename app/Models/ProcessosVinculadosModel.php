@@ -63,6 +63,7 @@ class ProcessosVinculadosModel extends Model
             $vinculados[] = [
                 'id_vinculo' => $processo['id_vinculo'],
                 'numeroprocessocommascara' => model('ProcessosModel')->getNumeroProcessoComMascara($vinculadoId),
+                'id_processo_vinculado' => $vinculadoId,
                 'tipo_vinculo' => $processo['tipo_vinculo'],
             ];
         }
