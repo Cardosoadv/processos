@@ -16,8 +16,19 @@ class Categorias extends BaseController
 
     public function index()
     {
+        $s=$this->request->getGet('s');
+        
+        $categorias = $this->model->orderBy('categoria');
+        
         $data['titulo'] = 'Categorias';
-        $data['categorias'] = $this->model->paginate(25);
+
+        if ($s) {
+            $categorias->like('categoria', $s);
+            $data['categorias'] = $categorias->paginate(25);
+        } else {
+            $data['categorias'] = $categorias->paginate(25);
+        }
+
         $data['pager'] = $this->model->pager;
         return view('categorias/categorias', $data);
     }

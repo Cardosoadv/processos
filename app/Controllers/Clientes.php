@@ -17,12 +17,13 @@ class Clientes extends BaseController
         ];
         $s = $this->request->getGet('s');
         
-        $clientesModel = model('ClientesModel');
+        $clientesModel = model('ClientesModel')->orderBy('nome', 'ASC');
 
         if($s !== null){
             $clientesModel  ->like('nome', $s);
             
-            $data['clientes'] = $clientesModel->paginate(25);
+            $data['clientes'] = $clientesModel  ->orderBy('nome', 'ASC')
+                                                ->paginate(25);
             $data['pager'] = $clientesModel->pager;
 
             return view('clientes/clientes', $data);                    

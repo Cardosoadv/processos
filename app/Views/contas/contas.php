@@ -24,20 +24,6 @@
                         <!-- Main Content Column -->
                         <div class="col-lg-9">
                             <!-- Search Form -->
-                            <form action="" method="get" class="mb-3">
-                                <div class="input-group">
-                                    <input
-                                        type="text"
-                                        name="s"
-                                        class="form-control"
-                                        placeholder="Pesquisar..."
-                                        aria-label="Pesquisar">
-                                    <button class="btn btn-outline-secondary" type="submit">
-                                        Pesquisar
-                                    </button>
-                                </div>
-                            </form>
-
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">

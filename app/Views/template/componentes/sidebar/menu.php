@@ -96,7 +96,7 @@ log_message('debug', $active . ' / ' . $subActive);
         $isFinanceiroActive = ($active === 'financeiro' || in_array($subActive, $financeiroSubItems));
     ?>
         <li class="nav-item <?= $isFinanceiroActive ? 'menu-is-opening menu-open' : ''; ?>">
-            <a href="<?= site_url('financeiro/index'); ?>" class="nav-link <?= ($active === 'financeiro' && $subActive === 'index') ? 'active' : ''; ?>">
+            <a href="<?= site_url('financeiro/index'); ?>" class="nav-link <?= ($active === 'financeiro' && $subActive === null) ? 'active' : ''; ?>">
                 <i class="nav-icon bi bi-cash-coin"></i>
                 <p>Financeiro <i class="nav-arrow bi bi-chevron-right"></i></p>
             </a>
