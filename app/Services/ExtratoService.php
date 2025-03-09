@@ -20,6 +20,8 @@ class ExtratoService
         $transferenciasDe = $this->extratoRepository->getTransferenciasDePorConta($conta_id);
         $transferenciasPara = $this->extratoRepository->getTransferenciasParaPorConta($conta_id);
 
+
+
         $extrato = array_merge($despesas, $receitas, $transferenciasDe, $transferenciasPara);
 
         // Ordenar extrato por data (ordem crescente)
