@@ -27,7 +27,7 @@ class PagamentoReceitas extends BaseController
 
     public function salvar()
     {
-        $id = $this->request->getPost('id_pagamento') ?? null;
+        $id = $this->request->getPost('id_pgto_receita') ?? null;
         $data = $this->request->getPost();
         
         // Formata o valor do pagamento
