@@ -62,7 +62,8 @@ class ProcessosMovimentosModel extends Model
         $dtFinal = date('Y-m-d', strtotime($dataFinal));
         $data = $this   ->where('dataHora >=',$dtInicial)
                         ->where('dataHora <=',$dtFinal)
-                        ->orderBy('dataHora', 'ASC')
+                        ->orderBy('dataHora', 'DESC')
+                        ->limit(10)
                         ->get()->getResultArray();
         return $data;
     }

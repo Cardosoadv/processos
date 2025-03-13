@@ -30,6 +30,7 @@ class ExtratoRepository
             ->select('pd.id_pgto_despesa as id, pd.pagamento_despesa_dt as data, d.despesa as descricao, (pd.valor * -1) as valor, pd.rateio as rateio')
             ->from('fin_pgto_despesas as pd')
             ->where('pd.conta_id', $conta_id)
+            ->where('pd.deleted_at is null')
             ->join('fin_despesas as d', 'd.id_despesa = pd.despesa_id', 'left')
             ->findAll();
 
@@ -64,6 +65,7 @@ class ExtratoRepository
             ->select('pr.id_pgto_receita as id, pr.pagamento_receita_dt as data, r.receita as descricao, pr.valor as valor, pr.rateio as rateio')
             ->from('fin_pgto_receitas as pr')
             ->where('pr.conta_id', $conta_id)
+            ->where('pr.deleted_at is null')
             ->join('fin_receitas as r', 'r.id_receita = pr.receita_id', 'left')
             ->findAll();
 
@@ -98,6 +100,7 @@ class ExtratoRepository
             ->distinct()
             ->select('id_transferencia as id, data_transferencia as data, transferencia as descricao, (valor * -1) as valor, NULL as rateio')
             ->where('id_conta_origem', $conta_id)
+            ->where('deleted_at is null')
             ->findAll();
         return $transferencias;
     }
@@ -109,6 +112,7 @@ class ExtratoRepository
             ->distinct()
             ->select('id_transferencia as id, data_transferencia as data, transferencia as descricao, valor, NULL as rateio')
             ->where('id_conta_destino', $conta_id)
+            ->where('deleted_at is null')
             ->findAll();
         return $transferencias;
     }

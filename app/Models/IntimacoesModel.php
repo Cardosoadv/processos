@@ -77,6 +77,8 @@ class IntimacoesModel extends Model
         $dtFinal = date('Y-m-d', strtotime($dataFinal));
         $data = $this->where('data_disponibilizacao >=',$dtInicial)
         ->where('data_disponibilizacao <=',$dtFinal)
+        ->orderBy('data_disponibilizacao', 'DESC')
+        ->limit(10)
         ->get()->getResultArray();
         return $data;
     }
