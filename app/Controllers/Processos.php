@@ -61,8 +61,7 @@ class Processos extends BaseController
     public function processosDoCliente(?int $cliente_id)
     {
         $data = [
-
-            'titulo'    => 'Processos',
+            'titulo'    => 'Processos do Cliente',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
             's'         => $this->request->getGet('s') ?? null,
@@ -73,12 +72,17 @@ class Processos extends BaseController
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
 
-        $processos = $this->processoService->listarProcessosCliente($cliente_id, $data['s']);
+        $processos = $this->processoService->listarProcessosCliente(
+            $cliente_id,
+            $data['s'],
+            $data['sortField'],
+            $data['sortOrder'],
+            $data['encerrado'],
+            $data['etiqueta'],
+        );
 
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
-
-        Session()->set(['msg' => null]);
         return view('processos/processos', $data);
     }
 
