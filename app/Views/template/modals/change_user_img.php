@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="<?= base_url('saveuserimg')?>" method="post" enctype="multipart/form-data">
+        <form action="<?= base_url('usuarios/salvar')?>" method="post" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="foto-perfil" class="form-label">Foto de perfil</label>
             <input type="hidden" name="id" value="<?= user_id() ?>">
