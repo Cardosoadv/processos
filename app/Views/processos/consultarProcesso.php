@@ -34,11 +34,11 @@ $selected = $processo['id_processo'] ?? "";
         <div class="container-fluid">
 
           <!--begin::Row-->
-          <?= $this->include('template/componentes/breadcrumbs') ?>
+          <?= $this->include('componentes/breadcrumbs') ?>
           <!--end::Row-->
 
           <!-- Nova seção de etiquetas -->
-          <?= $this->include('template/componentes/processos/etiquetas') ?>
+          <?= $this->include('componentes/processos/etiquetas') ?>
           <!-- Fim da seção de etiquetas -->
 
         </div><!--end::Container-->
@@ -54,9 +54,9 @@ $selected = $processo['id_processo'] ?? "";
           <div class="row">
             <div class="col-8">
               <!-- Inicio da Notificação -->
-              <?= $this->include('template/componentes/notificacaoSessao') ?>
+              <?= $this->include('componentes/notificacaoSessao') ?>
               <!-- inicio formulário -->
-              <?= $this->include('template/componentes/processos/formulario') ?>
+              <?= $this->include('componentes/processos/formulario') ?>
               <!-- Fim do Formulário -->
             </div>
             <div class="col-4">
@@ -64,33 +64,33 @@ $selected = $processo['id_processo'] ?? "";
 
               <!-- Inicio das Tarefas -->
               <div>
-                <?= $this->include('template/componentes/tarefas/sidebar') ?>
+                <?= $this->include('componentes/tarefas/sidebar') ?>
               </div>
               <!-- Fim das Tarefas -->
 
               <!-- Inicio das Anotações -->
               <div>
-                <?= $this->include('template/componentes/processos/acordion') ?>
+                <?= $this->include('componentes/processos/acordion') ?>
               </div>
               <!-- Fim das Anotações -->
               <!-- Inicio dos Movimentos -->
               <div>
-                <?= $this->include('template/componentes/processos/movimentos') ?>
+                <?= $this->include('componentes/processos/movimentos') ?>
               </div>
               <!-- Fim dos Movimentos -->
               <!-- Inicio das Intimações -->
               <div>
-                <?= $this->include('template/componentes/processos/intimacoes') ?>
+                <?= $this->include('componentes/processos/intimacoes') ?>
               </div>
               <!-- Fim das Intimações -->
               <!-- Inicio das Vinculações -->
               <div>
-                <?= $this->include('template/componentes/processos/vinculos') ?>
+                <?= $this->include('componentes/processos/vinculos') ?>
               </div>
               <!-- Fim das Vinculações  -->
               <!-- Inicio das Imóveis -->
               <div>
-              <?= $this->include('template/componentes/processos/objeto') ?>
+              <?= $this->include('componentes/processos/objeto') ?>
               </div>
               <!-- Fim dos Imoveis -->
 

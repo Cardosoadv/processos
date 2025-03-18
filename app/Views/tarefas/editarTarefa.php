@@ -13,7 +13,7 @@
         <main class="app-main">
             <div class="app-content-header">
                 <div class="container-fluid">
-                    <?= $this->include('template/componentes/breadcrumbs') ?>
+                    <?= $this->include('componentes/breadcrumbs') ?>
                 </div>
             </div>
             
@@ -40,7 +40,7 @@
                                     </div>
                                 <?php endif; ?>
                             </div>
-                                <?= $this->include('template/componentes/tarefas/formulario') ?>
+                                <?= $this->include('componentes/tarefas/formulario') ?>
                         </div>
                     </div>
                 </div>

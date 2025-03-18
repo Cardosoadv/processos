@@ -28,7 +28,7 @@
         <div class="container-fluid">
 
           <!--begin::Row-->
-          <?= $this->include('template/componentes/breadcrumbs') ?>
+          <?= $this->include('componentes/breadcrumbs') ?>
           <!--end::Row-->
 
         </div><!--end::Container-->
@@ -44,10 +44,10 @@
           <div class="row">
             <div class="col-8">
               <!-- Inicio da Notificação -->
-              <?= $this->include('template/componentes/notificacaoSessao') ?>
+              <?= $this->include('componentes/notificacaoSessao') ?>
 
               <!-- inicio formulário -->
-              <?= $this->include('template/componentes/fornecedores/formulario') ?>
+              <?= $this->include('componentes/fornecedores/formulario') ?>
               <!-- Fim do Formulário -->
             </div>
             <div class="col-4">

@@ -9,11 +9,11 @@
         <ul class="navbar-nav ms-auto"><!--begin::Navbar Search-->
             <li class="nav-item"><a class="nav-link" data-widget="navbar-search" href="#" role="button"><i class="bi bi-search"></i></a></li><!--end::Navbar Search-->
             <!--begin::Messages Dropdown Menu-->
-            <?= $this->include('template/componentes/nav/messagesDropdown') ?>
+            <?= $this->include('componentes/nav/messagesDropdown') ?>
             <!--end::Messages Dropdown Menu-->
 
             <!--begin::Notifications Dropdown Menu-->
-            <?= $this->include('template/componentes/nav/notificationDropdown') ?>
+            <?= $this->include('componentes/nav/notificationDropdown') ?>
             <!--end::Notifications Dropdown Menu-->
 
             <!--begin::Fullscreen Toggle-->
@@ -21,7 +21,7 @@
             <!--end::Fullscreen Toggle-->
 
             <!--begin::User Menu Dropdown-->
-            <?= $this->include('template/componentes/nav/userMenuDropdown') ?>
+            <?= $this->include('componentes/nav/userMenuDropdown') ?>
             <!--end::User Menu Dropdown-->
 
         </ul>

@@ -28,7 +28,7 @@
         <div class="container-fluid">
 
           <!--begin::Row-->
-          <?= $this->include('template/componentes/breadcrumbs') ?>
+          <?= $this->include('componentes/breadcrumbs') ?>
           <!--end::Row-->
 
         </div><!--end::Container-->
@@ -53,7 +53,7 @@
                                     </a>
                                 </div>
               <!-- Inicio da Notificação -->
-              <?= $this->include('template/componentes/notificacaoSessao') ?>
+              <?= $this->include('componentes/notificacaoSessao') ?>
 
               <!-- inicio Extrato -->
               <!-- Data Table -->

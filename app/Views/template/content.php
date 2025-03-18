@@ -5,7 +5,7 @@
         <!--begin::Container-->
         <div class="container-fluid">
             <!--begin::Row-->
-            <?= $this->include('template/componentes/breadcrumbs') ?>
+            <?= $this->include('componentes/breadcrumbs') ?>
         </div><!--end::Container-->
     </div><!--end::App Content Header-->
 

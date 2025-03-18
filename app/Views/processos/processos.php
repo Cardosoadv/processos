@@ -39,7 +39,7 @@ function removeParam($params, $key) {
         <main class="app-main">
             <div class="app-content-header">
                 <div class="container-fluid">
-                    <?= $this->include('template/componentes/breadcrumbs') ?>
+                    <?= $this->include('componentes/breadcrumbs') ?>
                 </div>
             </div>
             

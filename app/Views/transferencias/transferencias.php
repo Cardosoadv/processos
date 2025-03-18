@@ -24,7 +24,7 @@ function nomeConta($id = null)
         <main class="app-main">
             <div class="app-content-header">
                 <div class="container-fluid">
-                    <?= $this->include('template/componentes/breadcrumbs') ?>
+                    <?= $this->include('componentes/breadcrumbs') ?>
                 </div>
             </div>
 
@@ -57,7 +57,7 @@ function nomeConta($id = null)
                                     </a>
                                 </div>
                                 <!-- Inicio da Notificação -->
-                                <?= $this->include('template/componentes/notificacaoSessao') ?>
+                                <?= $this->include('componentes/notificacaoSessao') ?>
 
 
 
