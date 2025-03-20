@@ -1,3 +1,14 @@
+<?php
+
+function getUserName($id)
+{
+    $userModel = model('ResposavelModel');
+    $userName = $userModel->getUserName($id);
+    
+    return $userName;
+}
+?>
+
 <nav class="app-header navbar navbar-expand bg-body"><!--begin::Container-->
     <div class="container-fluid"><!--begin::Start Navbar Links-->
         <ul class="navbar-nav">

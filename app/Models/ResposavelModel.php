@@ -16,10 +16,27 @@ class ResposavelModel extends Model
 
     public function getUsers()
     {
-        $users = $this->table('users')
-            ->select('id, username')
-            ->where('active', 1)
-            ->findAll();
+        $users = $this
+                        ->select('id, username')
+                        ->where('active', 1)
+                        ->findAll();
         return $users;
     }
+
+
+    /**
+     * Retorna o nome do usuário
+     * @param int $id
+     * @return string
+     */
+    public function getUserName($id) :string
+    {
+        $userName = $this
+                            ->select('username')
+                            ->where('id', $id)
+                            ->first();
+
+        return $userName['username'];
+    }
+
 }

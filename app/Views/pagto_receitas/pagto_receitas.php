@@ -41,7 +41,7 @@
                             <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
-                                    <a href="<?= base_url('financeiro/receitas/novo/') ?>"
+                                    <a href="<?= base_url('mensagens/novo/') ?>"
                                         class="btn btn-success">
                                         Novo receita
                                     </a>
