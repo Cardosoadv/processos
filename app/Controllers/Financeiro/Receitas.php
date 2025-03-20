@@ -24,19 +24,11 @@ class Receitas extends BaseController
             'titulo'    => 'Receitas',
         ];
         $s = $this->request->getGet('s');
-        $receitas = $this->receitasModel->orderBy('vencimento_dt');
+        $receitas = $this->receitasModel;
 
-        $s = $this->request->getGet('s');
-        $receitasModel = $this->receitasModel; // Renomeado para evitar confusão
     
-        if ($s) {
-            $receitas = $receitasModel->like('receita', $s)->paginate(25);
-        } else {
-            $receitas = $receitasModel->paginate(25);
-        }
-    
-        $data['receitas'] = $receitas;
-        $data['pager'] = $receitasModel->pager;
+        $data['receitas'] = $receitas->listarReceitasNaoRecebidas();
+        
     
         return view('receitas/receitas', $data);                    
     }

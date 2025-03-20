@@ -22,7 +22,7 @@ class Despesas extends BaseController
 
         
         $despesasModel = model('Financeiro/FinanceiroDespesasModel');
-
+ 
         if($s !== null){
             $despesasModel  ->like('nome', $s);
             
@@ -32,8 +32,8 @@ class Despesas extends BaseController
             return view('despesas/despesas', $data);                    
             }
         
-        $data['despesas'] = $despesasModel->paginate(25);
-        $data['pager'] = $despesasModel->pager;
+        $data['despesas'] = $despesasModel->listarDespesasNaoPagas();
+        //$data['pager'] = $despesasModel->pager;
 
         return view('despesas/despesas', $data);
 

@@ -92,7 +92,7 @@
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
-                                        <?= $pager->links() ?>
+                                        
                                     <?php endif; ?>
                                 </div>
                             </div>
