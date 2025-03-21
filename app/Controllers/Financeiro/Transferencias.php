@@ -19,13 +19,13 @@ class Transferencias extends BaseController
         $data['titulo'] = 'Transferencias';
         $data['transferencias'] = $this->model->paginate(25);
         $data['pager'] = $this->model->pager;
-        return view('transferencias/transferencias', $data);
+        return $this->loadView('transferencias/transferencias', $data);
     }
 
     public function novo()
     {
         $data['titulo'] = 'Nova transferencias';
-        return view('transferencias/consultarTransferencia', $data);
+        return $this->loadView('transferencias/consultarTransferencia', $data);
     }
 
     public function editar($id = null)
@@ -35,7 +35,7 @@ class Transferencias extends BaseController
         if (empty($data['transferencia'])) {
             return redirect()->to(site_url('transferencias/transferencias'))->with('errors', 'Transferencia não encontrada!');
         }
-        return view('transferencias/consultarTransferencia', $data);
+        return $this->loadView('transferencias/consultarTransferencia', $data);
     }
 
     public function salvar()

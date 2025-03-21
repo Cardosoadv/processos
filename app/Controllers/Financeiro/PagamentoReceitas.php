@@ -21,7 +21,7 @@ class PagamentoReceitas extends BaseController
         $data['pagtoReceitas'] = $pagamentosModel->paginate(25);
         $data['pager'] = $pagamentosModel->pager;
 
-        return view('pagto_receitas/pagto_receitas', $data);
+        return $this->loadView('pagto_receitas/pagto_receitas', $data);
         
     }
 
@@ -100,7 +100,7 @@ class PagamentoReceitas extends BaseController
         $data['pagtoReceita']['receita_id'] = $receita_id;
         $data['pagtoReceita']['valor'] = $receita['valor'];
 
-        return view('pagto_receitas/consultarPagtoReceita', $data);
+        return $this->loadView('pagto_receitas/consultarPagtoReceita', $data);
     }
 
     public function editar($id)
@@ -118,7 +118,7 @@ class PagamentoReceitas extends BaseController
         
         $data['pagtoReceita'] = $pagamento;
         
-        return view('pagto_receitas/consultarPagtoReceita', $data);
+        return $this->loadView('pagto_receitas/consultarPagtoReceita', $data);
     }
 
     public function novo($receita_id = null)
@@ -133,7 +133,7 @@ class PagamentoReceitas extends BaseController
             $data['receita'] = model('Financeiro/FinanceiroReceitasModel')->find($receita_id);
         }
 
-        return view('pagto_receitas/consultarPagtoReceita', $data);
+        return $this->loadView('pagto_receitas/consultarPagtoReceita', $data);
     }
 
     public function excluir($id)

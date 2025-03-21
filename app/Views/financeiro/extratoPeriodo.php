@@ -216,18 +216,7 @@ $contas = model('Financeiro/FinanceiroContasModel')->orderBy('conta')->findAll()
 
                                 <script>
                                     $(document).ready(function() {
-                                        // Inicializar popovers para detalhes de rateio
-                                        $('[data-toggle="popover"]').popover({
-                                            trigger: 'click'
-                                        });
-
-                                        // Fechar popover ao clicar fora
-                                        $('body').on('click', function(e) {
-                                            if ($(e.target).data('toggle') !== 'popover' && $(e.target).parents('[data-toggle="popover"]').length === 0) {
-                                                $('[data-toggle="popover"]').popover('hide');
-                                            }
-                                        });
-
+                                        
                                         // Form de filtro de extrato
                                         $('#formFiltraExtrato').on('submit', function(e) {
                                             e.preventDefault();

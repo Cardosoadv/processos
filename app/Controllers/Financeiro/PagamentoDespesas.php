@@ -21,7 +21,7 @@ class PagamentoDespesas extends BaseController
         $data['pagtoDespesas'] = $pagamentosModel->paginate(25);
         $data['pager'] = $pagamentosModel->pager;
 
-        return view('pagto_despesas/pagto_despesas', $data);
+        return $this->loadView('pagto_despesas/pagto_despesas', $data);
         
     }
 
@@ -118,7 +118,7 @@ class PagamentoDespesas extends BaseController
         $data['pagtoDespesa']['despesa_id'] = $despesa_id;
         $data['pagtoDespesa']['valor'] = $despesa['valor'];
 
-        return view('pagto_despesas/consultarPagtoDespesa', $data);
+        return $this->loadView('pagto_despesas/consultarPagtoDespesa', $data);
     }
 
     public function editar($id)
@@ -138,7 +138,7 @@ class PagamentoDespesas extends BaseController
         
         $data['pagtoDespesa'] = $pagamento;
         
-        return view('pagto_despesas/consultarPagtoDespesa', $data);
+        return $this->loadView('pagto_despesas/consultarPagtoDespesa', $data);
     }
 
     public function novo($despesa_id = null)
@@ -153,7 +153,7 @@ class PagamentoDespesas extends BaseController
             $data['despesa'] = model('Financeiro/FinanceiroDespesasModel')->find($despesa_id);
         }
 
-        return view('pagto_despesas/consultarPagtoDespesa', $data);
+        return $this->loadView('pagto_despesas/consultarPagtoDespesa', $data);
     }
 
     public function excluir($id)

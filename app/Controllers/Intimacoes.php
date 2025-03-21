@@ -24,7 +24,7 @@ class Intimacoes extends BaseController
         $data['titulo'] = 'Intimações';
         $data['intimacoes'] = $this->intimacoesService->listarIntimacoes();
 
-        return view('intimacoes', $data);
+        return $this->loadView('intimacoes', $data);
     }
 
     public function receberIntimacoes()

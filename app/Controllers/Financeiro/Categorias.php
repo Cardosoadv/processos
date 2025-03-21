@@ -30,13 +30,13 @@ class Categorias extends BaseController
         }
 
         $data['pager'] = $this->model->pager;
-        return view('categorias/categorias', $data);
+        return $this->loadView('categorias/categorias', $data);
     }
 
     public function novo()
     {
         $data['titulo'] = 'Nova categoria';
-        return view('categorias/consultarCategoria', $data);
+        return $this->loadView('categorias/consultarCategoria', $data);
     }
 
     public function editar($id = null)

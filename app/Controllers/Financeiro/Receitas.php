@@ -30,7 +30,7 @@ class Receitas extends BaseController
         $data['receitas'] = $receitas->listarReceitasNaoRecebidas();
         
     
-        return view('receitas/receitas', $data);                    
+        return $this->loadView('receitas/receitas', $data);                    
     }
 
     public function salvar(){
@@ -76,7 +76,7 @@ class Receitas extends BaseController
         ];
         $data['receita'] = $this->receitasModel->find($id);
 
-        return view('receitas/consultarReceitas', $data);
+        return $this->loadView('receitas/consultarReceitas', $data);
     }
 
     public function novo(){
@@ -84,7 +84,7 @@ class Receitas extends BaseController
 
             'titulo'    => 'Novo Receita',
         ];
-        return view('receitas/consultarReceitas', $data);
+        return $this->loadView('receitas/consultarReceitas', $data);
     }
 
     public function excluir($id){

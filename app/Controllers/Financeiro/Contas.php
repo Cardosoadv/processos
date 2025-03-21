@@ -19,13 +19,13 @@ class Contas extends BaseController
         $data['titulo'] = 'Contas';
         $data['contas'] = $this->model->paginate(25);
         $data['pager'] = $this->model->pager;
-        return view('contas/contas', $data);
+        return $this->loadView('contas/contas', $data);
     }
 
     public function novo()
     {
         $data['titulo'] = 'Nova conta';
-        return view('contas/consultarConta', $data);
+        return $this->loadView('contas/consultarConta', $data);
     }
 
     public function editar($id = null)
@@ -35,7 +35,7 @@ class Contas extends BaseController
         if (empty($data['conta'])) {
             return redirect()->to(site_url('contas/contas'))->with('errors', 'Conta não encontrada!');
         }
-        return view('contas/consultarConta', $data);
+        return $this->loadView('contas/consultarConta', $data);
     }
 
     public function salvar()

@@ -26,13 +26,13 @@ class Tarefas extends BaseController
         $data['tarefas'] = $this->tarefasService->listarTarefas($minhas, $emAndamento);
 
         if ($view == "Lista") {
-            return view('tarefas/listaTarefas', $data);
+            return $this->loadView('tarefas/listaTarefas', $data);
         }
 
         helper('criarcartao');
         $data['cartoes'] = criarcartao($data['tarefas']);
         
-        return view('tarefas/kamban', $data);
+        return $this->loadView('tarefas/kamban', $data);
     }
 
     public function editar(?int $id)
@@ -46,7 +46,7 @@ class Tarefas extends BaseController
         $data['tarefas'] = $tarefa;
         $data['selected'] = $tarefa['processo_id'];
 
-        return view('tarefas/editarTarefa', $data);
+        return $this->loadView('tarefas/editarTarefa', $data);
     }
 
     public function nova()
@@ -103,7 +103,7 @@ class Tarefas extends BaseController
         
         Session()->set(['msg'=> null]);
         
-        return view('tarefas', $data);
+        return $this->loadView('tarefas', $data);
     }
 
     public function atualizar()

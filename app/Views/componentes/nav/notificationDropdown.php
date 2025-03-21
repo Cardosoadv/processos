@@ -1,15 +1,3 @@
-<?php
-$mensagensNaoLidas = model('MensagensModel')->qteMensagensNaoLidasPorDestinatario(user_id());
-$tarefasModel = model('TarefasModel');
-$despesasModel = model('Financeiro/FinanceiroDespesasModel');
-$tarefasUsuario = $tarefasModel ->where('responsavel', user_id())
-                                ->whereNotIn('status', [4,5])
-                                ->get()->getResultArray();
-$qteTarefas = count($tarefasUsuario);
-$qteDespesasNaoPagas = $despesasModel->contarDespesasNaoPagas();
-
-$notificacoes = $mensagensNaoLidas + $qteTarefas + $qteDespesasNaoPagas;
-?>
 
 <li class="nav-item dropdown">
     <a class="nav-link" data-bs-toggle="dropdown" href="#">
@@ -22,7 +10,7 @@ $notificacoes = $mensagensNaoLidas + $qteTarefas + $qteDespesasNaoPagas;
 
         <a href="<?= base_url('mensagens') ?>" class="dropdown-item">
             <i class="bi bi-envelope me-2"></i>
-            <?= $mensagensNaoLidas ?> novas mensagens
+            <?= $qteMensagensNaoLidas ?> novas mensagens
         </a>
         <div class="dropdown-divider"></div>
 

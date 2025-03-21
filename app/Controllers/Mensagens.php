@@ -3,11 +3,11 @@
 namespace App\Controllers;
 
 
-use CodeIgniter\Controller;
+use App\Controllers\BaseController;
 
 
 
-class Mensagens extends Controller
+class Mensagens extends BaseController
 {
 
     private $mensagensModel;
@@ -41,7 +41,7 @@ class Mensagens extends Controller
         $data['mensagens'] = $mensagens->paginate(25);
         $data['pager'] = $this->mensagensModel->pager;
 
-        echo view('mensagens/mensagens', $data);
+        return $this->loadView('mensagens/mensagens', $data);
     }
 
 
@@ -69,7 +69,7 @@ class Mensagens extends Controller
     public function novo()
     {
         $data['titulo'] = 'Nova mensagem';
-        echo view('mensagens/consultarMensagem', $data);
+        return $this->loadView('mensagens/consultarMensagem', $data);
     }
 
     public function ler($mensagemId)
@@ -92,7 +92,7 @@ class Mensagens extends Controller
             $data['mensagem'] = $mensagem;
 
             // Exibe a mensagem
-            echo view('mensagens/ler', $data);
+            return $this->loadView('mensagens/ler', $data);
         } else {
             // Mensagem não encontrada
             echo 'Mensagem não encontrada.';

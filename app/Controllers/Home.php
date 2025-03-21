@@ -32,7 +32,7 @@ class Home extends BaseController
         ];
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
         Session()->set(['msg'=> null]);
-        return view('dashboard', $data);
+        return $this->loadView('dashboard', $data);
     }
 
     

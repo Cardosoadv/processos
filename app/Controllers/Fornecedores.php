@@ -31,7 +31,7 @@ class Fornecedores extends BaseController
             $data['fornecedores'] = $this->fornecedoresModel->paginate(25);
             $data['pager'] = $this->fornecedoresModel->pager;
 
-            return view('fornecedores/fornecedores', $data);                    
+            return $this->loadView('fornecedores/fornecedores', $data);                    
             }
         
         $data['fornecedores'] = $this->fornecedoresModel->paginate(25);
@@ -92,7 +92,7 @@ class Fornecedores extends BaseController
         ];
         $data['fornecedor'] = $this->fornecedoresModel->find($id);
 
-        return view('fornecedores/consultarFornecedores', $data);
+        return $this->loadView('fornecedores/consultarFornecedores', $data);
     }
 
     public function novo(){
@@ -100,7 +100,7 @@ class Fornecedores extends BaseController
 
             'titulo'    => 'Novo Fornecedor',
         ];
-        return view('fornecedores/consultarFornecedores', $data);
+        return $this->loadView('fornecedores/consultarFornecedores', $data);
     }
 
     public function excluir($id){

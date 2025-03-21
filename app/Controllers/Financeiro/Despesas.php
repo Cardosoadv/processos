@@ -30,13 +30,13 @@ class Despesas extends BaseController
             $data['despesas'] = $despesasModel->listarDespesasNaoPagas($filtros);
             
 
-            return view('despesas/despesas', $data);                    
+            return $this->loadView('despesas/despesas', $data);                    
             }
         
         $data['despesas'] = $despesasModel->listarDespesasNaoPagas();
         //$data['pager'] = $despesasModel->pager;
 
-        return view('despesas/despesas', $data);
+        return $this->loadView('despesas/despesas', $data);
 
     }
 
@@ -115,7 +115,7 @@ class Despesas extends BaseController
         $pagarDespesa = $this->request->getGet('pagarDespesa');
         $data['pagarDespesa'] = $pagarDespesa;
 
-        return view('despesas/consultarDespesas', $data);
+        return $this->loadView('despesas/consultarDespesas', $data);
     }
 
     public function novo(){
@@ -123,7 +123,7 @@ class Despesas extends BaseController
 
             'titulo'    => 'Novo Despesa',
         ];
-        return view('despesas/consultarDespesas', $data);
+        return $this->loadView('despesas/consultarDespesas', $data);
     }
 
     public function excluir($id){

@@ -15,7 +15,7 @@ class Importacao extends BaseController
     
     public function index()
     {
-        return view('upload_form');
+        return $this->loadView('upload_form');
     }
 
     public function process()
@@ -30,13 +30,13 @@ class Importacao extends BaseController
         ];
 
         if (!$this->validate($validationRule)) {
-            return view('upload_form', ['errors' => $this->validator->listErrors()]);
+            return $this->loadView('upload_form', ['errors' => $this->validator->listErrors()]);
         }
 
         $file = $this->request->getFile('userfile');
 
         if (!$file->isValid() || $file->hasMoved()) {
-            return view('upload_form', ['errors' => 'Erro ao enviar o arquivo.']);
+            return $this->loadView('upload_form', ['errors' => 'Erro ao enviar o arquivo.']);
         }
 
         try {
@@ -62,7 +62,7 @@ class Importacao extends BaseController
 
         } catch (Exception $e) {
             log_message('error', 'Error processing CSV: ' . $e->getMessage());
-            return view('upload_form', ['errors' => 'Erro ao processar o arquivo: ' . $e->getMessage()]);
+            return $this->loadView('upload_form', ['errors' => 'Erro ao processar o arquivo: ' . $e->getMessage()]);
         }
     }
 

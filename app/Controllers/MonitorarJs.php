@@ -45,7 +45,7 @@ class MonitorarJs extends BaseController
                 'apiKey'        => getenv('API_KEY')
             ];
 
-            return view('monitorarjs', $data);
+            return $this->loadView('monitorarjs', $data);
         }
 /*
             $data = $receberMovimentosDatajud->receberMovimentos($tribunal, $numeroProcesso);

@@ -21,7 +21,7 @@ class ProcessoObjeto extends BaseController
         $objetos = $this->service->listarObjetos();
         echo '<pre>';
         print_r($objetos);
-        //return view('objetos/listar', ['objetos' => $objetos]);
+        //return $this->loadView('objetos/listar', ['objetos' => $objetos]);
     }
 
     public function salvar()

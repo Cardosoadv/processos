@@ -26,7 +26,7 @@ class ImportacaoClientes extends BaseController
     public function index()
     {
         $data['titulo'] = 'Importação de Clientes';
-        return view('importacao/index', $data);
+        return $this->loadView('importacao/index', $data);
     }
 
     /**
@@ -46,7 +46,7 @@ class ImportacaoClientes extends BaseController
 
             $data = ['errors' => $this->validator->getErrors()];
             $data['titulo'] = 'Erro na importação de Clientes';
-            return view('importacao/index', $data);
+            return $this->loadView('importacao/index', $data);
         }
 
         $arquivo = $this->request->getFile('arquivo_txt');

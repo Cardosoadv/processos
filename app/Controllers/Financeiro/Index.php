@@ -97,10 +97,10 @@ class Index extends BaseController
         // Verificar se é para impressão
         $print = $this->request->getGet('print');
         if ($print) {
-            return view('financeiro/balancoImprimir', $data);
+            return $this->loadView('financeiro/balancoImprimir', $data);
         }
 
-        return view('financeiro/balanco', $data);
+        return $this->loadView('financeiro/balanco', $data);
     }
 
     /**
@@ -146,7 +146,7 @@ class Index extends BaseController
             return view('financeiro/extratoPeriodoImprimir', $data);
         }
 
-        return view('financeiro/extratoPeriodo', $data);
+        return $this->loadView('financeiro/extratoPeriodo', $data);
     }
 
 
@@ -232,9 +232,9 @@ class Index extends BaseController
         // Verificar se é para impressão
         $print = $this->request->getGet('print');
         if ($print) {
-            return view('financeiro/balancoImprimir', $data);
+            return $this->loadView('financeiro/balancoImprimir', $data);
         }
 
-        return view('financeiro/balanco', $data);
+        return $this->loadView('financeiro/balanco', $data);
     }
 }

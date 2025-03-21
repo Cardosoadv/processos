@@ -1,11 +1,5 @@
 <?php
 
-$mensagensModel = model('MensagensModel');
-$qte = $mensagensModel->qteMensagensNaoLidasPorDestinatario(user_id());
-$mensagens = [];
-if ($qte > 0) {
-    $mensagens = $mensagensModel->mensagensNaoLidasPorDestinatario(user_id());
-}
 
 function tempo_decorrido($data_envio)
 {
@@ -31,11 +25,11 @@ function tempo_decorrido($data_envio)
 <li class="nav-item dropdown">
     <a class="nav-link" data-bs-toggle="dropdown" href="#">
         <i class="bi bi-chat-text"></i>
-        <span class="navbar-badge badge text-bg-danger"><?= $qte ?></span>
+        <span class="navbar-badge badge text-bg-danger"><?= $qteMensagensNaoLidas??0 ?></span>
     </a>
     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end">
-        <?php if (!empty($mensagens)): ?>
-            <?php foreach ($mensagens as $mensagem): ?>
+        <?php if (!empty($mensagensNaoLidas)): ?>
+            <?php foreach ($mensagensNaoLidas as $mensagem): ?>
                 <a href="<?= base_url('mensagens/ler/' . $mensagem['id']) ?>" class="dropdown-item">
                     <!--begin::Message-->
                     <div class="d-flex">

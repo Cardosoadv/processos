@@ -43,6 +43,8 @@ abstract class BaseController extends Controller
      */
     // protected $session;
 
+    protected $navData; // Propriedade para armazenar os dados de nav()
+
     /**
      * @return void
      */
@@ -52,7 +54,39 @@ abstract class BaseController extends Controller
         parent::initController($request, $response, $logger);
 
         // Preload any models, libraries, etc, here.
+        $this->navData = $this->nav();
 
         // E.g.: $this->session = \Config\Services::session();
     }
+
+    private function nav(){
+        
+        $mensagensModel = model('MensagensModel');
+        $despesasModel = model('Financeiro/FinanceiroDespesasModel');
+        $tarefasModel = model('TarefasModel');
+
+        $data['mensagensNaoLidas'] = $mensagensModel->mensagensNaoLidasPorDestinatario(user_id()) ?: [];
+        $data['qteMensagensNaoLidas'] = count($data['mensagensNaoLidas']);
+
+
+        $data['tarefasUsuario'] = $tarefasModel ->where('responsavel', user_id())
+                                        ->whereNotIn('status', [4,5])
+                                        ->get()->getResultArray() ?: [];
+
+        $data['qteTarefas'] = count($data['tarefasUsuario']);
+        $data['qteDespesasNaoPagas'] = $despesasModel->contarDespesasNaoPagas();
+        
+        $data['notificacoes'] = $data['qteMensagensNaoLidas'] + $data['qteTarefas'] + $data['qteDespesasNaoPagas']; 
+
+
+        return $data;
+    }
+
+    // Método para carregar as views com os dados de nav()
+    public function loadView($view, $data = [])
+    {
+        $data = array_merge($data, $this->navData); // Mescla os dados de nav() com os dados da view
+        return view($view, $data);
+    }
+
 }

@@ -18,7 +18,7 @@ class Decisoes extends BaseController
     public function index()
     {
                 $decisoes = $this->service->listarDecisoes();
-        return view('decisoes/listar', ['decisoes' => $decisoes]);
+        return $this->loadView('decisoes/listar', ['decisoes' => $decisoes]);
     }
 
     public function criar()
@@ -53,7 +53,7 @@ class Decisoes extends BaseController
     {
         $decisao = $this->service->obterDecisao($id);
         if ($decisao) {
-            return view('decisoes/exibir', ['decisao' => $decisao]);
+            return $this->loadView('decisoes/exibir', ['decisao' => $decisao]);
         } else {
             return $this->failNotFound('Decisão não encontrada.');
         }

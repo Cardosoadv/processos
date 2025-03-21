@@ -49,7 +49,7 @@ class Processos extends BaseController
 
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
-        return view('processos/processos', $data);
+        return $this->loadView('processos/processos', $data);
     }
 
     /**
@@ -83,7 +83,7 @@ class Processos extends BaseController
 
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
-        return view('processos/processos', $data);
+        return $this->loadView('processos/processos', $data);
     }
 
     /**
@@ -116,7 +116,7 @@ class Processos extends BaseController
         $data['img'] = 'vazio.png';
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
         $data['etiquetas'] = [];
-        return view('processos/consultarProcesso', $data);
+        return $this->loadView('processos/consultarProcesso', $data);
     }
 
     /**
@@ -134,7 +134,7 @@ class Processos extends BaseController
         );
 
         Session()->set(['msg' => null]);
-        return view('processos/consultarProcesso', $data);
+        return $this->loadView('processos/consultarProcesso', $data);
     }
 
     /**

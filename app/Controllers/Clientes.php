@@ -26,13 +26,13 @@ class Clientes extends BaseController
                                                 ->paginate(25);
             $data['pager'] = $clientesModel->pager;
 
-            return view('clientes/clientes', $data);                    
+            return $this->loadView('clientes/clientes', $data);                    
             }
         
         $data['clientes'] = $clientesModel->paginate(25);
         $data['pager'] = $clientesModel->pager;
 
-        return view('clientes/clientes', $data);
+        return $this->loadView('clientes/clientes', $data);
 
     }
 
@@ -85,7 +85,7 @@ class Clientes extends BaseController
         ];
         $data['cliente'] = model('ClientesModel')->find($id);
 
-        return view('clientes/consultarClientes', $data);
+        return $this->loadView('clientes/consultarClientes', $data);
     }
 
     public function novo(){
@@ -93,7 +93,7 @@ class Clientes extends BaseController
 
             'titulo'    => 'Novo Cliente',
         ];
-        return view('clientes/consultarClientes', $data);
+        return $this->loadView('clientes/consultarClientes', $data);
     }
 
     public function excluir($id){
