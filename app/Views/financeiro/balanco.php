@@ -7,8 +7,6 @@
     <title><?= $titulo ?></title><!--begin::Primary Meta Tags-->
     <?= $this->include('template/header') ?>
 </head><!--end::Head-->
-
-
 <!--begin::Body-->
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -130,7 +128,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                         <!-- Rateios por Advogado -->
                                                         <div class="col-md-6">
                                                             <div class="card">
@@ -214,7 +211,7 @@
                                 </div>
                                 <!--end::Accordion-->
                                 <!-- Fim dos Movimentos -->
-                            </div>
+                            
                         </div> <!-- Fim do SideBar do Formulario -->
                     </div> <!-- Fim do Row -->
                 </div>
@@ -223,6 +220,5 @@
     </div><!--end::App Content-->
     </main><!--end::App Main-->
     <?= $this->include('template/modals/change_user_img.php') ?>
-
     <?= $this->include('template/footer') ?>
 </body><!--end::Body-->

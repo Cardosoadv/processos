@@ -255,7 +255,7 @@ $contas = model('Financeiro/FinanceiroContasModel')->orderBy('conta')->findAll()
                                 </div>
                                 <!--end::Accordion-->
                                 <!-- Fim dos Movimentos -->
-                            </div>
+                            
                         </div> <!-- Fim do SideBar do Formulario -->
                     </div> <!-- Fim do Row -->
                 </div>
