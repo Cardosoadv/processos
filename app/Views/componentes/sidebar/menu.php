@@ -9,15 +9,18 @@ use App\Libraries\Permissions;
 $uri = service('uri');
 $active = $uri->getSegment(1);
 $subActive = null;
+$subActive2 = null;
 
 if ($uri->getTotalSegments() >= 2) {
     $subActive = $uri->getSegment(2);
 }
 
+if ($uri->getTotalSegments() >= 3) {
+    $subActive2 = $uri->getSegment(3);
+}
+
 $permitions = new Permissions();
 $permission = $permitions->permission();
-
-log_message('debug', $active . ' / ' . $subActive);
 
 ?>
 
@@ -101,6 +104,13 @@ log_message('debug', $active . ' / ' . $subActive);
                 <p>Financeiro <i class="nav-arrow bi bi-chevron-right"></i></p>
             </a>
             <ul class="nav nav-treeview">
+                
+                <li class="nav-item">
+                    <a href="<?= site_url('financeiro/index/extrato'); ?>" class="nav-link <?= ($subActive2 === 'extrato') ? 'active' : ''; ?>">
+                        <i class="nav-icon bi bi-card-list"></i>
+                        <p>Extrato</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="<?= site_url('financeiro/despesas'); ?>" class="nav-link <?= ($subActive === 'despesas') ? 'active' : ''; ?>">
                         <i class="nav-icon bi bi-cash-coin"></i>

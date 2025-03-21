@@ -14,15 +14,15 @@ class FinanceiroReceitasModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        
-            'receita',
-            'vencimento_dt',
-            'valor',
-            'categoria',
-            'cliente_id',
-            'comentario',
-            'rateio',
-    
+
+        'receita',
+        'vencimento_dt',
+        'valor',
+        'categoria',
+        'cliente_id',
+        'comentario',
+        'rateio',
+
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -54,8 +54,8 @@ class FinanceiroReceitasModel extends Model
     protected $afterFind      = ['preparaGetRateio'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-    
-        /**
+
+    /**
      * Prepares the rateio field for retrieval by decoding JSON
      * @param array $data The data array from the database
      * @return array The processed data array
@@ -101,7 +101,7 @@ class FinanceiroReceitasModel extends Model
             try {
                 // Validate rateio structure if needed
                 $this->validateRateioStructure($rateio);
-                
+
                 $data['data']['rateio'] = json_encode($rateio, JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
                 throw new InvalidArgumentException('Invalid rateio data structure: ' . $e->getMessage());
@@ -126,7 +126,7 @@ class FinanceiroReceitasModel extends Model
             if (!is_array($item)) {
                 throw new InvalidArgumentException('Each rateio item must be an array');
             }
-            
+
             // Add more specific validation rules based on your needs
             if (!isset($item['valor']) || !is_numeric($item['valor'])) {
                 throw new InvalidArgumentException('Each rateio item must have a numeric valor');
@@ -141,125 +141,123 @@ class FinanceiroReceitasModel extends Model
      */
     public function calculateTotal(array $rateio): float
     {
-        return array_reduce($rateio, function($carry, $item) {
+        return array_reduce($rateio, function ($carry, $item) {
             return $carry + ($item['valor'] ?? 0);
         }, 0.0);
     }
 
     /**
- * Conta as receitas que ainda não foram recebidas
- * 
- * @param array $filtros Filtros opcionais para a consulta (ex: período, categoria, etc)
- * @return int Número de receitas não recebidas
- */
-public function contarReceitasNaoRecebidas(array $filtros = []): int
-{
-    // Cria uma subquery para obter as receitas que já têm pagamento
-    $subQuery = $this->db   ->table('fin_pgto_receitas')
-                            ->select('receita_id')
-                            ->where('deleted_at IS NULL');
-    
-    // Query principal para contar receitas sem pagamento
-    $builder = $this->db    ->table('fin_receitas')
-                            ->select('COUNT(*) as total')
-                            ->whereNotIn('id_receita', $subQuery);
-    
-    // Aplicar filtros opcionais
-    if (!empty($filtros)) {
-        // Filtro por data de vencimento
-        if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
-            $builder->where('vencimento_dt >=', $filtros['data_inicio'])
-                    ->where('vencimento_dt <=', $filtros['data_fim']);
-        }
-        
-        // Filtro por categoria
-        if (isset($filtros['categoria'])) {
-            $builder->where('categoria', $filtros['categoria']);
-        }
-        
-        // Filtro por cliente
-        if (isset($filtros['cliente_id'])) {
-            $builder->where('cliente_id', $filtros['cliente_id']);
-        }
-        
-        // Filtro por vencimento (receitas vencidas)
-        if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
-            $builder->where('vencimento_dt <', date('Y-m-d'));
-        }
-    }
-    
-    // Garantir que apenas receitas não excluídas sejam contadas
-    $builder->where('deleted_at IS NULL');
-    
-    $result = $builder->get()->getRow();
-    
-    return (int)$result->total;
-}
+     * Conta as receitas que ainda não foram recebidas
+     * 
+     * @param array $filtros Filtros opcionais para a consulta (ex: período, categoria, etc)
+     * @return int Número de receitas não recebidas
+     */
+    public function contarReceitasNaoRecebidas(array $filtros = []): int
+    {
+        // Cria uma subquery para obter as receitas que já têm pagamento
+        $subQuery = $this->db->table('fin_pgto_receitas')
+            ->select('receita_id')
+            ->where('deleted_at IS NULL');
 
-/**
- * Recupera as receitas que ainda não foram recebidas
- * 
- * @param array $filtros Filtros opcionais para a consulta
- * @param int $limit Limite de registros para retornar
- * @param int $offset Deslocamento para paginação
- * @return array Lista de receitas não recebidas
- */
-public function listarReceitasNaoRecebidas(array $filtros = [], int $limit = 0, int $offset = 0): array
-{
-    // Cria uma subquery para obter as receitas que já têm pagamento
-    $subQuery = $this->db   ->table('fin_pgto_receitas')
-                            ->select('receita_id')
-                            ->where('deleted_at IS NULL');
-    
-    // Query principal para buscar receitas sem pagamento
-    $builder = $this->db    ->table('fin_receitas')
-                            ->whereNotIn('id_receita', $subQuery);
-    
-    // Aplicar filtros opcionais
-    if (!empty($filtros)) {
-        // Filtro por data de vencimento
-        if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
-            $builder->where('vencimento_dt >=', $filtros['data_inicio'])
+        // Query principal para contar receitas sem pagamento
+        $builder = $this->db->table('fin_receitas')
+            ->select('COUNT(*) as total')
+            ->whereNotIn('id_receita', $subQuery);
+
+        // Aplicar filtros opcionais
+        if (!empty($filtros)) {
+            // Filtro por data de vencimento
+            if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
+                $builder->where('vencimento_dt >=', $filtros['data_inicio'])
                     ->where('vencimento_dt <=', $filtros['data_fim']);
+            }
+
+            // Filtro por categoria
+            if (isset($filtros['categoria'])) {
+                $builder->where('categoria', $filtros['categoria']);
+            }
+
+            // Filtro por cliente
+            if (isset($filtros['cliente_id'])) {
+                $builder->where('cliente_id', $filtros['cliente_id']);
+            }
+
+            // Filtro por vencimento (receitas vencidas)
+            if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
+                $builder->where('vencimento_dt <', date('Y-m-d'));
+            }
         }
-        
-        // Filtro por categoria
-        if (isset($filtros['categoria'])) {
-            $builder->where('categoria', $filtros['categoria']);
-        }
-        
-        // Filtro por cliente
-        if (isset($filtros['cliente_id'])) {
-            $builder->where('cliente_id', $filtros['cliente_id']);
-        }
-        
-        // Filtro por vencimento (receitas vencidas)
-        if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
-            $builder->where('vencimento_dt <', date('Y-m-d'));
-        }
-        
-        // Ordenação
-        if (isset($filtros['ordenar_por']) && isset($filtros['ordem'])) {
-            $builder->orderBy($filtros['ordenar_por'], $filtros['ordem']);
+
+        // Garantir que apenas receitas não excluídas sejam contadas
+        $builder->where('deleted_at IS NULL');
+
+        $result = $builder->get()->getRow();
+
+        return (int)$result->total;
+    }
+
+    /**
+     * Recupera as receitas que ainda não foram recebidas
+     * 
+     * @param array $filtros Filtros opcionais para a consulta
+     * @param int $limit Limite de registros para retornar
+     * @param int $offset Deslocamento para paginação
+     * @return array Lista de receitas não recebidas
+     */
+    public function listarReceitasNaoRecebidas(array $filtros = [], int $limit = 0, int $offset = 0): array
+    {
+        // Cria uma subquery para obter as receitas que já têm pagamento
+        $subQuery = $this->db->table('fin_pgto_receitas')
+            ->select('receita_id')
+            ->where('deleted_at IS NULL');
+
+        // Query principal para buscar receitas sem pagamento
+        $builder = $this->db->table('fin_receitas')
+            ->whereNotIn('id_receita', $subQuery);
+
+        // Aplicar filtros opcionais
+        if (!empty($filtros)) {
+            // Filtro por data de vencimento
+            if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
+                $builder->where('vencimento_dt >=', $filtros['data_inicio'])
+                    ->where('vencimento_dt <=', $filtros['data_fim']);
+            }
+
+            // Filtro por categoria
+            if (isset($filtros['categoria'])) {
+                $builder->where('categoria', $filtros['categoria']);
+            }
+
+            // Filtro por cliente
+            if (isset($filtros['cliente_id'])) {
+                $builder->where('cliente_id', $filtros['cliente_id']);
+            }
+
+            // Filtro por vencimento (receitas vencidas)
+            if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
+                $builder->where('vencimento_dt <', date('Y-m-d'));
+            }
+
+            // Ordenação
+            if (isset($filtros['ordenar_por']) && isset($filtros['ordem'])) {
+                $builder->orderBy($filtros['ordenar_por'], $filtros['ordem']);
+            } else {
+                // Ordenação padrão por data de vencimento
+                $builder->orderBy('vencimento_dt', 'ASC');
+            }
         } else {
             // Ordenação padrão por data de vencimento
             $builder->orderBy('vencimento_dt', 'ASC');
         }
-    } else {
-        // Ordenação padrão por data de vencimento
-        $builder->orderBy('vencimento_dt', 'ASC');
-    }
-    
-    // Garantir que apenas receitas não excluídas sejam listadas
-    $builder->where('deleted_at IS NULL');
-    
-    // Aplicar limite e offset para paginação
-    if ($limit > 0) {
-        $builder->limit($limit, $offset);
-    }
-    
-    return $builder->get()->getResultArray();
-}
 
+        // Garantir que apenas receitas não excluídas sejam listadas
+        $builder->where('deleted_at IS NULL');
 
+        // Aplicar limite e offset para paginação
+        if ($limit > 0) {
+            $builder->limit($limit, $offset);
+        }
+
+        return $builder->get()->getResultArray();
+    }
 }

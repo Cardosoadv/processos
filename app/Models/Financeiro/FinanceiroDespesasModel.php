@@ -27,9 +27,8 @@ class FinanceiroDespesasModel extends Model
     protected bool $updateOnlyChanged = true;
 
     // Improved type definitions
-    protected array $casts = [
-    ];
-    
+    protected array $casts = [];
+
     protected array $castHandlers = [];
 
     // Dates
@@ -49,7 +48,7 @@ class FinanceiroDespesasModel extends Model
         'comentario'    => 'permit_empty|string',
         'rateio'        => 'permit_empty',
     ];
- 
+
     protected $validationMessages = [
         'despesa' => [
             'required' => 'O campo despesa é obrigatório',
@@ -123,7 +122,7 @@ class FinanceiroDespesasModel extends Model
             try {
                 // Validate rateio structure if needed
                 $this->validateRateioStructure($rateio);
-                
+
                 $data['data']['rateio'] = json_encode($rateio, JSON_THROW_ON_ERROR);
             } catch (\JsonException $e) {
                 throw new InvalidArgumentException('Invalid rateio data structure: ' . $e->getMessage());
@@ -148,7 +147,7 @@ class FinanceiroDespesasModel extends Model
             if (!is_array($item)) {
                 throw new InvalidArgumentException('Each rateio item must be an array');
             }
-            
+
             // Add more specific validation rules based on your needs
             if (!isset($item['valor']) || !is_numeric($item['valor'])) {
                 throw new InvalidArgumentException('Each rateio item must have a numeric valor');
@@ -163,123 +162,128 @@ class FinanceiroDespesasModel extends Model
      */
     public function calculateTotal(array $rateio): float
     {
-        return array_reduce($rateio, function($carry, $item) {
+        return array_reduce($rateio, function ($carry, $item) {
             return $carry + ($item['valor'] ?? 0);
         }, 0.0);
     }
 
-/**
- * Conta as despesas que ainda não foram pagas
- * 
- * @param array $filtros Filtros opcionais para a consulta (ex: período, categoria, etc)
- * @return int Número de despesas não pagas
- */
-public function contarDespesasNaoPagas(array $filtros = []): int
-{
-    // Cria uma subquery para obter as despesas que já têm pagamento
-    $subQuery = $this->db   ->table('fin_pgto_despesas')
-                            ->select('despesa_id')
-                            ->where('deleted_at IS NULL');
-    
-    // Query principal para contar despesas sem pagamento
-    $builder = $this->db    ->table('fin_despesas')
-                            ->select('COUNT(*) as total')
-                            ->whereNotIn('id_despesa', $subQuery);
-    
-    // Aplicar filtros opcionais
-    if (!empty($filtros)) {
-        // Filtro por data de vencimento
-        if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
-            $builder->where('vencimento_dt >=', $filtros['data_inicio'])
-                    ->where('vencimento_dt <=', $filtros['data_fim']);
-        }
-        
-        // Filtro por categoria
-        if (isset($filtros['categoria'])) {
-            $builder->where('categoria', $filtros['categoria']);
-        }
-        
-        // Filtro por fornecedor
-        if (isset($filtros['fornecedor'])) {
-            $builder->where('fornecedor', $filtros['fornecedor']);
-        }
-        
-        // Filtro por vencimento (despesas vencidas)
-        if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
-            $builder->where('vencimento_dt <', date('Y-m-d'));
-        }
-    }
-    
-    // Garantir que apenas despesas não excluídas sejam contadas
-    $builder->where('deleted_at IS NULL');
-    
-    $result = $builder->get()->getRow();
-    
-    return (int)$result->total;
-}
+    /**
+     * Conta as despesas que ainda não foram pagas
+     * 
+     * @param array $filtros Filtros opcionais para a consulta (ex: período, categoria, etc)
+     * @return int Número de despesas não pagas
+     */
+    public function contarDespesasNaoPagas(array $filtros = []): int
+    {
+        // Cria uma subquery para obter as despesas que já têm pagamento
+        $subQuery = $this->db->table('fin_pgto_despesas')
+            ->select('despesa_id')
+            ->where('deleted_at IS NULL');
 
-/**
- * Recupera as despesas que ainda não foram pagas
- * 
- * @param array $filtros Filtros opcionais para a consulta
- * @param int $limit Limite de registros para retornar
- * @param int $offset Deslocamento para paginação
- * @return array Lista de despesas não pagas
- */
-public function listarDespesasNaoPagas(array $filtros = [], int $limit = 0, int $offset = 0): array
-{
-    // Cria uma subquery para obter as despesas que já têm pagamento
-    $subQuery = $this->db   ->table('fin_pgto_despesas')
-                            ->select('despesa_id')
-                            ->where('deleted_at IS NULL');
-    
-    // Query principal para buscar despesas sem pagamento
-    $builder = $this->db    ->table('fin_despesas')
-                            ->whereNotIn('id_despesa', $subQuery);
-    
-    // Aplicar filtros opcionais
-    if (!empty($filtros)) {
-        // Filtro por data de vencimento
-        if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
-            $builder->where('vencimento_dt >=', $filtros['data_inicio'])
+        // Query principal para contar despesas sem pagamento
+        $builder = $this->db->table('fin_despesas')
+            ->select('COUNT(*) as total')
+            ->whereNotIn('id_despesa', $subQuery);
+
+        // Aplicar filtros opcionais
+        if (!empty($filtros)) {
+            // Filtro por data de vencimento
+            if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
+                $builder->where('vencimento_dt >=', $filtros['data_inicio'])
                     ->where('vencimento_dt <=', $filtros['data_fim']);
+            }
+
+            // Filtro por categoria
+            if (isset($filtros['categoria'])) {
+                $builder->where('categoria', $filtros['categoria']);
+            }
+
+            // Filtro por fornecedor
+            if (isset($filtros['fornecedor'])) {
+                $builder->where('fornecedor', $filtros['fornecedor']);
+            }
+
+            // Filtro por vencimento (despesas vencidas)
+            if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
+                $builder->where('vencimento_dt <', date('Y-m-d'));
+            }
         }
-        
-        // Filtro por categoria
-        if (isset($filtros['categoria'])) {
-            $builder->where('categoria', $filtros['categoria']);
-        }
-        
-        // Filtro por fornecedor
-        if (isset($filtros['fornecedor'])) {
-            $builder->where('fornecedor', $filtros['fornecedor']);
-        }
-        
-        // Filtro por vencimento (despesas vencidas)
-        if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
-            $builder->where('vencimento_dt <', date('Y-m-d'));
-        }
-        
-        // Ordenação
-        if (isset($filtros['ordenar_por']) && isset($filtros['ordem'])) {
-            $builder->orderBy($filtros['ordenar_por'], $filtros['ordem']);
+
+        // Garantir que apenas despesas não excluídas sejam contadas
+        $builder->where('deleted_at IS NULL');
+
+        $result = $builder->get()->getRow();
+
+        return (int)$result->total;
+    }
+
+    /**
+     * Recupera as despesas que ainda não foram pagas
+     * 
+     * @param array $filtros Filtros opcionais para a consulta
+     * @param int $limit Limite de registros para retornar
+     * @param int $offset Deslocamento para paginação
+     * @return array Lista de despesas não pagas
+     */
+    public function listarDespesasNaoPagas(array $filtros = [], int $limit = 0, int $offset = 0): array
+    {
+        // Cria uma subquery para obter as despesas que já têm pagamento
+        $subQuery = $this->db->table('fin_pgto_despesas')
+            ->select('despesa_id')
+            ->where('deleted_at IS NULL');
+
+        // Query principal para buscar despesas sem pagamento
+        $builder = $this->db->table('fin_despesas')
+            ->whereNotIn('id_despesa', $subQuery);
+
+        // Aplicar filtros opcionais
+        if (!empty($filtros)) {
+            // Filtro por data de vencimento
+            if (isset($filtros['data_inicio']) && isset($filtros['data_fim'])) {
+                $builder->where('vencimento_dt >=', $filtros['data_inicio'])
+                    ->where('vencimento_dt <=', $filtros['data_fim']);
+            }
+
+            // Filtro por despesa
+            if (isset($filtros['despesa'])) {
+                $builder->where('despesa', $filtros['despesa']);
+            }
+
+            // Filtro por categoria
+            if (isset($filtros['categoria'])) {
+                $builder->where('categoria', $filtros['categoria']);
+            }
+
+            // Filtro por fornecedor
+            if (isset($filtros['fornecedor'])) {
+                $builder->where('fornecedor', $filtros['fornecedor']);
+            }
+
+            // Filtro por vencimento (despesas vencidas)
+            if (isset($filtros['vencidas']) && $filtros['vencidas'] === true) {
+                $builder->where('vencimento_dt <', date('Y-m-d'));
+            }
+
+            // Ordenação
+            if (isset($filtros['ordenar_por']) && isset($filtros['ordem'])) {
+                $builder->orderBy($filtros['ordenar_por'], $filtros['ordem']);
+            } else {
+                // Ordenação padrão por data de vencimento
+                $builder->orderBy('vencimento_dt', 'ASC');
+            }
         } else {
             // Ordenação padrão por data de vencimento
             $builder->orderBy('vencimento_dt', 'ASC');
         }
-    } else {
-        // Ordenação padrão por data de vencimento
-        $builder->orderBy('vencimento_dt', 'ASC');
+
+        // Garantir que apenas despesas não excluídas sejam listadas
+        $builder->where('deleted_at IS NULL');
+
+        // Aplicar limite e offset para paginação
+        if ($limit > 0) {
+            $builder->limit($limit, $offset);
+        }
+
+        return $builder->get()->getResultArray();
     }
-    
-    // Garantir que apenas despesas não excluídas sejam listadas
-    $builder->where('deleted_at IS NULL');
-    
-    // Aplicar limite e offset para paginação
-    if ($limit > 0) {
-        $builder->limit($limit, $offset);
-    }
-    
-    return $builder->get()->getResultArray();
 }
-} 
