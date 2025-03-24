@@ -216,6 +216,7 @@ public function getTransferenciasParaPorContaPeriodo($conta_id, $dataInicial, $d
 public function getDespesasAnteriores($conta_id, $dataInicial)
 {
     return $this->pagtoDespesasModel
+        ->distinct()
         ->select('pd.pagamento_despesa_dt as data, (pd.valor * -1) as valor, pd.rateio as rateio')
         ->from('fin_pgto_despesas as pd')
         ->where('pd.conta_id', $conta_id)
@@ -227,6 +228,7 @@ public function getDespesasAnteriores($conta_id, $dataInicial)
 public function getReceitasAnteriores($conta_id, $dataInicial)
 {
     return $this->pagtoReceitasModel
+        ->distinct()
         ->select('pr.pagamento_receita_dt as data, pr.valor as valor, pr.rateio as rateio')
         ->from('fin_pgto_receitas as pr')
         ->where('pr.conta_id', $conta_id)
@@ -238,6 +240,7 @@ public function getReceitasAnteriores($conta_id, $dataInicial)
 public function getTransferenciasDeAnteriores($conta_id, $dataInicial)
 {
     return $this->transferenciaModel
+        ->distinct()
         ->select('(valor * -1) as valor')
         ->where('id_conta_origem', $conta_id)
         ->where('deleted_at is null')
@@ -248,15 +251,13 @@ public function getTransferenciasDeAnteriores($conta_id, $dataInicial)
 public function getTransferenciasParaAnteriores($conta_id, $dataInicial)
 {
     return $this->transferenciaModel
+        ->distinct()
         ->select('valor')
         ->where('id_conta_destino', $conta_id)
         ->where('deleted_at is null')
         ->where('data_transferencia <', $dataInicial)
         ->findAll();
 }
-
-
-
 
 
 }
