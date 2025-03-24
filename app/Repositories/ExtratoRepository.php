@@ -259,5 +259,4 @@ public function getTransferenciasParaAnteriores($conta_id, $dataInicial)
         ->findAll();
 }
 
-
 }

@@ -1,5 +1,5 @@
 <?php
-$listadeProcessos = model('ProcessosModel')->findAll();
+$listadeProcessos = model('ProcessosModel')->orderBy('numeroprocessocommascara')->findAll();
 $responsaveis = model('ResposavelModel')->getUsers();
 ?>
 
