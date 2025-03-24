@@ -35,6 +35,8 @@ class ReceberIntimacoes{
         
         // Executa a requisição e obtém a resposta
         $response = curl_exec($ch);
+
+        log_message('debug', 'Requisição: ' . $response);
         
         // Verifica se houve algum erro
         if(curl_errno($ch)){
