@@ -170,12 +170,6 @@ function removeParam($params, $key) {
                                                                     echo " ";
                                                                 };
                                                             ?>
-                                                            <button class="btn btn-sm btn-outline-secondary"
-                                                                style="padding: 0.1rem 0.25rem; font-size: 0.5rem;"
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#addTagModal">
-                                                                    <i class="fas fa-plus" style="font-size: 0.5rem;"></i> Adicionar
-                                                            </button>
                                                         </td>
                                                         <td><?= esc($processo['titulo_processo']) ?><br/>
                                                             <?= esc($processo['nome']) ?>
@@ -220,7 +214,6 @@ function removeParam($params, $key) {
         </main>
 
         <?= $this->include('template/modals/change_user_img.php') ?>
-        <?= $this->include('template/modals/badgeGeral.php') ?>
         <?= $this->include('template/footer') ?>
     </div>
 
