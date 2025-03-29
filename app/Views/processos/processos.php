@@ -126,6 +126,7 @@ function removeParam($params, $key) {
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
+                                                <th class="col"><input type="checkbox" id="selectAll"></th>
                                                     <th class="col-3">
                                                         <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['sort' => 'numero_processo', 'order' => ($sortField === 'numero_processo' ? $nextOrder : 'asc')]))) ?>" 
                                                             class="text-decoration-none text-dark">
@@ -157,9 +158,11 @@ function removeParam($params, $key) {
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <form id="processosForm" method="post" action="<?= base_url('processos/etiquetaEmLote') ?>">
                                                 <?php foreach ($processos as $processo): ?>
                                                     <tr>
-                                                        <td><?= esc($processo['numeroprocessocommascara']) ?>
+                                                    <td><input type="checkbox" class="processCheckbox" name="processos[]" value="<?= $processo['id_processo'] ?>"></td>
+                                                        <td style='font-size: 0.8rem;'><?= esc($processo['numeroprocessocommascara']) ?>
                                                             <br/>
                                                             <?php 
                                                                 $etiquetas = etiquetasDosProcesso($processo['id_processo']);
@@ -171,11 +174,11 @@ function removeParam($params, $key) {
                                                                 };
                                                             ?>
                                                         </td>
-                                                        <td><?= esc($processo['titulo_processo']) ?><br/>
+                                                        <td style='font-size: 0.8rem;'><?= esc($processo['titulo_processo']) ?><br/>
                                                             <?= esc($processo['nome']) ?>
                                                         </td>
-                                                        <td><?= date('d-m-Y',strtotime(esc($processo['dataRevisao'] ?? "01-01-2000"))) ?></td>
-                                                        <td>
+                                                        <td style='font-size: 0.8rem;'><?= date('d-m-Y',strtotime(esc($processo['dataRevisao'] ?? "01-01-2000"))) ?></td>
+                                                        <td style='font-size: 0.8rem;'>
                                                             <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
                                                                 class="btn btn-sm btn-primary"
                                                                 style="padding: 0.1rem 0.25rem; font-size: 0.7rem;">
@@ -191,6 +194,22 @@ function removeParam($params, $key) {
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
+                                        <div class="row align-items-end mb-3">
+                                            <div class="col-8">
+                                        <label for="etiqueta">Aplicar etiqueta em lote</label>
+                                        <select class="form-control" id="etiqueta" name="etiqueta">
+                                            <option value="">Selecione uma etiqueta</option>
+                                            <?php foreach ($tags as $tag): ?>
+                                                <option value="<?= $tag['id_etiqueta'] ?>">
+                                                    <?= htmlspecialchars($tag['nome'], ENT_QUOTES, 'UTF-8') ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select></div>
+                                            <div class="col-4">
+                                        <button type="submit" class="btn btn-primary mt-2">Adicionar Etiqueta</button>
+                                            </div></div>
+                                    </form>
+                                        
                                         <?= $pager->links() ?>
                                     <?php endif; ?>
                                 </div>
@@ -314,6 +333,16 @@ function removeParam($params, $key) {
                 // Se nenhuma tag for selecionada, você pode redirecionar para uma URL sem o parâmetro, ou fazer outra coisa
                 window.location.href = baseUrl; // Redireciona para a página sem filtro
             }
+        });
+
+        // Checkbox de seleção em lote
+        const selectAll = document.getElementById('selectAll');
+        const processCheckboxes = document.querySelectorAll('.processCheckbox');
+
+        selectAll.addEventListener('change', function() {
+            processCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
         });
 
     </script>
