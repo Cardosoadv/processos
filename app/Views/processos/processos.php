@@ -11,15 +11,15 @@ function etiquetasDosProcesso($id_processo){
 }
 
 //Carrega as etiquetas
-$tags = model('EtiquetasModel')->findAll();
+$tags = model('EtiquetasModel')->orderBy('nome')->findAll();
 
 // Obtém os parâmetros atuais
 $params = $_GET;
 
 // Função auxiliar para remover um parâmetro específico
 function removeParam($params, $key) {
-   unset($params[$key]);
-   return $params;
+    unset($params[$key]);
+    return $params;
 }
 
 ?>
@@ -46,11 +46,9 @@ function removeParam($params, $key) {
             <div class="app-content">
                 <div class="container-fluid">
                     <div class="row">
-                        <!-- Main Content Column -->
                         <div class="col-lg-9">
                             <div class="row">
                                 <div class="col-8">
-                                    <!-- Search Form -->
                                     <form action="" method="get" class="mb-3">
                                         <div class="input-group">
                                             <input 
@@ -58,7 +56,8 @@ function removeParam($params, $key) {
                                                 name="s" 
                                                 class="form-control" 
                                                 placeholder="Pesquisar..." 
-                                                aria-label="Pesquisar">
+                                                aria-label="Pesquisar"
+                                                value="<?= isset($params['s']) ? esc($params['s']) : '' ?>">
                                             <button class="btn btn-outline-secondary" type="submit">
                                                 Pesquisar
                                             </button>
@@ -68,17 +67,14 @@ function removeParam($params, $key) {
                                 <div class="col-4">
                                     <select class="form-control" id="tagSelect" name="selected_tag_id">
                                         <option value="">Selecione uma Tag</option> <?php foreach ($tags as $tag): ?>
-                                            <option value="<?= $tag['id_etiqueta'] ?>">
+                                            <option value="<?= $tag['id_etiqueta'] ?>" <?= (isset($params['etiqueta']) && $params['etiqueta'] == $tag['id_etiqueta']) ? 'selected' : '' ?>>
                                                 <?= htmlspecialchars($tag['nome'], ENT_QUOTES, 'UTF-8') ?>
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
-
-
                             </div>
 
-                            <!-- Action Button and Messages -->
                             <div class="container">
                                 <div class="d-flex justify-content-end mb-3">
 
@@ -96,14 +92,14 @@ function removeParam($params, $key) {
                                     <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['encerrado' => '1']))) ?>" 
                                         class="btn btn-danger mb-2 mx-1">
                                         Encerrados
-                                    </a>    
+                                    </a>        
                                 <?php endif; ?>
                                 <?php else: ?>
                                     <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['encerrado' => '0']))) ?>" 
                                         class="btn btn-primary mb-2 mx-1">
                                         Em Andamento
                                     </a>
-                            <?php endif; ?>    
+                                <?php endif; ?>        
 
                                     <a href="<?= base_url('processos/novo/') ?>" 
                                         class="btn btn-success mb-2 mx-1">
@@ -112,8 +108,8 @@ function removeParam($params, $key) {
                                 </div>
 
                                 <?php if (null !== (session()->get('msg'))
-                                                || (session()->get('success')) 
-                                                || (session()->get('errors'))): ?>
+                                            || (session()->get('success')) 
+                                            || (session()->get('errors'))): ?>
                                     <div class="callout callout-info">
                                         <?= session()->get('msg') ?>
                                         <?= session()->get('success') ?>
@@ -121,7 +117,6 @@ function removeParam($params, $key) {
                                     </div>
                                 <?php endif; ?>
 
-                                <!-- Data Table -->
                                 <div class="mt-3">
                                     <?php if (empty($processos)): ?>
                                         <div class="alert alert-info">
@@ -131,69 +126,59 @@ function removeParam($params, $key) {
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
+                                                <th class="col"><input type="checkbox" id="selectAll"></th>
                                                     <th class="col-3">
-                                                        <a href="<?= base_url('processos?sort=numero_processo&order=' . 
-                                                            ($sortField === 'numero_processo' ? $nextOrder : 'asc')) . 
-                                                            ($s ? '&s=' . $s : '') ?>" 
+                                                        <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['sort' => 'numero_processo', 'order' => ($sortField === 'numero_processo' ? $nextOrder : 'asc')]))) ?>" 
                                                             class="text-decoration-none text-dark">
-                                                                Número do Processo
+                                                            Número do Processo
                                                             <?php if($sortField === 'numero_processo'): ?>
                                                                 <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
                                                             <?php endif; ?>
-                                                        </a>    
+                                                        </a>        
                                                     </th>
                                                     <th class="col-4">
-                                                        <a href="<?= base_url('processos?sort=titulo_processo&order=' . 
-                                                            ($sortField === 'titulo_processo' ? $nextOrder : 'asc')) .
-                                                            ($s ? '&s=' . $s : '') ?>" 
+                                                        <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['sort' => 'titulo_processo', 'order' => ($sortField === 'titulo_processo' ? $nextOrder : 'asc')]))) ?>" 
                                                             class="text-decoration-none text-dark">
-                                                            Título
+                                                            Título / Cliente
                                                             <?php if($sortField === 'titulo_processo'): ?>
                                                                 <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
                                                             <?php endif; ?>
-                                                        </a> / Cliente
+                                                        </a>
                                                     </th>
                                                     <th class="col-2">
-                                                        <a href="<?= base_url('processos?sort=dataRevisao&order=' . 
-                                                            ($sortField === 'dataRevisao' ? $nextOrder : 'desc')) . 
-                                                            ($s ? '&s=' . $s : '') ?>" 
+                                                        <a href="<?= base_url('processos?' . http_build_query(array_merge($params, ['sort' => 'dataRevisao', 'order' => ($sortField === 'dataRevisao' ? $nextOrder : 'desc')]))) ?>" 
                                                             class="text-decoration-none text-dark">
-                                                                Data Revisão
+                                                            Data Revisão
                                                             <?php if($sortField === 'dataRevisao'): ?>
                                                                 <i class="fas fa-sort-<?= $sortOrder === 'asc' ? 'up' : 'down' ?>"></i>
                                                             <?php endif; ?>
-                                                        </a>    
+                                                        </a>        
                                                     </th>
                                                     <th class="col-2">Ações</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <form id="processosForm" method="post" action="<?= base_url('processos/etiquetaEmLote') ?>">
                                                 <?php foreach ($processos as $processo): ?>
                                                     <tr>
-                                                        <td><?= esc($processo['numeroprocessocommascara']) ?>
-                                                        <br/>
-                                                        <?php 
-                                                            $etiquetas = etiquetasDosProcesso($processo['id_processo']);
-                                                            foreach ($etiquetas as $etiqueta){ 
-                                                                echo "<span class='badge mr-1' style='background-color:#".$etiqueta['cor']."; font-size: 0.5rem;' id=".$etiqueta['id_etiqueta'].">".$etiqueta['nome']." &nbsp;";
-                                                                echo "<i class='fas fa-times'></i>";
-                                                                echo "</span>";
-                                                                echo " ";
-                                                            };
+                                                    <td><input type="checkbox" class="processCheckbox" name="processos[]" value="<?= $processo['id_processo'] ?>"></td>
+                                                        <td style='font-size: 0.8rem;'><?= esc($processo['numeroprocessocommascara']) ?>
+                                                            <br/>
+                                                            <?php 
+                                                                $etiquetas = etiquetasDosProcesso($processo['id_processo']);
+                                                                foreach ($etiquetas as $etiqueta){ 
+                                                                    echo "<span class='badge mr-1' style='background-color:#".$etiqueta['cor']."; font-size: 0.5rem;' id=".$etiqueta['id_etiqueta'].">".$etiqueta['nome']." &nbsp;";
+                                                                    echo "<i class='fas fa-times'></i>";
+                                                                    echo "</span>";
+                                                                    echo " ";
+                                                                };
                                                             ?>
-                                                                                                                
-                                                            <button class="btn btn-sm btn-outline-secondary"
-                                                                style="padding: 0.1rem 0.25rem; font-size: 0.5rem;"
-                                                                data-bs-toggle="modal" 
-                                                                data-bs-target="#addTagModal">
-                                                                    <i class="fas fa-plus" style="font-size: 0.5rem;"></i> Adicionar
-                                                            </button>
                                                         </td>
-                                                        <td><?= esc($processo['titulo_processo']) ?><br/>
-                                                        <?= esc($processo['nome']) ?>
+                                                        <td style='font-size: 0.8rem;'><?= esc($processo['titulo_processo']) ?><br/>
+                                                            <?= esc($processo['nome']) ?>
                                                         </td>
-                                                        <td><?= date('d-m-Y',strtotime(esc($processo['dataRevisao'] ?? "01-01-2000"))) ?></td>
-                                                        <td>
+                                                        <td style='font-size: 0.8rem;'><?= date('d-m-Y',strtotime(esc($processo['dataRevisao'] ?? "01-01-2000"))) ?></td>
+                                                        <td style='font-size: 0.8rem;'>
                                                             <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
                                                                 class="btn btn-sm btn-primary"
                                                                 style="padding: 0.1rem 0.25rem; font-size: 0.7rem;">
@@ -205,17 +190,32 @@ function removeParam($params, $key) {
                                                                 Excluir
                                                             </a>
                                                         </td>
-                                                        </tr>
+                                                    </tr>
                                                 <?php endforeach; ?>
                                             </tbody>
                                         </table>
+                                        <div class="row align-items-end mb-3">
+                                            <div class="col-8">
+                                        <label for="etiqueta">Aplicar etiqueta em lote</label>
+                                        <select class="form-control" id="etiqueta" name="etiqueta">
+                                            <option value="">Selecione uma etiqueta</option>
+                                            <?php foreach ($tags as $tag): ?>
+                                                <option value="<?= $tag['id_etiqueta'] ?>">
+                                                    <?= htmlspecialchars($tag['nome'], ENT_QUOTES, 'UTF-8') ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                        </select></div>
+                                            <div class="col-4">
+                                        <button type="submit" class="btn btn-primary mt-2">Adicionar Etiqueta</button>
+                                            </div></div>
+                                    </form>
+                                        
                                         <?= $pager->links() ?>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Sidebar -->
                         <div class="col-lg-3">
                             <section class="mb-4">
                                 <h3>Últimos Processos Movimentados</h3>
@@ -233,7 +233,6 @@ function removeParam($params, $key) {
         </main>
 
         <?= $this->include('template/modals/change_user_img.php') ?>
-        
         <?= $this->include('template/footer') ?>
     </div>
 
@@ -321,20 +320,30 @@ function removeParam($params, $key) {
         const tagSelect = document.getElementById('tagSelect');
 
         tagSelect.addEventListener('change', function() {
-        const selectedTagId = this.value;
+            const selectedTagId = this.value;
 
-        if (selectedTagId) {
-            // Obtém a URL base da página atual
-            const baseUrl = window.location.href.split('?')[0];
-            // Cria a nova URL com o parâmetro GET
-            const newUrl = `${baseUrl}?etiqueta=${selectedTagId}`;
-            // Redireciona para a nova URL
-            window.location.href = newUrl;
-        } else {
-            // Se nenhuma tag for selecionada, você pode redirecionar para uma URL sem o parâmetro, ou fazer outra coisa
-            window.location.href = baseUrl; // Redireciona para a página sem filtro
-        }
-    });
+            if (selectedTagId) {
+                // Obtém a URL base da página atual
+                const baseUrl = window.location.href.split('?')[0];
+                // Cria a nova URL com o parâmetro GET
+                const newUrl = `${baseUrl}?etiqueta=${selectedTagId}`;
+                // Redireciona para a nova URL
+                window.location.href = newUrl;
+            } else {
+                // Se nenhuma tag for selecionada, você pode redirecionar para uma URL sem o parâmetro, ou fazer outra coisa
+                window.location.href = baseUrl; // Redireciona para a página sem filtro
+            }
+        });
+
+        // Checkbox de seleção em lote
+        const selectAll = document.getElementById('selectAll');
+        const processCheckboxes = document.querySelectorAll('.processCheckbox');
+
+        selectAll.addEventListener('change', function() {
+            processCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
 
     </script>
 </body>

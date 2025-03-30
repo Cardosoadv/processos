@@ -95,7 +95,7 @@ class ProcessoService
         return $this->processosRepository->gerenciarEtiqueta($processoId, $etiquetaId, $adicionar);
     }
 
-    /**
+    /** 
      * Deleta um processo e seus registros relacionados
      */
     public function deletarProcesso(int $id): bool

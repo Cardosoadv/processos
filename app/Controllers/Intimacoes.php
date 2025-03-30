@@ -59,7 +59,7 @@ class Intimacoes extends BaseController
     {
         $intimacoes = $this->intimacoesService->buscarIntimacoesPorPeriodo($dias);
         return $this->response->setJSON($intimacoes);
-    }
+    } 
 
     private function montarParametrosConsulta($oab, $ufOab)
     {

@@ -111,6 +111,15 @@ class ProcessosModel extends Model
      * 
      */
     public function addEtiqueta($id_processo, $id_etiqueta){
+
+        $query = $this->db->table('processos_etiquetas')
+        ->where('processo_id', $id_processo)
+        ->where('etiqueta_id', $id_etiqueta);
+        if($query->countAllResults() > 0){
+            return 0; // Já existe a etiqueta
+        }
+        // Se não existe, insere a nova etiqueta
+
         $query = $this->db->table('processos_etiquetas')
         ->insert([
             'processo_id' => $id_processo,

@@ -132,8 +132,6 @@ class Processos extends BaseController
             ['titulo' => 'Consultar Processo', 'img' => 'vazio.png', 'selected' => $id],
             $this->processoService->getDetalhesProcesso($id)
         );
-
-        Session()->set(['msg' => null]);
         return $this->loadView('processos/consultarProcesso', $data);
     }
 
@@ -283,6 +281,19 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']));
     }
 
+
+        /**
+     * Adiciona uma etiqueta a um processo
+     * 
+     * @return json
+     */
+    public function adicionarEtiqueta()
+    {
+        $data = $this->request->getJSON();
+        $success = $this->processoService->gerenciarEtiquetas($data->id_processo, $data->id_etiqueta, true);
+        return $this->response->setJSON(['success' => $success]);
+    }
+
     /**
      * Remove uma etiqueta a um processo
      * 
@@ -296,15 +307,20 @@ class Processos extends BaseController
     }
 
     /**
-     * Adiciona uma etiqueta a um processo
-     * 
-     * @return json
+     * Sava etiquetas em lote
      */
-    public function adicionarEtiqueta()
-    {
-        $data = $this->request->getJSON();
-        $success = $this->processoService->gerenciarEtiquetas($data->id_processo, $data->id_etiqueta, true);
-        return $this->response->setJSON(['success' => $success]);
+    public function etiquetaEmLote(){
+        $data = $this->request->getPost();
+        if(!isset($data['etiqueta'])){
+            return redirect()->back()->with('error', 'Nenhuma etiqueta selecionada');
+        }
+        if(!isset($data['processos'])){
+            return redirect()->back()->with('error', 'Nenhum processo selecionado');
+        }
+        foreach ($data['processos'] as $processo) {
+            $this->processoService->gerenciarEtiquetas($processo, $data['etiqueta'], true);
+        }
+        return redirect()->back()->with('success', 'Etiquetas adicionadas com sucesso');
     }
 
     /**
@@ -442,8 +458,15 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/consultarprocesso/' . $processo['id_processo']));
     }
 
+
     /**
-     * Este função apenas redireciona para o editar por id
+     * Verifica se um processo existe no banco de dados
+     * 
+     * Recebe o número do processo formatado, remove caracteres não numéricos
+     * e busca no banco de dados. Retorna um JSON indicando se o processo existe
+     * e seus detalhes.
+     * 
+     * @return \CodeIgniter\HTTP\ResponseInterface JSON com status da verificação
      */
     public function verificaProcessoExiste()
     {

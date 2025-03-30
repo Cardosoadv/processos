@@ -40,7 +40,7 @@ class ProcessosRepository
         if ($encerrado !== null) {
             $builder->where('encerrado', $encerrado);
         }
-
+ 
         // Filtro por busca (numero_processo ou titulo_processo)
         if ($search !== null) {
             $builder->groupStart()
@@ -49,6 +49,8 @@ class ProcessosRepository
                 //Ou, Pesquisa pelo titulo do processo
                 ->orLike('LOWER(titulo_processo)', strtolower(trim($search)), 'both')
                 //Ou, Pesquisa pelo nome da parte
+                //ou, Pesquisa pela Classe
+                ->orLike('LOWER(tipoDocumento)', strtolower(trim($search)), 'both')
                 ->orWhereIn('id_processo', $this->partesProcessoModel->getParteProcessoPorNome($search))
                 ->groupEnd();
         }

@@ -2,18 +2,20 @@
 
 namespace App\Services;
 
-use App\Libraries\ConverterData;
-use App\Libraries\ReceberIntimacoes;
+use App\Services\ReceberIntimacoes;
 use App\Models\IntimacoesModel;
 use App\Models\IntimacoesAdvogadosModel;
 use App\Models\IntimacoesDestinatariosModel;
+use App\Traits\FormataDataTrait;
 
 class IntimacoesService
 {
+    use FormataDataTrait;
+
     private $intimacoesModel;
     private $destinatariosModel;
     private $advogadosModel;
-    private $converterData;
+
     private $processoService;
 
     public function __construct()
@@ -21,7 +23,7 @@ class IntimacoesService
         $this->intimacoesModel = new IntimacoesModel();
         $this->destinatariosModel = new IntimacoesDestinatariosModel();
         $this->advogadosModel = new IntimacoesAdvogadosModel();
-        $this->converterData = new ConverterData();
+
         $this->processoService = new ProcessoService();
     }
 
@@ -106,7 +108,7 @@ class IntimacoesService
     {
         $data = [
             'id_intimacao' => $intimacao['id'],
-            'data_disponibilizacao' => $this->converterData->dataParaBancoDados($intimacao['data_disponibilizacao']),
+            'data_disponibilizacao' => $this->dataParaBancoDados($intimacao['data_disponibilizacao']),
             'tipoComunicacao' => $intimacao['tipoComunicacao'],
             'texto' => $intimacao['texto'],
             'numero_processo' => $intimacao['numero_processo'],
@@ -116,10 +118,10 @@ class IntimacoesService
             'hash' => $intimacao['hash'],
             'motivo_cancelamento' => $intimacao['motivo_cancelamento'] ?? null,
             'data_cancelamento' => $intimacao['data_cancelamento'] ?? null,
-            'datadisponibilizacao' => $this->converterData->dataParaBancoDados($intimacao['datadisponibilizacao']),
-            'dataenvio' => $this->converterData->dataParaBancoDados($intimacao['datadisponibilizacao']),
+            'datadisponibilizacao' => $this->dataParaBancoDados($intimacao['datadisponibilizacao']),
+            'dataenvio' => $this->dataParaBancoDados($intimacao['datadisponibilizacao']),
             'meiocompleto' => $intimacao['meiocompleto'],
-        ];
+        ]; 
         $this->intimacoesModel->insert($data);
     }
 
