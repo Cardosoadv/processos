@@ -2,8 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Models\ProcessosModel;
-
 class Home extends BaseController
 {
     
@@ -27,8 +25,7 @@ class Home extends BaseController
             'qteClientes'       => $qteClientes,
             'qteTarefas'        => $qteTarefas,
             'tarefasUsuario'    => $tarefasUsuario,
-            'img'       =>  'vazio.png',
-            'titulo'    => 'Dashboard'
+            'titulo'            => 'Dashboard'
         ];
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
         Session()->set(['msg'=> null]);

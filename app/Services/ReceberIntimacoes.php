@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Libraries;
+namespace App\Services;
 
 use App\Controllers\Intimacoes;
 use Exception;
 
 class ReceberIntimacoes{
-
+ 
         private $intimacoes;
 
     /**

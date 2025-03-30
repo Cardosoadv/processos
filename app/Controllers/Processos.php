@@ -458,8 +458,15 @@ class Processos extends BaseController
         return redirect()->to(base_url('processos/consultarprocesso/' . $processo['id_processo']));
     }
 
+
     /**
-     * Este função apenas redireciona para o editar por id
+     * Verifica se um processo existe no banco de dados
+     * 
+     * Recebe o número do processo formatado, remove caracteres não numéricos
+     * e busca no banco de dados. Retorna um JSON indicando se o processo existe
+     * e seus detalhes.
+     * 
+     * @return \CodeIgniter\HTTP\ResponseInterface JSON com status da verificação
      */
     public function verificaProcessoExiste()
     {

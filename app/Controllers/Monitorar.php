@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Libraries\ReceberIntimacoes;
+use App\Services\ReceberIntimacoes;
 use App\Libraries\ReceberMovimentosDatajud;
 use App\Models\ProcessosMonitoradosModel;
 
