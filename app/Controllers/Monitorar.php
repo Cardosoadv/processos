@@ -22,16 +22,25 @@ class Monitorar extends BaseController
         $receberMovimentosDatajud = new ReceberMovimentosDatajud();
         $processosMonitoradosModel = new ProcessosMonitoradosModel();
 
-        $processosMonitorados = $processosMonitoradosModel->orderBy('ultima_checagem', 'ASC')->limit(30)->findAll();
+        $processosMonitorados = $processosMonitoradosModel  ->orderBy('ultima_checagem', 'ASC')
+                                                            ->limit(10)
+                                                            ->findAll();
 
         foreach ($processosMonitorados as $processo){
-            $tribunal = substr($processo['numero_processo'],16,4);
+            
+            $tribunal = substr($processo['numero_processo'],13,3);
             $numeroProcesso = preg_replace('/[^0-9]/', '', $processo['numero_processo']);
+            
             $data = $receberMovimentosDatajud->receberMovimentos($tribunal, $numeroProcesso);
+            
+
             $data['ultima_checagem'] = date('Y-m-d H:i:s');
+            
             $processosMonitoradosModel->update($processo['id_monitoramento'], $data);
         }
-        Echo "Movimentos Recebidos";
+        $data['titulo'] = "Monitorar Movimentos";
+        return $this->loadView('testes', $data);
+        
     }
 
     public function MonitorarProcessos(){
@@ -39,7 +48,9 @@ class Monitorar extends BaseController
         $processosMonitoradosModel = new ProcessosMonitoradosModel();
         $receberIntimacoes = new ReceberIntimacoes();
 
-        $processosMonitorados = $processosMonitoradosModel->orderBy('ultima_checagem', 'ASC')->limit(50)->findAll();
+        $processosMonitorados = $processosMonitoradosModel  ->orderBy('ultima_checagem', 'ASC')
+                                                            ->limit(50)
+                                                            ->findAll();
 
         foreach ($processosMonitorados as $processo){
             $numeroProcesso = preg_replace('/[^0-9]/', '', $processo['numero_processo']);

@@ -8,22 +8,23 @@ use Exception;
 class ReceberMovimentosDatajud{
 
     public function receberMovimentos(string $tribunal, string $numeroProcesso){
-
+        
         $url = null;
 
         // Mapeamento de tribunais para URLs da API
         $tribunais = [
-            '8.13' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search", // TJMG
-            '8.07' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjdft/_search",// TJDFT
-            '8.26' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjsp/_search", // TJSP
-            '5.03' => "https://api-publica.datajud.cnj.jus.br/api_publica_trt3/_search", // TRT3
-            '4.01' => "https://api-publica.datajud.cnj.jus.br/api_publica_trf1/_search", // TRF1
-            '4.06' => "https://api-publica.datajud.cnj.jus.br/api_publica_trf6/_search", // TRF6
+            '813' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjmg/_search", // TJMG
+            '807' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjdft/_search",// TJDFT
+            '826' => "https://api-publica.datajud.cnj.jus.br/api_publica_tjsp/_search", // TJSP
+            '503' => "https://api-publica.datajud.cnj.jus.br/api_publica_trt3/_search", // TRT3
+            '401' => "https://api-publica.datajud.cnj.jus.br/api_publica_trf1/_search", // TRF1
+            '406' => "https://api-publica.datajud.cnj.jus.br/api_publica_trf6/_search", // TRF6
         ];
 
     
         if (array_key_exists($tribunal, $tribunais)) {
             $url = $tribunais[$tribunal];
+            
         } else {
             // Tribunal não encontrado
             error_log("Tribunal não encontrado: tribunal={$tribunal}");
@@ -61,6 +62,7 @@ class ReceberMovimentosDatajud{
         $response = curl_exec($ch);
         curl_close($ch);
         $resultados = json_decode($response);
+        
 
         if (empty($resultados->hits->hits[0])) {
             $data = [

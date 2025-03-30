@@ -18,7 +18,7 @@
                     <tbody>
                         <tr>
                             <td><?= date('d/m/Y', strtotime($intimacao['data_disponibilizacao'])) ?></td>
-                            <td><?= $intimacao['tipoComunicacao'] ?></td>
+                            <td alt="<?= htmlspecialchars($intimacao['texto']) ?>" title="<?= htmlspecialchars($intimacao['texto']) ?>"><?= $intimacao['tipoComunicacao'] ?></td>
                         </tr>
                     </tbody>
                 <?php endforeach; ?>
