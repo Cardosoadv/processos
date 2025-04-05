@@ -4,13 +4,11 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Services\IntimacoesService;
-use App\Services\ProcessosService;
 use App\Services\AuditoriaService;
 
 class Intimacoes extends BaseController
 {
     private $intimacoesService;
-    private $processosService;
     private $auditoriaService;
 
     public function __construct()
@@ -31,7 +29,7 @@ class Intimacoes extends BaseController
     {
         $params = $this->montarParametrosConsulta("61061", "MG");
         $this->intimacoesService->buscarIntimacoes($params);
-        return redirect()       ->back()
+        return redirect()       ->to('intimacoes')
                                 ->with('success', 'Intimações recebidas com sucesso');
     }
 
@@ -39,7 +37,7 @@ class Intimacoes extends BaseController
     {
         $params = $this->montarParametrosConsulta("164136", "MG");
         $this->intimacoesService->buscarIntimacoes($params);
-        return redirect()       ->back()
+        return redirect()       ->to('intimacoes')
                                 ->with('success', 'Intimações recebidas com sucesso');
     }
 
@@ -47,12 +45,6 @@ class Intimacoes extends BaseController
     {
         $params = ['numeroProcesso' => $numeroProcesso];
         $this->intimacoesService->buscarIntimacoes($params);
-    }
-
-    public function parseIntimacao(array $data, $filename)
-    {
-        $resultado = $this->intimacoesService->processarIntimacoes($data, $filename, user_id());
-        return redirect()->to(base_url('intimacoes'));
     }
 
     public function intimacoesPorPeriodo($dias)

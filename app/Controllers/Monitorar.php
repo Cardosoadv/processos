@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Services\ReceberIntimacoes;
-use App\Libraries\ReceberMovimentosDatajud;
+use App\Services\ReceberMovimentosDatajud;
 use App\Models\ProcessosMonitoradosModel;
 
 class Monitorar extends BaseController
@@ -23,9 +23,9 @@ class Monitorar extends BaseController
         $processosMonitoradosModel = new ProcessosMonitoradosModel();
 
         $processosMonitorados = $processosMonitoradosModel  ->orderBy('ultima_checagem', 'ASC')
-                                                            ->limit(10)
+                                                            ->limit(5)
                                                             ->findAll();
-
+        $table = [];
         foreach ($processosMonitorados as $processo){
             
             $tribunal = substr($processo['numero_processo'],13,3);
@@ -37,8 +37,15 @@ class Monitorar extends BaseController
             $data['ultima_checagem'] = date('Y-m-d H:i:s');
             
             $processosMonitoradosModel->update($processo['id_monitoramento'], $data);
+
+            // Adiciona ao array $table
+            $table[] = [
+                'numero_processo' => $processo['numero_processo'],
+                'data' => $data
+            ];
         }
         $data['titulo'] = "Monitorar Movimentos";
+        $data['table'] = $table;
         return $this->loadView('testes', $data);
         
     }

@@ -19,7 +19,10 @@ trait FormataDataTrait
 
         $dateTime = \DateTime::createFromFormat('d/m/Y', $data);
         if (!$dateTime) {
-            throw new \InvalidArgumentException('Invalid date format');
+            $dateTime = \DateTime::createFromFormat('Y-m-d', $data);
+            if (!$dateTime) {
+                throw new \InvalidArgumentException('Invalid date format');
+            }
         }
 
         return $dateTime->format('Y-m-d');

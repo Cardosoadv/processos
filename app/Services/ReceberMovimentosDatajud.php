@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Libraries;
+namespace App\Services;
 
 use App\Models\ProcessosMovimentosModel;
 use Exception;
- 
+
 class ReceberMovimentosDatajud{
 
     public function receberMovimentos(string $tribunal, string $numeroProcesso){
