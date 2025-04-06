@@ -25,6 +25,7 @@ Além disso, certifique-se de que as seguintes extensões estejam habilitadas no
 # Fluxo de Dados
 
 | Módulo | View | Controllers | Services  | Repositories | Models |
+:-:|:-:|:-:|:-:|:-:|:-:|
 | Clientes  | <-> | <-> |   |   |  <-> |
 | Processos | <-> | <-> |  <-> |  <-> |  <-> |
 | Financeiro | <-> | <-> |   |   |  <-> |
