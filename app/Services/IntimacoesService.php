@@ -93,14 +93,18 @@ class IntimacoesService
         
         $this->salvarIntimacao($item);
         
-        foreach ($item['destinatarios'] as $destinatario) {
-            $this->salvarDestinatario($destinatario);
-            // Usar o ProcessoService existente para salvar as partes
-            $this->processoService->salvarPartes($destinatario, $idProcesso);
+        if(!empty($item['destinatarios']||$item['destinatarios'] !== null)){
+            foreach ($item['destinatarios'] as $destinatario) {
+                $this->salvarDestinatario($destinatario);
+                // Usar o ProcessoService existente para salvar as partes
+                $this->processoService->salvarPartes($destinatario, $idProcesso);
+            }
         }
 
-        foreach ($item['destinatarioadvogados'] as $advogado) {
-            $this->salvarAdvogado($advogado);
+        if(!empty($item['destinatarioadvogados']||$item['destinatarioadvogados'] !== null)){
+            foreach ($item['destinatarioadvogados'] as $advogado) {
+                $this->salvarAdvogado($advogado);
+            }
         }
     }
 
