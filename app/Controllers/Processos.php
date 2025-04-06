@@ -9,6 +9,8 @@ use App\Services\ProcessoService;
 use App\Models\ProcessosPartesModel;
 use App\Traits\FormataValorTrait;
 
+
+
 class Processos extends BaseController
 {
     use FormataValorTrait;

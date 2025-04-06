@@ -4,6 +4,13 @@ namespace App\Repositories;
 
 use CodeIgniter\Database\BaseConnection;
 
+/**
+ * Repository for managing legal processes and their related data
+ * 
+ * Handles database operations for processes, including searching, creating, 
+ * updating, and deleting processes and their associated entities like 
+ * parties, annotations, movements, and tags.
+ */
 class ProcessosRepository
 {
     protected $db;
@@ -280,5 +287,28 @@ class ProcessosRepository
     public function excluirVinculo(int $id): void
     {
         $this->processosVinculadosModel->delete($id);
+    }
+
+
+    /********************* METODOS RELACIONADOS AOS OBJETOS DO PROCESSO *********************/
+    
+    public function salvarObjeto(array $dados): int
+    {
+        return $this->processosObjetoModel->salvarObjeto($dados);
+    }
+ 
+    public function obterObjeto(int $id): ?array
+    {
+        return $this->processosObjetoModel->obterObjeto($id);
+    }
+
+        public function listarObjetos(): array
+    {
+        return $this->processosObjetoModel->listarObjetos();
+    } 
+
+    public function deletarObjeto(int $id): void
+    {
+        $this->processosObjetoModel->deletarObjeto($id);
     }
 }
