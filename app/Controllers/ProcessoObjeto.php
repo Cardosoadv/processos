@@ -15,16 +15,16 @@ use CodeIgniter\API\ResponseTrait;
 class ProcessoObjeto extends BaseController
 {
     use ResponseTrait;
-    protected ProcessoService $service;
+    protected ProcessoService $processoService;
 
     public function __construct()
     {
-        $this->service = new ProcessoService();
+        $this->processoService = new ProcessoService();
     }
 
     public function index()
     {
-        $objetos = $this->service->listarObjetos();
+        $objetos = $this->processoService->listarObjetos();
         echo '<pre>';
         print_r($objetos);
         //return $this->loadView('objetos/listar', ['objetos' => $objetos]);
@@ -43,7 +43,7 @@ class ProcessoObjeto extends BaseController
         $dados = $this->request->getPost();
 
 
-        $id = $this->service->salvarObjeto($dados);
+        $id = $this->processoService->salvarObjeto($dados);
         if ($id) {
             return redirect()->to(base_url('processos/consultarprocesso/') . $dados['processo_id'])->with('success', 'Objeto salvo com sucesso!');
         } else {
@@ -62,7 +62,7 @@ class ProcessoObjeto extends BaseController
      */
     public function deletar(int $id)
     {
-        $this->service->deletarObjeto($id);
+        $this->processoService->deletarObjeto($id);
         return redirect()->back()->with('success', 'Objeto deletado com sucesso!');
     }
 }
