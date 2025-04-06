@@ -21,3 +21,10 @@ Além disso, certifique-se de que as seguintes extensões estejam habilitadas no
 **json** - (habilitada por padrão - não a desative)
 **mysqlnd** -  se você planeja usar MySQL
 **libcurl**
+
+# Fluxo de Dados
+
+| Módulo | View | Controllers | Services  | Repositories | Models |
+| Clientes  | <-> | <-> |   |   |  <-> |
+| Processos | <-> | <-> |  <-> |  <-> |  <-> |
+| Financeiro | <-> | <-> |   |   |  <-> |
