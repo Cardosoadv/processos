@@ -9,6 +9,8 @@ use App\Services\ProcessoService;
 use App\Models\ProcessosPartesModel;
 use App\Traits\FormataValorTrait;
 
+
+
 class Processos extends BaseController
 {
     use FormataValorTrait;
@@ -126,7 +128,7 @@ class Processos extends BaseController
      * @param int $id ID do processo
      * @return string
      */
-    public function consultarProcesso(int $id = null)
+    public function consultarProcesso(?int $id = null)
     {
         $data = array_merge(
             ['titulo' => 'Consultar Processo', 'img' => 'vazio.png', 'selected' => $id],

@@ -4,6 +4,14 @@ namespace App\Services;
 
 use App\Repositories\ProcessosRepository;
 
+
+
+/**
+ * Service class for managing legal processes (processos)
+ * 
+ * Provides methods for retrieving, creating, updating, and deleting legal processes
+ * and associated entities such as process parts, annotations, tags, and links.
+ */
 class ProcessoService
 {
     protected $processosRepository;
@@ -133,5 +141,27 @@ class ProcessoService
     public function excluirVinculo(int $id): void
     {
         $this->processosRepository->excluirVinculo($id);
+    }
+
+    /********************* METODOS RELACIONADOS AOS OBJETOS DO PROCESSO *********************/
+
+    public function salvarObjeto(array $dados): int
+    {
+        return $this->processosRepository->salvarObjeto($dados);
+    }
+
+    public function obterObjeto(int $id): ?array
+    {
+        return $this->processosRepository->obterObjeto($id);
+    }
+
+    public function listarObjetos(): array
+    {
+        return $this->processosRepository->listarObjetos();
+    }
+
+    public function deletarObjeto(int $id): void
+    {
+        $this->processosRepository->deletarObjeto($id);
     }
 }

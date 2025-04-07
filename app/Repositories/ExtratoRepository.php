@@ -3,6 +3,12 @@
 namespace App\Repositories;
 
 
+/**
+ * Repository for managing financial extracts and transactions
+ * 
+ * Handles retrieval of expenses, revenues, and transfers for specific accounts
+ * with methods to fetch transactions by account, period, and historical data
+ */
 class ExtratoRepository
 {
     protected $receitaModel;
@@ -21,6 +27,12 @@ class ExtratoRepository
         $this->transferenciaModel = model('Financeiro/FinanceiroTransferenciasModel');
     }
 
+    /**
+         * Retrieves expenses for a specific account
+         *
+         * @param int $conta_id The ID of the account to fetch expenses for
+         * @return array List of expenses with details including ID, date, description, value, and allocation
+         */
     public function getDespesasPorConta($conta_id)
     {
 
@@ -57,6 +69,12 @@ class ExtratoRepository
         return $despesas;
     }
 
+    /**
+         * Retrieves income entries for a specific account
+         *
+         * @param int $conta_id The ID of the account to fetch income entries for
+         * @return array List of income entries with details including ID, date, description, value, and allocation
+         */
     public function getReceitasPorConta($conta_id)
     {
         // Buscar receitas da conta
@@ -93,6 +111,12 @@ class ExtratoRepository
     }
 
 
+    /**
+         * Retrieves transfer entries sent from a specific account
+         *
+         * @param int $conta_id The ID of the account to fetch outgoing transfers for
+         * @return array List of transfer entries with details including ID, date, description, and value
+         */
     public function getTransferenciasDePorConta($conta_id)
     {
         // Buscar transferencias da conta
@@ -105,6 +129,12 @@ class ExtratoRepository
         return $transferencias;
     }
 
+    /**
+         * Retrieves transfer entries received by a specific account
+         *
+         * @param int $conta_id The ID of the account to fetch incoming transfers for
+         * @return array List of transfer entries with details including ID, date, description, and value
+         */
     public function getTransferenciasParaPorConta($conta_id)
     {
         // Buscar transferencias da conta
@@ -117,7 +147,7 @@ class ExtratoRepository
         return $transferencias;
     }
 
-    // ExtratoRepository.php - Adicionando novos métodos
+
 
 public function getDespesasPorContaPeriodo($conta_id, $dataInicial, $dataFinal)
 {
