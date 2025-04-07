@@ -31,5 +31,5 @@ Além disso, certifique-se de que as seguintes extensões estejam habilitadas no
 | Clientes  | <-> | <-> |   |   |  <-> |
 | Tarefas  | <-> | <-> | <->  |   |  <-> |
 | Processos | <-> | <-> |  <-> |  <-> |  <-> |
-| Clientes  | <-> | <-> | <->  |   |  <-> |
+| Intimações  | <-> | <-> | <->  |   |  <-> |
 | Financeiro | <-> | <-> | <->  | <->  |  <-> |
