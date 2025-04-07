@@ -74,7 +74,7 @@ class IntimacoesService
             'nomeOrgao'                     => $item['nomeOrgao'],
             'numero_processo'               => $item['numero_processo'],
             'link'                          => $item['link'],
-            'tipoDocumento'                 => $item['tipoDocumento'],
+            'tipoDocumento'                 => $item['nomeClasse'],
             'codigoClasse'                  => $item['codigoClasse'],
             'ativo'                         => $item['ativo'],
             'status'                        => $item['status'] ?? 'P',
