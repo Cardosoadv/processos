@@ -294,21 +294,26 @@ class ProcessosRepository
     
     public function salvarObjeto(array $dados): int
     {
-        return $this->processosObjetoModel->salvarObjeto($dados);
+        if(isset($dados['id_objeto'])) {
+            return $this->processosObjetoModel->update($dados['id_objeto'], $dados);
+        } else{
+            return $this->processosObjetoModel->insert($dados);
+        }
+        
     }
- 
+  
     public function obterObjeto(int $id): ?array
     {
-        return $this->processosObjetoModel->obterObjeto($id);
+        return $this->processosObjetoModel->find($id);
     }
 
         public function listarObjetos(): array
     {
-        return $this->processosObjetoModel->listarObjetos();
+        return $this->processosObjetoModel->findAll();
     } 
 
     public function deletarObjeto(int $id): void
     {
-        $this->processosObjetoModel->deletarObjeto($id);
+        $this->processosObjetoModel->delete($id);
     }
 }

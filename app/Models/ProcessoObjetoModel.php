@@ -13,6 +13,7 @@ class ProcessoObjetoModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
+
         'dados',
         'cidade',
         'bairro',
@@ -22,6 +23,7 @@ class ProcessoObjetoModel extends Model
         'cod_interno',
         'matricula',
         'cartorio',
+
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -31,7 +33,7 @@ class ProcessoObjetoModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -54,6 +56,7 @@ class ProcessoObjetoModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /*
     public function salvarObjeto(array $dados): int
     {
         try {
@@ -69,6 +72,8 @@ class ProcessoObjetoModel extends Model
             return 0;
         }
     }
+    */
+
 
     public function obterObjeto(int $id): ?array
     {
