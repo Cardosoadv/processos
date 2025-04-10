@@ -144,7 +144,7 @@ class ProcessosRepository
             'etiquetas'         => $this->processosModel->joinEtiquetasProcessos($id),
             'tarefas'           => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray(),
             'vinculos'          => $this->processosVinculadosModel->getVinculosProcesso($id),
-            'objetos'           => $this->processosObjetoModel->listarObjetoProcesso($id),
+            'objetos'           => $this->processosObjetoModel->selecionarObjetoPorProcessoId($id),
         ];
     }
 
@@ -300,6 +300,11 @@ class ProcessosRepository
             return $this->processosObjetoModel->insert($dados);
         }
         
+    }
+
+    public function selecionarObjetoPorProcessoId(int $processoId): array
+    {
+        return $this->processosObjetoModel->selecionarObjetoPorProcessoId($processoId);
     }
   
     public function obterObjeto(int $id): ?array

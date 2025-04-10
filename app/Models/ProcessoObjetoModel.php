@@ -56,6 +56,18 @@ class ProcessoObjetoModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    
+    public function selecionarObjetoPorProcessoId(int $processoId): array
+    {
+    // Usando a tabela de relação processos_objeto_processo
+    $builder = $this->db->table($this->table)
+        ->select("{$this->table}.*")
+        ->join('processos_objeto_processo', "processos_objeto_processo.objeto_id = {$this->table}.id_objeto")
+        ->where('processos_objeto_processo.processo_id', $processoId);
+    
+    return $builder->get()->getResultArray();
+    }
+    
     /*
     public function salvarObjeto(array $dados): int
     {
@@ -73,7 +85,6 @@ class ProcessoObjetoModel extends Model
         }
     }
     */
-
 
     public function obterObjeto(int $id): ?array
     {
