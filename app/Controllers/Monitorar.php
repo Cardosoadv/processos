@@ -56,7 +56,7 @@ class Monitorar extends BaseController
         $receberIntimacoes = new ReceberIntimacoes();
 
         $processosMonitorados = $processosMonitoradosModel  ->orderBy('ultima_checagem', 'ASC')
-                                                            ->limit(50)
+                                                            ->limit(5)
                                                             ->findAll();
 
         foreach ($processosMonitorados as $processo){

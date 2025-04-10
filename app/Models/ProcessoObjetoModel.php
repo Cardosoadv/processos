@@ -14,6 +14,14 @@ class ProcessoObjetoModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'dados',
+        'cidade',
+        'bairro',
+        'quadra',
+        'lote',
+        'inscricao',
+        'cod_interno',
+        'matricula',
+        'cartorio',
     ];
 
     protected bool $allowEmptyInserts = false;
@@ -65,32 +73,31 @@ class ProcessoObjetoModel extends Model
     public function obterObjeto(int $id): ?array
     {
         $objeto = $this->find($id);
-            if ($objeto && $objeto['dados']) {
-                $objeto['dados'] = json_decode($objeto['dados'], true);
-            }
+        if ($objeto && $objeto['dados']) {
+            $objeto['dados'] = json_decode($objeto['dados'], true);
+        }
         return $objeto;
     }
 
     public function listarObjetos(): array
     {
         $objetos = $this->findAll();
-                foreach ($objetos as &$objeto) {
+        foreach ($objetos as &$objeto) {
             if ($objeto && $objeto['dados']) {
                 $objeto['dados'] = json_decode($objeto['dados'], true);
-                
             }
-        } 
+        }
         return $objetos;
     }
 
     public function listarObjetoProcesso(int $processoId): array
     {
-        
-        $query = $this->db->query("SELECT * FROM {$this->table} WHERE JSON_EXTRACT(dados, '$.processo_id') = ?", [(string)$processoId])->getResultArray(); 
-        $dados= [];
+
+        $query = $this->db->query("SELECT * FROM {$this->table} WHERE JSON_EXTRACT(dados, '$.processo_id') = ?", [(string)$processoId])->getResultArray();
+        $dados = [];
         foreach ($query as $dado) {
             if ($dado && $dado['dados']) {
-                
+
                 $item = json_decode($dado['dados'], true);
                 $item['id_objeto'] = $dado['id_objeto'];
                 array_push($dados, $item);
@@ -103,6 +110,4 @@ class ProcessoObjetoModel extends Model
     {
         return $this->delete($id);
     }
-
-
 }

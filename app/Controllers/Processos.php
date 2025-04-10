@@ -155,10 +155,9 @@ class Processos extends BaseController
             // Converte o id para int ou null se estiver vazio
             $id = $this->request->getPost('id_processo');
             $id = !empty($id) ? (int)$id : null;
-
     
+            // Realiza o bind de todos os dados do formulário
             $data = $this->prepararDadosProcesso();
-
     
             $idProcesso = $this->processoService->salvarProcesso($data, $id);
     
@@ -198,12 +197,8 @@ class Processos extends BaseController
     }
 
 
-    ############################################################################################ 
-    #                                                                                          #
-    #                Metódos Reacionados às Tabelas Auxiliares                                 #
-    #                                                                                          #
-    ############################################################################################
 
+/*******************************  Metódos Reacionados às Tabelas Auxiliares  *******************************/
 
 
 
@@ -264,7 +259,6 @@ class Processos extends BaseController
             'polo'        => $parte['polo'],
         ];
 
-        // Assuming salvarParteDoProcesso handles potential duplicates based on id_parte and id_processo
         $processosPartesModel->salvarParteDoProcesso($parteProcesso);
     }
 
@@ -284,7 +278,7 @@ class Processos extends BaseController
     }
 
 
-        /**
+    /**
      * Adiciona uma etiqueta a um processo
      * 
      * @return json
