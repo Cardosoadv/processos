@@ -110,6 +110,43 @@ class ProcessosRepository
         return $builder->joinProcessoCliente($perPage);
     }
 
+        /**
+     * Busca processos de um objeto específico com os mesmos filtros da pesquisa geral
+     */
+    public function buscarProcessosObjeto(int $objetoId, ?string $search, string $sortField, string $sortOrder, ?int $encerrado, ?int $etiqueta = null, int $perPage = 25)
+    {
+        $builder = $this->processosModel->whereIn('id_processo', $this->processosObjetoModel->getProcessoPorObjeto($objetoId));
+
+        // Filtro por encerrado
+        if ($encerrado !== null) {
+            $builder->where('encerrado', $encerrado);
+        }
+
+        // Filtro por busca (numero_processo ou titulo_processo)
+        if ($search !== null) {
+            $builder->groupStart()
+                //Pesquisa pelo numero do processo sem ponto ou traço
+                ->like('numero_processo', preg_replace('/[.-]/', '', $search))
+                //Ou, Pesquisa pelo titulo do processo
+                ->orLike('LOWER(titulo_processo)', strtolower(trim($search)), 'both')
+                //Ou, Pesquisa pelo nome da parte
+                ->orWhereIn('id_processo', $this->partesProcessoModel->getParteProcessoPorNome($search))
+                ->groupEnd();
+        }
+
+        // Filtro por etiqueta
+        if ($etiqueta !== null) {
+            $builder->join('processos_etiquetas', 'processos.id_processo = processos_etiquetas.processo_id')
+                ->where('processos_etiquetas.etiqueta_id', $etiqueta);
+        }
+
+        // Ordena os processos
+        $builder->orderBy($sortField, $sortOrder);
+
+        return $builder->joinProcessoCliente($perPage);
+    }
+
+
     /**
      * Busca processos movimentados em um período específico
      */

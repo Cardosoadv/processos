@@ -31,6 +31,16 @@ class ProcessoService
         return $this->processosRepository->buscarProcessos($search, $sortField, $sortOrder, $encerrado, $etiqueta, $perPage);
     }
 
+        /**
+     * Lista os processos de um cliente.
+     * Utilizando os mesmos filtros da pesquisa geral de processos.
+     */
+    public function listarProcessosObjeto(int $objetoId, ?string $search, string $sortField = 'id_processo', string $sortOrder = 'DESC', ?int $encerrado = null, ?int $etiqueta = null, int $perPage = 25)
+    {
+        return $this->processosRepository->buscarProcessosObjeto($objetoId, $search, $sortField, $sortOrder, $encerrado, $etiqueta, $perPage);
+    }
+
+
     /**
      * Lista os processos de um cliente.
      * Utilizando os mesmos filtros da pesquisa geral de processos.

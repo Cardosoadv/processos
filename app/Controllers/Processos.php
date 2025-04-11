@@ -89,6 +89,40 @@ class Processos extends BaseController
     }
 
     /**
+     * Lista os processos de um cliente
+     * 
+     * @param int $cliente_id
+     * @return string
+     */
+    public function processosDoObjeto(?int $objeto_id)
+    {
+        $data = [
+            'titulo'    => 'Processos do Objeto',
+            'sortField' => $this->request->getGet('sort') ?? 'id_processo',
+            'sortOrder' => $this->request->getGet('order') ?? 'asc',
+            's'         => $this->request->getGet('s') ?? null,
+            'encerrado' => $this->request->getGet('encerrado') ?? null,
+            'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
+        ];
+
+        $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
+
+
+        $processos = $this->processoService->listarProcessosObjeto(
+            $objeto_id,
+            $data['s'],
+            $data['sortField'],
+            $data['sortOrder'],
+            $data['encerrado'],
+            $data['etiqueta'],
+        );
+
+        $data['pager'] = $processos['pager'];
+        $data['processos'] = $processos['processos'];
+        return $this->loadView('processos/processos', $data);
+    }
+
+    /**
      * Retorna os processos movimentados nos últimos dias
      * 
      * @param int $dias

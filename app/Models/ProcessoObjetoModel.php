@@ -67,6 +67,14 @@ class ProcessoObjetoModel extends Model
     
     return $builder->get()->getResultArray();
     }
+
+    public function getProcessoPorObjeto($objetoId){
+        $builder = $this->db->table('processos_objeto_processo')
+            ->select('processo_id')
+            ->where('objeto_id', $objetoId);
+        return $builder->get()->getRowArray();
+    }
+
     
     /*
     public function salvarObjeto(array $dados): int
