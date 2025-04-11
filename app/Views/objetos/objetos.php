@@ -86,7 +86,7 @@
                                                                 class="btn btn-sm btn-danger">
                                                                 Excluir
                                                             </a>
-                                                            <a href="<?= base_url('processos/listarprocessosobjeto/' . $objeto['id_objeto']) ?>"
+                                                            <a href="<?= base_url('processos/processosDoObjeto/' . $objeto['id_objeto']) ?>"
                                                                 class="btn btn-sm btn-secondary">
                                                                 Processos
                                                             </a>
