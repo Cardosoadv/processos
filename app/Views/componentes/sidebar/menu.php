@@ -57,6 +57,16 @@ $permission = $permitions->permission();
                 <p>Processos</p>
             </a>
         </li>
+
+        <li class="nav-item <?= ($active === 'objetos') ? 'active' : ''; ?>">
+            <a href="<?= site_url('objetos'); ?>" class="nav-link <?= ($active === 'objetos') ? 'active' : ''; ?>">
+                <i class="nav-icon bi bi-houses"></i>
+                <p>Objetos</p>
+            </a>
+        </li>
+
+
+
     <?php endif; ?>
 
     <?php

@@ -16,9 +16,22 @@ class Objetos extends BaseController
     
     public function index()
     {
-        $data['titulo'] = 'Objetos';
-        $data['objetos'] = $this->objetoModel->paginate(25);
-        $data['pager'] = $this->objetoModel->pager;
+        $data['titulo']     = 'Objetos';
+        $data['s']          = $this->request->getGet('s');
+
+        if($data['s']){
+            $data['objetos'] = $this    ->objetoModel
+            
+                                        ->like('bairro', $data['s'])
+                                        ->orLike('cod_interno', $data['s'])
+                                        ->orLike('logradouro', $data['s'])
+                                        ->paginate(25);
+        }else{
+            $data['objetos'] = $this->objetoModel->paginate(25);
+        }
+
+        $data['pager']      = $this->objetoModel->pager;
+
         return $this->loadView('objetos/objetos', $data);
     }
 
