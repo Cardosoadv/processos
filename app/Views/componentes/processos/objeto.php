@@ -25,10 +25,10 @@
                     
                         <tbody>
                             <tr>
-                                <td><?= esc($objeto['bairro']) ?></td>
-                                <td><?= esc($objeto['quadra']) ?></td>
-                                <td><?= esc($objeto['lote']) ?></td>
-                                <td>
+                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['bairro']) ?></td>
+                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['quadra']) ?></td>
+                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['lote']) ?></td>
+                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;">
                                     <a href="<?= base_url('objetos/editar/' . $objeto['id_objeto']) ?>" >
                                         <i class="bi bi-pencil-square" style="cursor: pointer;"> </i>
                                     </a>
