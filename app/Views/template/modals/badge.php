@@ -1,5 +1,5 @@
 <?php 
-$listaetiquetas = model('EtiquetasModel')->findAll();
+$listaetiquetas = model('EtiquetasModel')->orderBy('nome')->findAll();
 ?>
 
 <script src="<?= base_url('public/js/jscolor.js')?>"></script>

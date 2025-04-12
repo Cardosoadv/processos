@@ -75,6 +75,35 @@ class ProcessoObjetoModel extends Model
         return $builder->get()->getRowArray();
     }
 
+    public function vincularProcessoObjeto($processoId, $objetoId){
+        $data = [
+            'processo_id' => $processoId,
+            'objeto_id' => $objetoId
+        ];
+        $this->db->table('processos_objeto_processo')->insert($data);
+    }
+
+    public function desvincularObjetoProcesso($processoId, $objetoId){
+        $this->db->table('processos_objeto_processo')
+            ->where('processo_id', $processoId)
+            ->where('objeto_id', $objetoId)
+            ->delete();
+    }
+
+    /**
+     * Deletes the relationship between a process and an object
+     *
+     * @param int $processoId The ID of the process
+     * @param int $objetoId The ID of the object
+     */
+    public function deletarProcessoObjeto($processoId, $objetoId){
+        $this->db->table('processos_objeto_processo')
+            ->where('processo_id', $processoId)
+            ->where('objeto_id', $objetoId)
+            ->delete();
+    }
+
+
     
     /*
     public function salvarObjeto(array $dados): int

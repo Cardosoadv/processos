@@ -28,7 +28,7 @@
                                 <td><?= esc($objeto['bairro']) ?></td>
                                 <td><?= esc($objeto['quadra']) ?></td>
                                 <td><?= esc($objeto['lote']) ?></td>
-                                <td><a href="<?= base_url('processoobjeto/deletar/' . $objeto['id_objeto']) ?>" >
+                                <td><a href="<?= base_url('processos/desvincularObjeto/'.$processo['id_processo'] .'/'. $objeto['id_objeto']) ?>" >
                                         <i class="fas fa-trash" style="cursor: pointer;"></i>
                                     </a>
                                 </td>

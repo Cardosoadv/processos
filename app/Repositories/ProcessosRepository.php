@@ -20,7 +20,7 @@ class ProcessosRepository
     protected $processosMovimentosModel;
     protected $intimacoesModel;
     protected $tarefasModel;
-    protected $processosObjetoModel;
+    protected $processoObjetoModel;
     protected $processosVinculadosModel;
 
     public function __construct()
@@ -32,7 +32,7 @@ class ProcessosRepository
         $this->processosMovimentosModel     = model('ProcessosMovimentosModel');
         $this->intimacoesModel              = model('IntimacoesModel');
         $this->tarefasModel                 = model('TarefasModel');
-        $this->processosObjetoModel         = model('ProcessoObjetoModel');
+        $this->processoObjetoModel         = model('ProcessoObjetoModel');
         $this->processosVinculadosModel     = model('ProcessosVinculadosModel');
     }
 
@@ -47,7 +47,7 @@ class ProcessosRepository
         if ($encerrado !== null) {
             $builder->where('encerrado', $encerrado);
         }
- 
+
         // Filtro por busca (numero_processo ou titulo_processo)
         if ($search !== null) {
             $builder->groupStart()
@@ -110,12 +110,21 @@ class ProcessosRepository
         return $builder->joinProcessoCliente($perPage);
     }
 
-        /**
+    /**
      * Busca processos de um objeto específico com os mesmos filtros da pesquisa geral
      */
     public function buscarProcessosObjeto(int $objetoId, ?string $search, string $sortField, string $sortOrder, ?int $encerrado, ?int $etiqueta = null, int $perPage = 25)
     {
-        $builder = $this->processosModel->whereIn('id_processo', $this->processosObjetoModel->getProcessoPorObjeto($objetoId));
+
+        $processosIds = $this->processoObjetoModel->getProcessoPorObjeto($objetoId);
+
+        // Verifica se o array de IDs de processos não está vazio
+        if (!empty($processosIds)) {
+            $builder = $this->processosModel->whereIn('id_processo', $processosIds);
+        } else {
+            // Se o array estiver vazio, retorna uma consulta que não retorna nenhum resultado
+            $builder = $this->processosModel->where('id_processo', null);
+        }
 
         // Filtro por encerrado
         if ($encerrado !== null) {
@@ -181,7 +190,7 @@ class ProcessosRepository
             'etiquetas'         => $this->processosModel->joinEtiquetasProcessos($id),
             'tarefas'           => $this->tarefasModel->where('processo_id', $id)->get()->getResultArray(),
             'vinculos'          => $this->processosVinculadosModel->getVinculosProcesso($id),
-            'objetos'           => $this->processosObjetoModel->selecionarObjetoPorProcessoId($id),
+            'objetos'           => $this->processoObjetoModel->selecionarObjetoPorProcessoId($id),
         ];
     }
 
@@ -328,34 +337,43 @@ class ProcessosRepository
 
 
     /********************* METODOS RELACIONADOS AOS OBJETOS DO PROCESSO *********************/
-    
+
     public function salvarObjeto(array $dados): int
     {
-        if(isset($dados['id_objeto'])) {
-            return $this->processosObjetoModel->update($dados['id_objeto'], $dados);
-        } else{
-            return $this->processosObjetoModel->insert($dados);
+        if (isset($dados['id_objeto'])) {
+            $this->processoObjetoModel->update($dados['id_objeto'], $dados);
+            return $dados['id_objeto'];
+        } else {
+            $this->processoObjetoModel->insert($dados);
+            return $this->processoObjetoModel->getInsertID();
         }
-        
+    }
+    
+    public function vincularObjetoProcesso(int $processoId, int $objetoId){
+        return $this->processoObjetoModel->vincularProcessoObjeto($processoId, $objetoId);
+    }
+
+    public function desvincularObjetoProcesso(int $processoId, int $objetoId){
+        return $this->processoObjetoModel->desvincularObjetoProcesso($processoId, $objetoId);
     }
 
     public function selecionarObjetoPorProcessoId(int $processoId): array
     {
-        return $this->processosObjetoModel->selecionarObjetoPorProcessoId($processoId);
-    }
-  
-    public function obterObjeto(int $id): ?array
-    {
-        return $this->processosObjetoModel->find($id);
+        return $this->processoObjetoModel->selecionarObjetoPorProcessoId($processoId);
     }
 
-        public function listarObjetos(): array
+    public function obterObjeto(int $id): ?array
     {
-        return $this->processosObjetoModel->findAll();
-    } 
+        return $this->processoObjetoModel->find($id);
+    }
+
+    public function listarObjetos(): array
+    {
+        return $this->processoObjetoModel->findAll();
+    }
 
     public function deletarObjeto(int $id): void
     {
-        $this->processosObjetoModel->delete($id);
+        $this->processoObjetoModel->delete($id);
     }
 }

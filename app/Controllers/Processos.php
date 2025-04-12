@@ -98,7 +98,7 @@ class Processos extends BaseController
     {
         $data = [
             'titulo'    => 'Processos do Objeto',
-            'sortField' => $this->request->getGet('sort') ?? 'id_processo',
+            'sortField' => $this->request->getGet('sort') ?? 'numero_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
             's'         => $this->request->getGet('s') ?? null,
             'encerrado' => $this->request->getGet('encerrado') ?? null,
@@ -397,6 +397,45 @@ class Processos extends BaseController
         }
     }
 
+    /************   Relacionado ao Objeto do Processo   ************/
+
+
+    public function vincularObjeto(){
+        $processoId = $this->request->getPost('processo_id');
+        $objetoId = $this->request->getPost('objeto_id');
+        try{
+            $this->processoService->vincularObjetoProcesso($processoId, $objetoId);
+            return redirect()->to(base_url('processos/consultarprocesso/' . $processoId))
+                ->with('success', 'Objeto vinculado com sucesso');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao vincular objeto: ' . $e->getMessage());
+        }
+    }
+
+    public function desvincularObjeto($processoId, $objetoId){
+        try{
+            $this->processoService->desvincularObjetoProcesso($processoId, $objetoId);
+            return redirect()->to(base_url('processos/consultarprocesso/' . $processoId))
+                ->with('success', 'Objeto desvinculado com sucesso');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao desvincular objeto: ' . $e->getMessage());
+        }
+    }
+
+    public function salvarObjeto(){
+        $data = $this->request->getPost();
+        try{
+            $objetoId = $this->processoService->salvarObjeto($data);
+            $this->processoService->vincularObjetoProcesso($data['processo_id'], $objetoId);
+            return redirect()->to(base_url('processos/consultarprocesso/' . $data['processo_id']))
+                ->with('success', 'Objeto salvo com sucesso');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Erro ao salvar objeto: ' . $e->getMessage());
+        }
+    }
 
     ############################################################################################ 
     #                                                                                          #
