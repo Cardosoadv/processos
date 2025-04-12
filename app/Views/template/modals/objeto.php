@@ -67,12 +67,28 @@ $listaObjetos = $objetosModel->orderby('cod_interno', 'ASC')->findAll();
                                     </div>
                                 </div>
                                 <div class="row mb-2">
+                                    <div class="form-group col-9">
+                                        <label for="logradouro" class="form-label">Logradouro</label>
+                                        <input type="text" class="form-control col" id="logradouro" name="logradouro" value="">
+                                    </div>
+                                    <div class="form-group col-3">
+                                        <label for="numero" class="form-label">Número</label>
+                                        <input type="text" class="form-control col" id="numero" name="numero" value="">
+                                    </div>
                                     <div class="form-group">
-                                        <label for="comentario" class="form-label ">Comentário</label>
-                                        <textarea class="form-control col w-100" id="comentario" name="comentario"></textarea>
+                                        <label for="complemento" class="form-label">Complemento</label>
+                                        <input type="text" class="form-control col" id="complemento" name="complemento" value="">
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Salvar</button>
+
+                                <div class="row mb-2">
+                                    <div class="form-group">
+                                        <label for="comentarios" class="form-label">Comentários</label>
+                                        <textarea class="form-control col" id="comentarios" name="comentarios" rows="3">
+                                        </textarea>
+                                    </div>
+                                </div>
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
                             </form>
                         </div>
                     </div>
