@@ -9,7 +9,6 @@ class AlteraObjeto extends Migration
     public function up()
     {
         $fields = [
-
             'cidade'        => ['type' => 'varchar', 'constraint' => '100','null' => true],
             'bairro'        => ['type' => 'varchar', 'constraint' => '100','null' => true],
             'quadra'        => ['type' => 'varchar', 'constraint' => '10','null' => true],

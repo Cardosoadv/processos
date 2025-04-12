@@ -23,6 +23,10 @@ class ProcessoObjetoModel extends Model
         'cod_interno',
         'matricula',
         'cartorio',
+        'logradouro',
+        'numero',
+        'complemento',
+        'comentarios',
 
     ];
 
