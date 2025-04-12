@@ -28,8 +28,12 @@
                                 <td><?= esc($objeto['bairro']) ?></td>
                                 <td><?= esc($objeto['quadra']) ?></td>
                                 <td><?= esc($objeto['lote']) ?></td>
-                                <td><a href="<?= base_url('processos/desvincularObjeto/'.$processo['id_processo'] .'/'. $objeto['id_objeto']) ?>" >
-                                        <i class="fas fa-trash" style="cursor: pointer;"></i>
+                                <td>
+                                    <a href="<?= base_url('objetos/editar/' . $objeto['id_objeto']) ?>" >
+                                        <i class="bi bi-pencil-square" style="cursor: pointer;"> </i>
+                                    </a>
+                                    <a href="<?= base_url('processos/desvincularObjeto/'.$processo['id_processo'] .'/'. $objeto['id_objeto']) ?>" >
+                                        <i class="bi bi-trash" style="cursor: pointer;"> </i>
                                     </a>
                                 </td>
 
