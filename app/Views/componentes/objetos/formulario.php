@@ -43,6 +43,21 @@
     </div>
 
     <div class="row mb-2">
+        <div class="form-group col-12">
+            <label for="inscricao" class="form-label">Inscrição</label>
+            <input type="text" class="form-control col" id="inscricao" name="inscricao" value="<?= esc($objeto['inscricao'] ?? '') ?>">
+        </div>
+        <div class="form-group col-6">
+            <label for="cartorio" class="form-label">Cartório</label>
+            <input type="text" class="form-control col" id="cartorio" name="cartorio" value="<?= esc($objeto['cartorio'] ?? '') ?>">
+        </div>
+        <div class="form-group col-6">
+            <label for="matricula" class="form-label">Matrícula</label>
+            <input type="text" class="form-control col" id="matricula" name="matricula" value="<?= esc($objeto['matricula'] ?? '') ?>">
+        </div>
+    </div>
+
+    <div class="row mb-2">
         <div class="form-group">
             <label for="comentarios" class="form-label">Comentários</label>
             <textarea class="form-control col" id="comentarios" name="comentarios" rows="3">
