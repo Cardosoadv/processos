@@ -18,7 +18,7 @@ class PagamentoReceitas extends BaseController
         $pagamentosModel = model('Financeiro/FinanceiroPagtoReceitasModel')
                                 ->join('fin_receitas', 'fin_receitas.id_receita = fin_pgto_receitas.receita_id')
                                 ->select('fin_pgto_receitas.*, fin_receitas.receita');
-        $data['pagtoReceitas'] = $pagamentosModel->paginate(25);
+        $data['pagtoReceitas'] = $pagamentosModel->orderBy('pagamento_receita_dt')->paginate(25);
         $data['pager'] = $pagamentosModel->pager;
 
         return $this->loadView('pagto_receitas/pagto_receitas', $data);

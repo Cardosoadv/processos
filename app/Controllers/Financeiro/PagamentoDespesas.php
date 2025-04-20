@@ -18,7 +18,7 @@ class PagamentoDespesas extends BaseController
         $pagamentosModel = model('Financeiro/FinanceiroPagtoDespesasModel')
                                 ->join('fin_despesas', 'fin_despesas.id_despesa = fin_pgto_despesas.despesa_id')
                                 ->select('fin_pgto_despesas.*, fin_despesas.despesa');
-        $data['pagtoDespesas'] = $pagamentosModel->paginate(25);
+        $data['pagtoDespesas'] = $pagamentosModel->orderBy('pagamento_despesa_dt')->paginate(25);
         $data['pager'] = $pagamentosModel->pager;
 
         return $this->loadView('pagto_despesas/pagto_despesas', $data);
