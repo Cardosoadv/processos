@@ -68,6 +68,13 @@ function nomeConta($id = null)
                                             Nenhuma transferencia encontrada.
                                         </div>
                                     <?php else: ?>
+                                        <div class="alert alert-info">
+                                        <?php if ($pager->getTotal()>1): ?>
+                                            <?= $pager->getTotal() ?> transferências encontradas.
+                                        <?php else: ?>
+                                            <?= $pager->getTotal() ?> transfêrencia encontrada.
+                                        <?php endif; ?>
+                                        </div>
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>

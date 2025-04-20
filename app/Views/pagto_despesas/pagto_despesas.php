@@ -58,6 +58,13 @@
                                             Nenhum despesa encontrado.
                                         </div>
                                     <?php else: ?>
+                                        <div class="alert alert-info">
+                                        <?php if ($pager->getTotal()>1): ?>
+                                            <?= $pager->getTotal() ?> despesas encontradas.
+                                        <?php else: ?>
+                                            <?= $pager->getTotal() ?> despesa encontrada.
+                                        <?php endif; ?>
+                                        </div>
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>

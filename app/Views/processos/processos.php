@@ -123,6 +123,13 @@ function removeParam($params, $key) {
                                             Nenhum processo encontrado.
                                         </div>
                                     <?php else: ?>
+                                        <div class="alert alert-info">
+                                        <?php if ($pager->getTotal()>1): ?>
+                                            <?= $pager->getTotal() ?> processos encontrados.
+                                        <?php else: ?>
+                                            <?= $pager->getTotal() ?> processo encontrado.
+                                        <?php endif; ?>
+                                        </div>
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>

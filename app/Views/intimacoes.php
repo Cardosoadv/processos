@@ -60,11 +60,11 @@
                                                         <th scope="col">Número do Processo</th>
                                                         <th scope="col">Tipo de Comunicação</th>
                                                         <th scope="col">Data de Disponibilização</th>
-                                                    </tr>
+                                                    </tr> 
                                                 </thead>
                                                 <tbody>
                                                 <?php foreach($intimacoes as $intimacao): ?>
-                                                    <tr>
+                                                    <tr alt="<?= htmlspecialchars($intimacao['texto']) ?>" title="<?= htmlspecialchars($intimacao['texto']) ?>">
                                                         <td>
                                                             <a href="<?= base_url('processos/editarpornumerodeprocesso/' . $intimacao['numero_processo']) ?>">
                                                                 <?= $intimacao['numero_processo'] ?>

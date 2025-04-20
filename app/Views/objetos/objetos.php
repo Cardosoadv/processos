@@ -58,6 +58,13 @@
                                             Nenhum objeto encontrado.
                                         </div>
                                     <?php else: ?>
+                                        <div class="alert alert-info">
+                                        <?php if ($pager->getTotal()>1): ?>
+                                            <?= $pager->getTotal() ?> objetos encontrados.
+                                        <?php else: ?>
+                                            <?= $pager->getTotal() ?> objeto encontrado.
+                                        <?php endif; ?>
+                                        </div>
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
