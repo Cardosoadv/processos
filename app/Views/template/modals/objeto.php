@@ -2,6 +2,8 @@
 
 $objetosModel = model('ProcessoObjetoModel');
 $listaObjetos = $objetosModel->orderby('cod_interno', 'ASC')->findAll();
+$listaBairros = $objetosModel->select('bairro')->distinct()->orderby('bairro', 'ASC')->findAll();
+$listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', 'ASC')->findAll();
 
 ?>
 <div class="modal fade" id="modal_objeto" tabindex="-1" aria-labelledby="modal-objeto" aria-hidden="true">
@@ -45,11 +47,27 @@ $listaObjetos = $objetosModel->orderby('cod_interno', 'ASC')->findAll();
                                 <div class="row mb-2">
                                     <div class="form-group col-6">
                                         <label for="cidade" class="form-label">Cidade</label>
-                                        <input type="text" class="form-control col" id="cidade" name="cidade">
+                                        <input type="text" class="form-control col" id="cidade" name="cidade" list="ListaCidades">
+
+                                        <datalist id="ListaCidades">
+                                            <?php foreach ($listaCidades as $cidade) : ?>
+                                                <option value="<?= $cidade['cidade'] ?>"><?= $cidade['cidade'] ?></option>
+                                            <?php endforeach; ?>
+                                        </datalist>
+
+
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="bairro" class="form-label">Bairro</label>
-                                        <input type="text" class="form-control col" id="bairro" name="bairro">
+                                        <input type="text" class="form-control col" id="bairro" name="bairro" list="ListaBairros">
+
+                                                <datalist id="ListaBairros">
+                                                    <?php foreach ($listaBairros as $bairro) : ?>
+                                                        <option value="<?= $bairro['bairro'] ?>"><?= $bairro['bairro'] ?></option>
+                                                    <?php endforeach; ?>
+                                                </datalist>
+                                                
+
                                     </div>
                                 </div>
                                 <div class="row mb-2">

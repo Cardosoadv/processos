@@ -37,9 +37,11 @@ function criarcartao(array $items){
                             </div>
                         </div>
                         <div class='card-body'>
+                            
                             <p> ".$item['detalhes']."</p>
                         </div>
                         <div class='card-footer'>
+                            <p>Prazo: ".date('d/m/Y', strtotime($item['prazo']))."</p>
                             <a href='".site_url('processos/consultarProcesso')."/". $idProcesso."'> ".$numeroProcesso."</a>
                         </div>
                     </div>

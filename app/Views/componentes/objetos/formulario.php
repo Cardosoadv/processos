@@ -1,13 +1,32 @@
+<?php
+
+$objetosModel = model('ProcessoObjetoModel');
+$listaObjetos = $objetosModel->orderby('cod_interno', 'ASC')->findAll();
+$listaBairros = $objetosModel->select('bairro')->distinct()->orderby('bairro', 'ASC')->findAll();
+$listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', 'ASC')->findAll();
+
+?>
+
 <form action="<?= base_url('objetos/salvar') ?>" method="post">
     <input type="hidden" name="id_objeto" value="<?= esc($objeto['id_objeto'] ?? '') ?>">
     <div class="row mb-2">
         <div class="form-group col-6">
             <label for="cidade" class="form-label">Cidade</label>
-            <input type="text" class="form-control col" id="cidade" name="cidade" value="<?= esc($objeto['cidade'] ?? '') ?>">
+            <input type="text" class="form-control col" id="cidade" name="cidade" value="<?= esc($objeto['cidade'] ?? '') ?>" list="ListaCidades">
+            <datalist id="ListaCidades">
+                <?php foreach ($listaCidades as $cidade) : ?>
+                    <option value="<?= $cidade['cidade'] ?>"><?= $cidade['cidade'] ?></option>
+                <?php endforeach; ?>
+            </datalist>
         </div>
         <div class="form-group col-6">
             <label for="bairro" class="form-label">Bairro</label>
-            <input type="text" class="form-control col" id="bairro" name="bairro" value="<?= esc($objeto['bairro'] ?? '') ?>">
+            <input type="text" class="form-control col" id="bairro" name="bairro" value="<?= esc($objeto['bairro'] ?? '') ?>" list="ListaBairros">
+            <datalist id="ListaBairros">
+                <?php foreach ($listaBairros as $bairro) : ?>
+                    <option value="<?= $bairro['bairro'] ?>"><?= $bairro['bairro'] ?></option>
+                <?php endforeach; ?>
+            </datalist>
         </div>
     </div>
     <div class="row mb-2">
