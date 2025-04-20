@@ -32,7 +32,7 @@ class ProcessosRepository
         $this->processosMovimentosModel     = model('ProcessosMovimentosModel');
         $this->intimacoesModel              = model('IntimacoesModel');
         $this->tarefasModel                 = model('TarefasModel');
-        $this->processoObjetoModel         = model('ProcessoObjetoModel');
+        $this->processoObjetoModel          = model('ProcessoObjetoModel');
         $this->processosVinculadosModel     = model('ProcessosVinculadosModel');
     }
 

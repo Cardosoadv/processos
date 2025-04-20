@@ -22,9 +22,10 @@ class Objetos extends BaseController
         if($data['s']){
             $data['objetos'] = $this    ->objetoModel
             
-                                        ->like('bairro', $data['s'])
-                                        ->orLike('cod_interno', $data['s'])
-                                        ->orLike('logradouro', $data['s'])
+                                        ->like('LOWER(bairro)', strtolower(trim($data['s'])))
+                                        ->orLike('LOWER(cidade)', strtolower(trim($data['s'])))
+                                        ->orLike('LOWER(cod_interno)', strtolower(trim($data['s'])))
+                                        ->orLike('LOWER(logradouro)', strtolower(trim($data['s'])))
                                         ->paginate(25);
         }else{
             $data['objetos'] = $this->objetoModel->paginate(25);
