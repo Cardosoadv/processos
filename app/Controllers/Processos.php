@@ -16,11 +16,13 @@ class Processos extends BaseController
     use FormataValorTrait;
 
     protected $processoService;
+    protected $auth;
 
     public function __construct()
     {
-        $this->processoService = new ProcessoService();
+        $this->processoService = new ProcessoService(); // Instancia o Service
     }
+    
 
     /**
      * Lista todos os processos
@@ -29,8 +31,8 @@ class Processos extends BaseController
      */
     public function index()
     {
+        
         $data = [
-
             'titulo'    => 'Processos',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
             'sortOrder' => $this->request->getGet('order') ?? 'asc',
@@ -41,12 +43,21 @@ class Processos extends BaseController
 
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
+        $data['cliente'] = null;
+        if(auth()->user()->can('exclusive.construtiva')){
+            $data['cliente'] = 2;
+        }
+
+        log_message('debug','Cliente enviado: ' . $data['cliente']);
+
         $processos = $this->processoService->listarProcessos(
             $data['s'],
             $data['sortField'],
             $data['sortOrder'],
             $data['encerrado'],
             $data['etiqueta'],
+            $data['perPage'] ?? 25,
+            $data['cliente']
         );
 
         $data['pager'] = $processos['pager'];
@@ -62,6 +73,7 @@ class Processos extends BaseController
      */
     public function processosDoCliente(?int $cliente_id)
     {
+        //TODO: Unificar lógica de listagem de processos
         $data = [
             'titulo'    => 'Processos do Cliente',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
@@ -107,6 +119,10 @@ class Processos extends BaseController
 
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
+        $data['cliente'] = null;
+        if(auth()->user()->can('exclusive.construtiva')){
+            $data['cliente'] = 2;
+        }
 
         $processos = $this->processoService->listarProcessosObjeto(
             $objeto_id,
@@ -115,6 +131,8 @@ class Processos extends BaseController
             $data['sortOrder'],
             $data['encerrado'],
             $data['etiqueta'],
+            $data['perPage'] ?? 25,
+            $data['cliente'] ?? null
         );
 
         $data['pager'] = $processos['pager'];
@@ -178,10 +196,12 @@ class Processos extends BaseController
      */
     public function salvar()
     {
-
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!auth()->user()->can('module.processos')){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para alterar Processos.');
+        }
     
         if (!$this->validarDadosProcesso()) {
-
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
     
@@ -373,7 +393,7 @@ class Processos extends BaseController
         $data = $this->request->getPost();
         try{
         $this->processoService->salvarVinculo($data);
-        return redirect()   ->to(base_url('processos/editar/' . $data['id_processo_a']))
+        return redirect()   ->to(base_url('processos/consultarprocesso/' . $data['id_processo_a']))
                             ->with('success', 'Vínculo salvo com sucesso');
         } catch (\Exception $e) {
             return redirect()

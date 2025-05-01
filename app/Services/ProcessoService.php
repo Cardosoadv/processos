@@ -26,9 +26,20 @@ class ProcessoService
      * Conforme filtros predefinidos
      * Retorna um array com os processos paginados.
      */
-    public function listarProcessos(?string $search, string $sortField, string $sortOrder, ?int $encerrado, ?int $etiqueta = null, int $perPage = 25)
+    public function listarProcessos(?string $search, 
+                                    string $sortField, 
+                                    string $sortOrder, 
+                                    ?int $encerrado, 
+                                    ?int $etiqueta = null, 
+                                    int $perPage = 25, 
+                                    ?int $clienteId = null)
     {
-        return $this->processosRepository->buscarProcessos($search, $sortField, $sortOrder, $encerrado, $etiqueta, $perPage);
+
+        if ($clienteId) {
+            return $this->processosRepository->buscarProcessosCliente($clienteId, $search, $sortField, $sortOrder, $encerrado, $etiqueta, $perPage);
+        }else{
+            return $this->processosRepository->buscarProcessos($search, $sortField, $sortOrder, $encerrado, $etiqueta, $perPage);
+        }
     }
 
         /**

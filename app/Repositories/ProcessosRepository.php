@@ -113,17 +113,30 @@ class ProcessosRepository
     /**
      * Busca processos de um objeto específico com os mesmos filtros da pesquisa geral
      */
-    public function buscarProcessosObjeto(int $objetoId, ?string $search, string $sortField, string $sortOrder, ?int $encerrado, ?int $etiqueta = null, int $perPage = 25)
+    public function buscarProcessosObjeto(
+                                            int $objetoId, 
+                                            ?string $search, 
+                                            string $sortField, 
+                                            string $sortOrder, 
+                                            ?int $encerrado, 
+                                            ?int $etiqueta = null, 
+                                            int $perPage = 25, 
+                                            ?int $clienteId = null
+                                            )
     {
 
         $processosIds = $this->processoObjetoModel->getProcessoPorObjeto($objetoId);
 
         // Verifica se o array de IDs de processos não está vazio
         if (!empty($processosIds)) {
-            $builder = $this->processosModel->whereIn('id_processo', $processosIds);
+            $builder = $this->processosModel
+                                            ->where('cliente_id', $clienteId)
+                                            ->whereIn('id_processo', $processosIds);
         } else {
             // Se o array estiver vazio, retorna uma consulta que não retorna nenhum resultado
-            $builder = $this->processosModel->where('id_processo', null);
+            $builder = $this->processosModel
+                                            ->where('cliente_id', $clienteId)
+                                            ->where('id_processo', null);
         }
 
         // Filtro por encerrado

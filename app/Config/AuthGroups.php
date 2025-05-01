@@ -72,18 +72,19 @@ class AuthGroups extends ShieldAuthGroups
      * If a permission is not listed here it cannot be used.
      */
     public array $permissions = [
-        'admin.access'        => 'Can access the sites admin area',
-        'admin.settings'      => 'Can access the main site settings',
-        'users.manage-admins' => 'Can manage other admins',
-        'users.create'        => 'Can create new non-admin users',
-        'users.edit'          => 'Can edit existing non-admin users',
-        'users.delete'        => 'Can delete existing non-admin users',
-        'beta.access'         => 'Can access beta-level features',
-        'module.clientes'     => 'Pode gerenciar clientes',
-        'module.tarefas'      => 'Pode gerenciar tarefas',
-        'module.processos'    => 'Pode gerenciar processos',
-        'module.financeiro'   => 'Pode gerenciar financeiro',
-        'module.intimacoes'   => 'Pode gerenciar intimações'
+        'admin.access'                  => 'Can access the sites admin area',
+        'admin.settings'                => 'Can access the main site settings',
+        'users.manage-admins'           => 'Can manage other admins',
+        'users.create'                  => 'Can create new non-admin users',
+        'users.edit'                    => 'Can edit existing non-admin users',
+        'users.delete'                  => 'Can delete existing non-admin users',
+        'beta.access'                   => 'Can access beta-level features',
+        'module.clientes'               => 'Pode gerenciar clientes',
+        'module.tarefas'                => 'Pode gerenciar tarefas',
+        'module.processos'              => 'Pode gerenciar processos',
+        'module.financeiro'             => 'Pode gerenciar financeiro',
+        'module.intimacoes'             => 'Pode gerenciar intimações',
+        'exclusive.construtiva'         => 'Pode gerenciar apenas processos do clientes',
 
     ];
 
@@ -118,7 +119,9 @@ class AuthGroups extends ShieldAuthGroups
             'beta.access',
             
         ],
-        'user' => [],
+        'user' => [
+            'exclusive.construtiva',
+        ],
         'beta' => [
             'beta.access',
         ],
