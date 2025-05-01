@@ -28,7 +28,10 @@ class Objetos extends BaseController
                                         ->orLike('LOWER(logradouro)', strtolower(trim($data['s'])))
                                         ->paginate(25);
         }else{
-            $data['objetos'] = $this->objetoModel->paginate(25);
+            $data['objetos'] = $this->objetoModel
+                                                    ->orderBy('cidade', 'ASC')
+                                                    ->orderBy('bairro', 'ASC')
+                                                    ->paginate(25);
         }
 
         $data['pager']      = $this->objetoModel->pager;
