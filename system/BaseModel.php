@@ -516,7 +516,7 @@ abstract class BaseModel
      */
     abstract protected function doPurgeDeleted();
 
-    /**
+    /** 
      * Works with the find* methods to return only the rows that
      * have been deleted.
      * This method works only with dbCalls.

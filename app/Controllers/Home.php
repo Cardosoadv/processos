@@ -39,6 +39,7 @@ class Home extends BaseController
             'qteClientes'       => $qteClientes,
             'qteTarefas'        => $qteTarefas,
             'tarefasUsuario'    => $tarefasUsuario,
+            'titulo' => 'Dashboard'
         ];
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
         return $this->loadView('dashboard', $data);

@@ -40,13 +40,65 @@ class ProcessosPartesModel extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $afterInsert    = ['auditoriaNovo'];
+    protected $beforeUpdate   = ['auditoriaAtualizar'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
-    protected $beforeDelete   = [];
+    protected $beforeDelete   = ['auditoriaDeletar'];
     protected $afterDelete    = [];
+
+    protected $auditoriaModel;
+    protected $ip;
+    
+    public function __construct(){
+        parent::__construct();
+        $this->auditoriaModel = new AuditoriaModel();
+        $this->ip = service('request')->getIPAddress();
+
+    }
+
+    protected function auditoriaNovo($data)
+    {
+        $data['id'] = $this->getInsertID();
+        $this->auditoriaModel->insert([
+            'user_id' => user_id(),
+            'table_name' => $this->table,
+            'action_type' => 'CREATE',
+            'dados_novos' => json_encode($data),
+            'ip_address' => $this->ip,
+        ]);
+        return $data;
+    }
+
+    protected function auditoriaAtualizar($data)
+    {
+        $dados_antigos = $this->find($data['id']);
+        $this->auditoriaModel->insert([
+            'user_id' => user_id(),
+            'table_name' => $this->table,
+            'action_type' => 'UPDATE',
+            'dados_antigos' => json_encode($dados_antigos),
+            'dados_novos' => json_encode($data['data']),
+            'ip_address' => $this->ip,
+            'created_at' => date('Y-m-d H:i:s'),
+        ]);
+        return $data;
+    }
+
+    protected function auditoriaDeletar($data)
+    {
+
+        $dados_antigos = $this->find($data['id']);
+        $this->auditoriaModel->insert([
+            'user_id' => user_id(),
+            'table_name' => $this->table,
+            'action_type' => 'DELETE',
+            'dados_antigos' => json_encode($dados_antigos),
+            'ip_address' => $this->ip,
+        ]);
+        return $data;
+    }
 
     /** 
      * Retorna as partes de um processo
