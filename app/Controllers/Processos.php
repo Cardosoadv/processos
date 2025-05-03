@@ -7,6 +7,7 @@ use App\Services\ProcessoService;
 
 
 use App\Models\ProcessosPartesModel;
+use App\Services\ExportarService;
 use App\Traits\FormataValorTrait;
 
 
@@ -138,6 +139,25 @@ class Processos extends BaseController
         $data['pager'] = $processos['pager'];
         $data['processos'] = $processos['processos'];
         return $this->loadView('processos/processos', $data);
+    }
+
+
+    public function exportar(){
+        $processos = $this->processoService->listarProcessos(
+            null,
+            'id_processo',
+            'asc',
+            null,
+            null,
+            1000000,
+            null);
+
+        $cabecalho = array_keys($processos['processos'][0]);
+        
+        $service = new ExportarService();
+        $service->gerarExcel($processos['processos'], 'Processos', $cabecalho);
+        echo '<pre>';
+        print_r($processos['processos']);
     }
 
     /**
