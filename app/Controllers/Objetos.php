@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Services\ExportarService;
 use Exception;
 
 class Objetos extends BaseController
@@ -72,6 +73,30 @@ class Objetos extends BaseController
     {
         $this->objetoModel->delete($id);
         return redirect()->to(base_url('objetos'));
+    }
+
+
+    public function exportar()
+    {
+        $data['titulo'] = 'Exportar Objetos';
+        $data['objetos'] = $this->objetoModel
+                                                ->orderBy('cidade', 'ASC')
+                                                ->orderBy('bairro', 'ASC')
+                                                ->join('processos_objeto_processo as pop', 'pop.objeto_id = processos_objeto.id_objeto', 'left')
+                                                ->join('processos as p', 'p.id_processo = pop.processo_id', 'left')
+                                                ->get()->getResultArray();
+        
+        $cabecalho = array_keys($data['objetos'][0]);
+
+        $service = new ExportarService();
+        $service->gerarExcel($data['objetos'], 'Objetos', $cabecalho);
+
+        echo "<pre>";
+        print_r($cabecalho);
+        echo "Dados: ";
+        print_r($data['objetos']);
+
+        //return $this->loadView('objetos/exportarObjetos', $data);
     }
 
 }

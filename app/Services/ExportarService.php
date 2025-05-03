@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Services;
 
-use App\Controllers\BaseController;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
- 
-class Exportacao extends BaseController
+
+class ExportarService
 {
     /**
      * Constructor
@@ -59,6 +58,7 @@ class Exportacao extends BaseController
             $coluna = 1;
             foreach ($registro as $valor) {
                 $sheet->setCellValue([$coluna, $linha], $valor);
+                $sheet->getStyle($coluna, $linha)->getFont()->setBold(false);
                 $coluna++;
             }
             $linha++;
