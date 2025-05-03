@@ -89,7 +89,7 @@ class Objetos extends BaseController
         $cabecalho = array_keys($data['objetos'][0]);
 
         $service = new ExportarService();
-        $service->gerarExcel($data['objetos'], 'Objetos', $cabecalho);
+        $service->exportarCsv($data['objetos'], 'Objetos', $cabecalho);
 
         echo "<pre>";
         print_r($cabecalho);

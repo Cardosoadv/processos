@@ -133,6 +133,46 @@ class ExportarService
         // Gere e baixe o arquivo Excel
         return $this->gerarExcel($dados, 'dados_exportados', $cabecalhos);
     }
+
+    public function exportarCsv($data, $filename = 'exportacao', $headers = [])
+    {
+    // Adicionar extensão .csv se não estiver presente
+    if (!str_ends_with($filename, '.csv')) {
+        $filename .= '.csv';
+    }
+    
+    // Configurar cabeçalhos HTTP para download
+    $response = service('response');
+    $response->setHeader('Content-Type', 'text/csv');
+    $response->setHeader('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    $response->setHeader('Pragma', 'no-cache');
+    $response->setHeader('Expires', '0');
+    
+    // Abrir o output como um stream PHP
+    $output = fopen('php://output', 'w');
+    
+    // Escrever o BOM (Byte Order Mark) para UTF-8
+    fwrite($output, "\xEF\xBB\xBF");
+    
+    // Escrever cabeçalhos se fornecidos
+    if (!empty($headers)) {
+        fputcsv($output, $headers);
+    } elseif (!empty($data)) {
+        // Se não houver cabeçalhos definidos mas houver dados, use as chaves do primeiro item como cabeçalhos
+        fputcsv($output, array_keys($data[0]));
+    }
+    
+    // Escrever os dados
+    foreach ($data as $row) {
+        fputcsv($output, $row);
+    }
+    
+    // Fechar o stream
+    fclose($output);
+    
+    // Encerrar o script para evitar que qualquer outro conteúdo seja enviado
+    exit;
+}
     
     /**
      * Método para mostrar um formulário que permite ao usuário exportar dados
