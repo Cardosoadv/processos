@@ -79,15 +79,22 @@ class AuthGroups extends ShieldAuthGroups
         'users.edit'                    => 'Can edit existing non-admin users',
         'users.delete'                  => 'Can delete existing non-admin users',
         'beta.access'                   => 'Can access beta-level features',
+        // Minhas Permissões
         'module.clientes'               => 'Pode gerenciar clientes',
         'module.tarefas'                => 'Pode gerenciar tarefas',
+        'module.tarefas.exclusive'      => 'Pode gerenciar apenas tarefas do clientes',
+
         'module.processos'              => 'Pode gerenciar processos',
+        'module.processos.exclusive'    => 'Pode gerenciar apenas processos do clientes',
+
         'module.financeiro'             => 'Pode gerenciar financeiro',
         'module.intimacoes'             => 'Pode gerenciar intimações',
+
+
         'exclusive.construtiva'         => 'Pode gerenciar apenas processos do clientes',
 
     ];
-
+ 
     /**
      * --------------------------------------------------------------------
      * Permissions Matrix
@@ -121,6 +128,7 @@ class AuthGroups extends ShieldAuthGroups
         ],
         'user' => [
             'exclusive.construtiva',
+            'module.processos.exclusive',
         ],
         'beta' => [
             'beta.access',

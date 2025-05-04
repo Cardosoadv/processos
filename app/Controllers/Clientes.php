@@ -9,9 +9,23 @@ use Exception;
 class Clientes extends BaseController
 {
     use ValidacoesTrait;
+
+    protected $permission;
+
+
+
+    public function verificaPermissao($permission = 'module.clientes')
+    {
+        return (auth()->user()->can($permission));
+    }
     
     public function index()
     {
+        if (! $this->verificaPermissao()) {
+
+            return redirect()->to(base_url('home/permissao'))->with('errors', 'Você não tem permissão para acessar o módulo de Clientes!');
+        }
+        
         $data = [
             'titulo'    => 'Clientes',
         ];
@@ -47,7 +61,7 @@ class Clientes extends BaseController
             if (!$this->validarCpfCnpj($cpf_cnpj)) {
                 return redirect()   ->back()
                                     ->withInput()
-                                    ->with('error', 'CPF ou CNPJ inválido.');
+                                    ->with('errors', 'CPF ou CNPJ inválido.');
             }
         }
 
@@ -62,7 +76,7 @@ class Clientes extends BaseController
 
                 return redirect()   ->back()
                                     ->withInput()
-                                    ->with('error', 'Erro ao salvar Cliente: ' . $e->getMessage());
+                                    ->with('errors', 'Erro ao salvar Cliente: ' . $e->getMessage());
             }
         }
 
@@ -74,7 +88,7 @@ class Clientes extends BaseController
 
                 return redirect()   ->back()
                                     ->withInput()
-                                    ->with('error', 'Erro ao atualizar dados do Cliente: ' . $e->getMessage());
+                                    ->with('errors', 'Erro ao atualizar dados do Cliente: ' . $e->getMessage());
             }
 
     }
@@ -102,7 +116,7 @@ class Clientes extends BaseController
             return redirect()->to(base_url('clientes'))->with('success', 'Cliente excluído com sucesso');
         }
         catch(Exception $e){
-            return redirect()->to(base_url('clientes'))->with('error', 'Erro ao excluir Cliente: ' . $e->getMessage());
+            return redirect()->to(base_url('clientes'))->with('errors', 'Erro ao excluir Cliente: ' . $e->getMessage());
         }
     }
 }

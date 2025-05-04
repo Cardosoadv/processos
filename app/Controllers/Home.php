@@ -45,5 +45,14 @@ class Home extends BaseController
         return $this->loadView('dashboard', $data);
     }
 
+    public function permissao(): string
+    {
+        $data = [
+            'titulo' => 'Permissões',
+        ];
+        
+        return $this->loadView('permissao', $data);
+    }
+
 
 }

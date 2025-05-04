@@ -168,6 +168,11 @@ class ProcessosRepository
         return $builder->joinProcessoCliente($perPage);
     }
 
+    public function buscarClienteProcesso(int $id): ?int
+    {
+        return $this->processosModel->where('id_processo', $id)->get()->getRowArray()['cliente_id'] ?? null;
+    }
+
 
     /**
      * Busca processos movimentados em um período específico

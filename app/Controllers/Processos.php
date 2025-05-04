@@ -17,13 +17,20 @@ class Processos extends BaseController
     use FormataValorTrait;
 
     protected $processoService;
-    protected $auth;
 
     public function __construct()
     {
-        $this->processoService = new ProcessoService(); // Instancia o Service
+        $this->processoService = new ProcessoService();
     }
     
+    protected function getUsuarioCliente() : int|null
+    {
+        // Busca o cliente associado ao usuário logado
+        $usuarioCliente = model('ClientesModel')  ->select('id_cliente')
+        ->where('usuario_id', user_id())
+        ->first() ?? null;
+        return $usuarioCliente['id_cliente']?? null;
+    }
 
     /**
      * Lista todos os processos
@@ -32,7 +39,16 @@ class Processos extends BaseController
      */
     public function index()
     {
-        
+
+
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.processos'))||
+            (auth()->user()->can('module.processos.exclusive'))
+            )
+        ){
+            return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para acessar Processos.');
+        }
+
         $data = [
             'titulo'    => 'Processos',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
@@ -44,12 +60,11 @@ class Processos extends BaseController
 
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
+        // Verifica se o usuário tem permissão para acessar o módulo de processos exclusivos
         $data['cliente'] = null;
-        if(auth()->user()->can('exclusive.construtiva')){
-            $data['cliente'] = 2;
+        if(!(auth()->user()->can('module.processos')) && auth()->user()->can('module.processos.exclusive')){
+            $data['cliente'] = $this->getUsuarioCliente() ?? 0;
         }
-
-        log_message('debug','Cliente enviado: ' . $data['cliente']);
 
         $processos = $this->processoService->listarProcessos(
             $data['s'],
@@ -74,7 +89,21 @@ class Processos extends BaseController
      */
     public function processosDoCliente(?int $cliente_id)
     {
-        //TODO: Unificar lógica de listagem de processos
+
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.processos'))||
+            (auth()->user()->can('module.processos.exclusive'))
+            )
+            ){
+        return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para acessar Processos.');
+        }
+
+        if(auth()->user()->can('module.processos.exclusive')){
+            if($cliente_id != ($this->getUsuarioCliente() ?? 0)){
+                return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para acessar Processos.');
+            };
+        }
+
         $data = [
             'titulo'    => 'Processos do Cliente',
             'sortField' => $this->request->getGet('sort') ?? 'id_processo',
@@ -82,18 +111,20 @@ class Processos extends BaseController
             's'         => $this->request->getGet('s') ?? null,
             'encerrado' => $this->request->getGet('encerrado') ?? null,
             'etiqueta'  => $this->request->getGet('etiqueta') ?? null,
+            'cliente'   => $cliente_id,
         ];
 
         $data['nextOrder'] = $data['sortOrder'] === 'asc' ? 'desc' : 'asc';
 
 
-        $processos = $this->processoService->listarProcessosCliente(
-            $cliente_id,
+        $processos = $this->processoService->listarProcessos(
             $data['s'],
             $data['sortField'],
             $data['sortOrder'],
             $data['encerrado'],
             $data['etiqueta'],
+            $data['perPage'] ?? 25,
+            $data['cliente']
         );
 
         $data['pager'] = $processos['pager'];
@@ -122,7 +153,7 @@ class Processos extends BaseController
 
         $data['cliente'] = null;
         if(auth()->user()->can('exclusive.construtiva')){
-            $data['cliente'] = 2;
+            $data['cliente'] = $this->getUsuarioCliente() ?? 0;
         }
 
         $processos = $this->processoService->listarProcessosObjeto(
@@ -185,9 +216,9 @@ class Processos extends BaseController
     {
         $data = [
             'titulo'    => 'Novo Processo',
-            'processo'  => ['cliente_id' => null],
+            'processo'  => ['cliente_id' => $this->getUsuarioCliente() ?? null],
         ];
-        $data['img'] = 'vazio.png';
+        $data['objetos'] = [];
         $data['listaetiquetas'] = model('EtiquetasModel')->findAll();
         $data['etiquetas'] = [];
         return $this->loadView('processos/consultarProcesso', $data);
@@ -202,8 +233,23 @@ class Processos extends BaseController
      */
     public function consultarProcesso(?int $id = null)
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.processos'))||
+            (auth()->user()->can('module.processos.exclusive'))
+            ))
+            {
+                return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para consultar este Processo.');
+            }
+
+        // Verifica se a permissão para o usuário exclusivo    
+        $clienteProcesso = $this->processoService->getClienteProcesso($id);
+        $ClienteUsuario = $this->getUsuarioCliente() ?? 0;
+        if ((auth()->user()->can('module.processos.exclusive') && ($clienteProcesso != $ClienteUsuario))) {
+            return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para consultar este Processo.');
+        }
+        
         $data = array_merge(
-            ['titulo' => 'Consultar Processo', 'img' => 'vazio.png', 'selected' => $id],
+            ['titulo' => 'Consultar Processo', 'selected' => $id],
             $this->processoService->getDetalhesProcesso($id)
         );
         return $this->loadView('processos/consultarProcesso', $data);
@@ -217,8 +263,18 @@ class Processos extends BaseController
     public function salvar()
     {
         // Verifica se o usuário tem permissão para acessar o módulo de processos
-        if(!auth()->user()->can('module.processos')){
+        if(!((auth()->user()->can('module.processos'))||
+            (auth()->user()->can('module.processos.exclusive'))
+            ))
+        {
             return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para alterar Processos.');
+        }
+
+        // Verifica se a permissão para o usuário exclusivo    
+        $clienteProcesso = $this->request->getPost('cliente_id') ?? null;
+        $ClienteUsuario = $this->getUsuarioCliente() ?? 0;
+        if ((auth()->user()->can('module.processos.exclusive') && ($clienteProcesso != $ClienteUsuario))) {
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para Salvar ou Editar Processo de outro cliente.');
         }
     
         if (!$this->validarDadosProcesso()) {
@@ -257,7 +313,22 @@ class Processos extends BaseController
      */
     public function excluir(int $id)
     {
+        if(!((auth()->user()->can('module.processos'))||
+            (auth()->user()->can('module.processos.exclusive'))
+            ))
+            {
+                return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para exluir este Processo.');
+            }
+
+        // Verifica se a permissão para o usuário exclusivo    
+        $clienteProcesso = $this->processoService->getClienteProcesso($id);
+        $ClienteUsuario = $this->getUsuarioCliente() ?? 0;
+        if ((auth()->user()->can('module.processos.exclusive') && ($clienteProcesso != $ClienteUsuario))) {
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para excluir processo de outro cliente.');
+        }
+        
         try {
+
             $this->processoService->deletarProcesso($id);
 
             return redirect()

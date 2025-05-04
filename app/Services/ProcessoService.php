@@ -83,6 +83,11 @@ class ProcessoService
         return $this->processosRepository->buscarDetalhesProcesso($id);
     }
 
+    public function getClienteProcesso(int $id): ?int
+    {
+        return $this->processosRepository->buscarClienteProcesso($id);
+    }
+
     /**
      * Salva um processo.
      *

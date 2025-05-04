@@ -107,15 +107,7 @@ function removeParam($params, $key) {
                                     </a>
                                 </div>
 
-                                <?php if (null !== (session()->get('msg'))
-                                            || (session()->get('success')) 
-                                            || (session()->get('errors'))): ?>
-                                    <div class="callout callout-info">
-                                        <?= session()->get('msg') ?>
-                                        <?= session()->get('success') ?>
-                                        <?= session()->get('errors') ?>
-                                    </div>
-                                <?php endif; ?>
+                                <?= $this->include('componentes/notificacaoSessao') ?>
 
                                 <div class="mt-3">
                                     <?php if (empty($processos)): ?>
@@ -130,6 +122,7 @@ function removeParam($params, $key) {
                                             <?= $pager->getTotal() ?> processo encontrado.
                                         <?php endif; ?>
                                         </div>
+
                                         <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
@@ -223,6 +216,8 @@ function removeParam($params, $key) {
                             </div>
                         </div>
 
+                        <?php if (auth()->user()->can('module.processos')): ?>
+
                         <div class="col-lg-3">
                             <section class="mb-4">
                                 <h3>Últimos Processos Movimentados</h3>
@@ -234,6 +229,7 @@ function removeParam($params, $key) {
                                 <div id="intimacoes" class="list-group"></div>
                             </section>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -242,7 +238,7 @@ function removeParam($params, $key) {
         <?= $this->include('template/modals/change_user_img.php') ?>
         <?= $this->include('template/footer') ?>
     </div>
-
+    <?php if (auth()->user()->can('module.processos')): ?>
     <script>
         const BASE_URL = '<?= base_url() ?>';
         
@@ -353,5 +349,6 @@ function removeParam($params, $key) {
         });
 
     </script>
+    <?php endif; ?>
 </body>
 </html>

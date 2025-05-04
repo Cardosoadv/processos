@@ -15,8 +15,11 @@
         <div class="container-fluid">
             <!--begin::Row-->
             <div class="row">
-                <!--begin::Col-->
+                <!--begin::Col--> 
                 <div class="col-lg-3 col-6">
+                    <!-- Inicio da Notificação -->
+                    <?= $this->include('componentes/notificacaoSessao') ?>
+
                     <?php if (auth()->user()->can('module.processos') || auth()->user()->can('exclusive.construtiva') ): ?>
                         <!--begin::Small Box Widget 1-->
                         <div class="small-box text-bg-primary">
@@ -88,7 +91,7 @@
                             </a>
                         </div><!--end::Small Box Widget 4-->
                     <?php endif; ?>
-                </div><!--end::Col-->
+
             </div><!--end::Row-->
             </div><!-- /.row (main row) -->
         </div><!--end::Container-->
