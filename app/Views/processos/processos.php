@@ -179,7 +179,7 @@ function removeParam($params, $key) {
                                                         </td>
                                                         <td style='font-size: 0.8rem;'><?= date('d-m-Y',strtotime(esc($processo['dataRevisao'] ?? "01-01-2000"))) ?></td>
                                                         <td style='font-size: 0.8rem;'>
-                                                            <a href="<?= base_url('processos/editar/' . $processo['id_processo']) ?>" 
+                                                            <a href="<?= base_url('processos/consultarprocesso/' . $processo['id_processo']) ?>" 
                                                                 class="btn btn-sm btn-primary"
                                                                 style="padding: 0.1rem 0.25rem; font-size: 0.7rem;">
                                                                 Editar
