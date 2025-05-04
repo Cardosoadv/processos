@@ -56,11 +56,11 @@
                                         </div>
                                     <?php else: ?>
                                         <div class="alert alert-info">
-                                        <?php if ($pager->getTotal()>1): ?>
-                                            <?= $pager->getTotal() ?> objetos encontrados.
-                                        <?php else: ?>
-                                            <?= $pager->getTotal() ?> objeto encontrado.
-                                        <?php endif; ?>
+                                            <?php if ($pager->getTotal() > 1): ?>
+                                                <?= $pager->getTotal() ?> objetos encontrados.
+                                            <?php else: ?>
+                                                <?= $pager->getTotal() ?> objeto encontrado.
+                                            <?php endif; ?>
                                         </div>
                                         <table class="table table-striped table-hover">
                                             <thead>
@@ -102,55 +102,59 @@
                                         <?= $pager->links() ?>
                                     <?php endif; ?>
                                 </div>
-                            </div>
-                        </div>
+                            </div><!-- end::Container -->
+                        </div><!-- end::Main Content Column -->
 
-                        <!-- Sidebar -->
-                        <div class="col-lg-3">
-                            <section class="mb-4">
-                                <h3>Últimos Processos Movimentados</h3>
-                                <div id="processoMovimentados" class="list-group"></div>
-                            </section>
+                        <?php if (auth()->user()->can('module.processos')): ?>
+                            <!-- Sidebar -->
+                            <div class="col-lg-3">
+                                <section class="mb-4">
+                                    <h3>Últimos Processos Movimentados</h3>
+                                    <div id="processoMovimentados" class="list-group"></div>
+                                </section>
 
-                            <section>
-                                <h3>Últimas Intimações</h3>
-                                <div id="intimacoes" class="list-group"></div>
-                            </section>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                <section>
+                                    <h3>Últimas Intimações</h3>
+                                    <div id="intimacoes" class="list-group"></div>
+                                </section>
+                            </div><!-- end::Sidebar -->
+                        <?php endif; ?>
+                    </div><!-- end::Row -->
+                </div><!-- end::Container-fluid -->
+
+            </div><!-- end::App Content -->
         </main>
 
         <?= $this->include('template/modals/change_user_img.php') ?>
-
         <?= $this->include('template/footer') ?>
-    </div>
 
-    <script>
-        const BASE_URL = '<?= base_url() ?>';
+    </div><!-- end::App Wrapper -->
+    
+    <?php if (auth()->user()->can('module.processos')): ?>
+        <script>
+            const BASE_URL = '<?= base_url() ?>';
 
-        // Utility functions
-        const formatDate = timestamp => {
-            const date = new Date(timestamp);
-            return date.toLocaleDateString('pt-BR');
-        };
+            // Utility functions
+            const formatDate = timestamp => {
+                const date = new Date(timestamp);
+                return date.toLocaleDateString('pt-BR');
+            };
 
-        const createProcessLink = (numeroProcesso) => {
-            return `${BASE_URL}/processos/editarpornumerodeprocesso/${numeroProcesso}`;
-        };
+            const createProcessLink = (numeroProcesso) => {
+                return `${BASE_URL}/processos/editarpornumerodeprocesso/${numeroProcesso}`;
+            };
 
-        const handleFetchError = (error, elementId) => {
-            console.error('Erro:', error);
-            document.getElementById(elementId).innerHTML = `
+            const handleFetchError = (error, elementId) => {
+                console.error('Erro:', error);
+                document.getElementById(elementId).innerHTML = `
                 <div class="alert alert-danger">
                     Erro ao carregar informações. Tente novamente mais tarde.
                 </div>
             `;
-        };
+            };
 
-        // Process data rendering
-        const renderProcessItem = (item) => `
+            // Process data rendering
+            const renderProcessItem = (item) => `
             <div class="list-group-item">
                 <a href="${createProcessLink(item.numero_processo)}" class="text-primary">
                     ${item.numero_processo}
@@ -160,7 +164,7 @@
             </div>
         `;
 
-        const renderIntimacaoItem = (item) => `
+            const renderIntimacaoItem = (item) => `
             <div class="list-group-item">
                 <a href="${createProcessLink(item.numero_processo)}" class="text-primary">
                     ${item.numero_processo}
@@ -170,43 +174,43 @@
             </div>
         `;
 
-        // Data fetching functions
-        async function fetchProcessos() {
-            try {
-                const response = await fetch(`${BASE_URL}/processos/processosmovimentados/30`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
+            // Data fetching functions
+            async function fetchProcessos() {
+                try {
+                    const response = await fetch(`${BASE_URL}/processos/processosmovimentados/30`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
 
-                const container = document.getElementById('processoMovimentados');
-                container.innerHTML = Array.isArray(data) && data.length > 0 ?
-                    data.map(renderProcessItem).join('') :
-                    '<div class="list-group-item">Nenhum processo encontrado</div>';
-            } catch (error) {
-                handleFetchError(error, 'processoMovimentados');
+                    const container = document.getElementById('processoMovimentados');
+                    container.innerHTML = Array.isArray(data) && data.length > 0 ?
+                        data.map(renderProcessItem).join('') :
+                        '<div class="list-group-item">Nenhum processo encontrado</div>';
+                } catch (error) {
+                    handleFetchError(error, 'processoMovimentados');
+                }
             }
-        }
 
-        async function fetchIntimacoes() {
-            try {
-                const response = await fetch(`${BASE_URL}/intimacoes/intimacoesporperiodo/30`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
+            async function fetchIntimacoes() {
+                try {
+                    const response = await fetch(`${BASE_URL}/intimacoes/intimacoesporperiodo/30`);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
 
-                const container = document.getElementById('intimacoes');
-                container.innerHTML = Array.isArray(data) && data.length > 0 ?
-                    data.map(renderIntimacaoItem).join('') :
-                    '<div class="list-group-item">Nenhuma intimação encontrada</div>';
-            } catch (error) {
-                handleFetchError(error, 'intimacoes');
+                    const container = document.getElementById('intimacoes');
+                    container.innerHTML = Array.isArray(data) && data.length > 0 ?
+                        data.map(renderIntimacaoItem).join('') :
+                        '<div class="list-group-item">Nenhuma intimação encontrada</div>';
+                } catch (error) {
+                    handleFetchError(error, 'intimacoes');
+                }
             }
-        }
 
-        // Initialize
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchProcessos();
-            fetchIntimacoes();
-        });
-    </script>
+            // Initialize
+            document.addEventListener('DOMContentLoaded', () => {
+                fetchProcessos();
+                fetchIntimacoes();
+            });
+        </script>
+    <?php endif; ?>
 </body>
-
 </html>

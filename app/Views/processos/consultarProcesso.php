@@ -14,7 +14,6 @@ $selected = $processo['id_processo'] ?? "";
   <?= $this->include('template/header') ?>
 </head><!--end::Head-->
 
-
 <!--begin::Body-->
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -61,13 +60,13 @@ $selected = $processo['id_processo'] ?? "";
             </div>
             <div class="col-4">
               <!-- Inicio SideBar do Formulario -->
-
-              <!-- Inicio das Tarefas -->
-              <div>
-                <?= $this->include('componentes/tarefas/sidebar') ?>
-              </div>
-              <!-- Fim das Tarefas -->
-
+              <?php if (auth()->user()->can('module.processos')): ?>
+                <!-- Inicio das Tarefas -->
+                <div>
+                  <?= $this->include('componentes/tarefas/sidebar') ?>
+                </div>
+                <!-- Fim das Tarefas -->
+              
               <!-- Inicio das Anotações -->
               <div>
                 <?= $this->include('componentes/processos/acordion') ?>
@@ -83,6 +82,7 @@ $selected = $processo['id_processo'] ?? "";
                 <?= $this->include('componentes/processos/intimacoes') ?>
               </div>
               <!-- Fim das Intimações -->
+              <?php endif; ?>
               <!-- Inicio das Vinculações -->
               <div>
                 <?= $this->include('componentes/processos/vinculos') ?>
@@ -90,16 +90,15 @@ $selected = $processo['id_processo'] ?? "";
               <!-- Fim das Vinculações  -->
               <!-- Inicio das Imóveis -->
               <div>
-              <?= $this->include('componentes/processos/objeto') ?>
+                <?= $this->include('componentes/processos/objeto') ?>
               </div>
               <!-- Fim dos Imoveis -->
 
-            </div>
-          </div> <!-- Fim do SideBar do Formulario -->
-        </div> <!-- Fim do Row -->
-      </div>
-      <!-- Fim -->
-  </div><!--end::Container-->
+            </div> <!-- Fim do SideBar do Formulario -->
+          </div> <!-- Fim do Row -->
+        </div>
+        <!-- Fim -->
+      </div><!--end::Container-->
   </div><!--end::App Content-->
   </main><!--end::App Main-->
   <?= $this->include('template/modals/change_user_img.php') ?>
@@ -115,8 +114,6 @@ $selected = $processo['id_processo'] ?? "";
   <script src="https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.umd.js" crossorigin></script>
   <script src="<?= base_url('public/js/main.js') ?>">
   </script>
-
-
 
 </body><!--end::Body-->
 
