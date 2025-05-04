@@ -13,6 +13,13 @@ class Tarefas extends BaseController
 
     public function index()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.tarefas'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Tarefas.');
+        }
+        
         $data = [
             'img'    => 'vazio.png',
             'titulo' => 'Tarefas'
@@ -37,6 +44,14 @@ class Tarefas extends BaseController
 
     public function editar(?int $id)
     {
+        
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.tarefas'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Tarefas.');
+        }
+        
         $data = [
             'img'     => 'vazio.png',
             'titulo'  => 'Tarefas'
@@ -51,6 +66,13 @@ class Tarefas extends BaseController
 
     public function nova()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.tarefas'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Tarefas.');
+        }
+        
         $idTarefa = $this->request->getPost('id_tarefa');
         
         $tarefaData = [
@@ -92,6 +114,13 @@ class Tarefas extends BaseController
 
     public function listarTarefas()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.tarefas'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Tarefas.');
+        }
+        
         $data = [
             'img'    => 'vazio.png',
             'titulo' => 'Tarefas',
@@ -108,6 +137,12 @@ class Tarefas extends BaseController
 
     public function atualizar()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.tarefas'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Tarefas.');
+        }
         $id = $this->request->getPost('id_tarefa');
         $tarefaData = [
             'tarefa'   => $this->request->getPost('tarefa'),

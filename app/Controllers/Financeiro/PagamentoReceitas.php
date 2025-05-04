@@ -12,6 +12,13 @@ class PagamentoReceitas extends BaseController
 
     public function index()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+        
         $data = [
             'titulo' => 'Receitas Recebidas',
         ];

@@ -16,6 +16,13 @@ class Categorias extends BaseController
 
     public function index()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+        
         $s=$this->request->getGet('s');
         
         $categorias = $this->model->orderBy('categoria');
@@ -51,6 +58,13 @@ class Categorias extends BaseController
 
     public function salvar()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+        
         $data = $this->request->getPost();
         if ($this->model->save($data)) {
             return redirect()->to(site_url('financeiro/categorias'))->with('success', 'Categoria salva com sucesso!');
@@ -61,6 +75,13 @@ class Categorias extends BaseController
 
     public function excluir($id = null)
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+
         if ($this->model->delete($id)) {
             return redirect()->to(site_url('financeiro/categorias'))->with('success', 'Categoria excluída com sucesso!');
         } else {

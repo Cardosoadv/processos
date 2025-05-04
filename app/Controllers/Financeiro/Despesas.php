@@ -14,6 +14,13 @@ class Despesas extends BaseController
 
     public function index()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+        
         $data = [
             'titulo'    => 'Despesas',
         ];
@@ -42,7 +49,12 @@ class Despesas extends BaseController
 
     public function salvar(){
 
-
+// Verifica se o usuário tem permissão para acessar o módulo de processos
+if(!((auth()->user()->can('module.financeiro'))
+)
+){
+return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+}
         $id = $this->request->getPost('id_despesa') ?? null;
         $data = $this->request->getPost();
         $data['valor'] = $this->formatarValorParaBanco($this->request->getPost('valor'));
@@ -108,6 +120,13 @@ class Despesas extends BaseController
     }
 
     public function editar($id){
+        
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
         $data = [  
             'titulo'    => 'Editar Dados do Despesa',
         ];
@@ -127,6 +146,13 @@ class Despesas extends BaseController
     }
 
     public function excluir($id){
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+        
         try{
             model('Financeiro/FinanceiroDespesasModel')->delete($id);
             return redirect()->to(base_url('financeiro/despesas'))->with('success', 'Despesa excluído com sucesso');

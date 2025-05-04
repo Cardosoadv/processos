@@ -16,6 +16,12 @@ class Contas extends BaseController
 
     public function index()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
         $data['titulo'] = 'Contas';
         $data['contas'] = $this->model->paginate(25);
         $data['pager'] = $this->model->pager;
@@ -40,6 +46,13 @@ class Contas extends BaseController
 
     public function salvar()
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+
         $data = $this->request->getPost();
         if ($this->model->save($data)) {
             return redirect()->to(site_url('financeiro/contas'))->with('success', 'Conta salva com sucesso!');
@@ -50,6 +63,13 @@ class Contas extends BaseController
 
     public function excluir($id = null)
     {
+        // Verifica se o usuário tem permissão para acessar o módulo de processos
+        if(!((auth()->user()->can('module.financeiro'))
+            )
+        ){
+            return redirect()->back()->withInput()->with('errors', 'Você não tem permissão para acessar Módulo Financeiro.');
+        }
+        
         if ($this->model->delete($id)) {
             return redirect()->to(site_url('financeiro/contas'))->with('success', 'Conta excluída com sucesso!');
         } else {

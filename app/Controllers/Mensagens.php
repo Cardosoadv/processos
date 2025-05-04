@@ -25,7 +25,8 @@ class Mensagens extends BaseController
         $s = $this->request->getGet('s');
 
         $mensagens = $this->mensagensModel
-            ->where('destinatario_id', user_id());
+            ->where('destinatario_id', user_id())
+            ->orWhere('remetente_id', user_id());
             
         if ($s) {
             $mensagens

@@ -1,11 +1,10 @@
 <?php
 
-function getRemetente($id)
+function getUserNamePeloId($id)
 {
 
     $userModel = model('ResposavelModel');
     $userName = $userModel->getUserName($id);
-
     return $userName;
 }
 ?>
@@ -75,6 +74,7 @@ function getRemetente($id)
                                                     <th>Data</th>
                                                     <th>Assunto</th>
                                                     <th>Remetente</th>
+                                                    <th>Destinatário</th>
                                                     <th>Ações</th>
                                                 </tr>
                                             </thead>
@@ -90,7 +90,8 @@ function getRemetente($id)
 
                                                         <td><?= date('d/m/Y', strtotime($mensagem['data_envio'])) ?></td>
                                                         <td><?= $mensagem['assunto'] ?></td>
-                                                        <td><?php echo (getRemetente($mensagem['remetente_id'])) ?></td>
+                                                        <td><?php echo (getUserNamePeloId($mensagem['remetente_id'])) ?></td>
+                                                        <td><?php echo (getUserNamePeloId($mensagem['destinatario_id'])) ?></td>
                                                         <td>
                                                             <a href="<?= base_url('mensagens/ler/' . $mensagem['id']) ?>"
                                                                 class="btn btn-sm btn-primary">
