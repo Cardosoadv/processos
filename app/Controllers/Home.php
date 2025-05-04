@@ -16,14 +16,14 @@ class Home extends BaseController
         $clientesModel = model('ClientesModel');
         $tarefasModel = model('TarefasModel');
 
-
+        //Exibe apenas os processos do cliente 2 (Construtiva) para o usuário com permissão exclusiva
         if(auth()->user()->can('exclusive.construtiva')){
             $processos = $processosModel->where('encerrado', 0)
                                         ->where('cliente_id', 2)
                                         ->get()->getResultArray();
             $data['qteProcessos'] = count($processos);
             
-                                        return $this->loadView('dashboard', $data);
+            return $this->loadView('dashboard', $data);
         }
 
         $tarefasUsuario = $tarefasModel ->where('responsavel', user_id())
@@ -44,8 +44,6 @@ class Home extends BaseController
         $data['responsaveis'] = model('ResposavelModel')->getUsers();
         return $this->loadView('dashboard', $data);
     }
-
-    
 
 
 }
