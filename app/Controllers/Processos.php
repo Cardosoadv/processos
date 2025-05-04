@@ -237,9 +237,15 @@ class Processos extends BaseController
         if(!((auth()->user()->can('module.processos'))||
             (auth()->user()->can('module.processos.exclusive'))
             ))
-            {
+        {
                 return redirect()->to(base_url('home/permissao'))->withInput()->with('errors', 'Você não tem permissão para consultar este Processo.');
-            }
+        }
+        
+        log_message('info', 'Permissão module.processos: ' . auth()->user()->can('module.processos'));
+        log_message('info', 'Permissão module.processos.exclusive: ' . auth()->user()->can('module.processos.exclusive'));
+        log_message('info', 'Permissão combinada: ' . (auth()->user()->can('module.processos') || auth()->user()->can('module.processos.exclusive')));
+
+
 
         // Verifica se a permissão para o usuário exclusivo    
         $clienteProcesso = $this->processoService->getClienteProcesso($id);
