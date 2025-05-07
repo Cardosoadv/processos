@@ -130,3 +130,25 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
         </div>
     </div>
 </div>
+<script>
+    // Script para gerar o código interno automaticamente
+    // com base nos campos Bairro, Quadra e Lote
+    document.addEventListener('DOMContentLoaded', function() {
+    const bairroInput = document.getElementById('bairro');
+    const quadraInput = document.getElementById('quadra');
+    const loteInput = document.getElementById('lote');
+    const codInternoInput = document.getElementById('cod_interno');
+
+    loteInput.addEventListener('blur', function() {
+        const bairro = bairroInput.value.trim().toUpperCase().slice(0, 3);
+        const quadra = quadraInput.value.trim();
+        const lote = this.value.trim();
+
+        if (bairro && quadra && lote) {
+            codInternoInput.value = `${bairro}${quadra}${lote}`;
+        } else {
+            codInternoInput.value = ''; // Limpa o campo se algum dos campos estiver vazio
+        }
+    });
+});
+</script>

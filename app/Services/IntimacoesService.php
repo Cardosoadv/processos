@@ -117,7 +117,7 @@ class IntimacoesService
             'texto' => $intimacao['texto'],
             'numero_processo' => $intimacao['numero_processo'],
             'meio' => $intimacao['meio'],
-            'link' => $intimacao['link'],
+            'link' => $intimacao['link'], 
             'numeroComunicacao' => $intimacao['numeroComunicacao'],
             'hash' => $intimacao['hash'],
             'motivo_cancelamento' => $intimacao['motivo_cancelamento'] ?? null,
