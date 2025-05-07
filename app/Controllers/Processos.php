@@ -538,6 +538,18 @@ class Processos extends BaseController
         return $this->validate($rules);
     }
 
+    /**
+     * Retorna os processos movimentados nos últimos dias
+     * 
+     * @param int $dias
+     * @return json
+     */
+    public function processosMovimentados($dias)
+    {
+        $processos = $this->processoService->getProcessosMovimentados($dias);
+        return $this->response->setJSON($processos);
+    }
+
     ############################################################################################ 
     #                                                                                          #
     #                            Metódos de Redirecionamento                                   #
