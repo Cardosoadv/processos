@@ -164,25 +164,6 @@ class ProcessoObjetoModel extends Model
     }
 
 
-    
-    /*
-    public function salvarObjeto(array $dados): int
-    {
-        try {
-            $jsonData = json_encode($dados, JSON_UNESCAPED_UNICODE); // JSON_UNESCAPED_UNICODE para caracteres especiais
-            if (json_last_error() !== JSON_ERROR_NONE) {
-                log_message('error', 'Erro ao codificar JSON: ' . json_last_error_msg());
-                return 0; // Ou lançar uma exceção, dependendo da sua necessidade
-            }
-            $this->insert(['dados' => $jsonData]);
-            return $this->insertID();
-        } catch (\Exception $e) {
-            log_message('error', 'Erro ao salvar objeto: ' . $e->getMessage());
-            return 0;
-        }
-    }
-    */
-
     public function obterObjeto(int $id): ?array
     {
         $objeto = $this->find($id);
@@ -192,35 +173,18 @@ class ProcessoObjetoModel extends Model
         return $objeto;
     }
 
-    public function listarObjetos(): array
-    {
-        $objetos = $this->findAll();
-        foreach ($objetos as &$objeto) {
-            if ($objeto && $objeto['dados']) {
-                $objeto['dados'] = json_decode($objeto['dados'], true);
-            }
-        }
-        return $objetos;
-    }
-
-    public function listarObjetoProcesso(int $processoId): array
-    {
-
-        $query = $this->db->query("SELECT * FROM {$this->table} WHERE JSON_EXTRACT(dados, '$.processo_id') = ?", [(string)$processoId])->getResultArray();
-        $dados = [];
-        foreach ($query as $dado) {
-            if ($dado && $dado['dados']) {
-
-                $item = json_decode($dado['dados'], true);
-                $item['id_objeto'] = $dado['id_objeto'];
-                array_push($dados, $item);
-            }
-        }
-        return $dados;
-    }
-
     public function deletarObjeto(int $id): bool
     {
         return $this->delete($id);
     }
+
+    public function existeObjetoCodInterno(string $codInterno): bool
+    {
+        return $this->where('cod_interno', $codInterno)->countAllResults() > 0;
+    }
+    public function existeObjetoInscricao(string $inscricao): bool
+    {
+        return $this->where('inscricao', $inscricao)->countAllResults() > 0;
+    }
+
 }

@@ -77,6 +77,26 @@ class Objetos extends BaseController
         return redirect()->to(base_url('objetos'));
     }
 
+    public function existeObjetoCodInterno($cod_interno)
+    {
+        $objeto = $this->objetoModel->where('cod_interno', $cod_interno)->first();
+        if ($objeto) {
+            return $this->response->setJSON(['existe' => true]);
+        } else {
+            return $this->response->setJSON(['existe' => false]);
+        }
+    }
+
+    public function existeObjetoInscricao($inscricao)
+    {
+        $objeto = $this->objetoModel->where('inscricao', $inscricao)->first();
+        if ($objeto) {
+            return $this->response->setJSON(['existe' => true]);
+        } else {
+            return $this->response->setJSON(['existe' => false]);
+        }
+    }
+
 
     public function exportar()
     {

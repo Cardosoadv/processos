@@ -138,6 +138,8 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
     const quadraInput = document.getElementById('quadra');
     const loteInput = document.getElementById('lote');
     const codInternoInput = document.getElementById('cod_interno');
+    const inscricaoInput = document.getElementById('inscricao');
+    const form = document.querySelector('form'); // Seleciona o formulário
 
     loteInput.addEventListener('blur', function() {
         const bairro = bairroInput.value.trim().toUpperCase().slice(0, 3);
@@ -147,8 +149,70 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
         if (bairro && quadra && lote) {
             codInternoInput.value = `${bairro}${quadra}${lote}`;
         } else {
-            codInternoInput.value = ''; // Limpa o campo se algum dos campos estiver vazio
+            codInternoInput.value = '';
         }
+    });
+
+    form.addEventListener('submit', function(event) {
+        const codInterno = codInternoInput.value.trim();
+        const inscricao = inscricaoInput.value.trim();
+        let codInternoJaExiste = false;
+        let inscricaoJaExiste = false;
+        let podeEnviar = true;
+
+        // Função para verificar a existência do código interno
+        function verificarCodInterno(codigo) {
+            return new Promise((resolve, reject) => {
+                fetch(`<?= base_url("objetos/existeObjetoCodInterno/") ?>${codigo}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resolve(data.existe); // Assumindo que a resposta JSON tem um campo 'existe'
+                    })
+                    .catch(error => {
+                        console.error("Erro ao verificar Código Interno:", error);
+                        reject(false); // Em caso de erro, considera que não existe para não bloquear o envio
+                    });
+            });
+        }
+
+        // Função para verificar a existência da inscrição
+        function verificarInscricao(inscricao) {
+            return new Promise((resolve, reject) => {
+                fetch(`<?= base_url("objetos/existeObjetoInscricao/") ?>${inscricao}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resolve(data.existe); // Assumindo que a resposta JSON tem um campo 'existe'
+                    })
+                    .catch(error => {
+                        console.error("Erro ao verificar Inscrição:", error);
+                        reject(false); // Em caso de erro, considera que não existe para não bloquear o envio
+                    });
+            });
+        }
+
+        // Realiza as verificações assíncronas
+        Promise.all([verificarCodInterno(codInterno), verificarInscricao(inscricao)])
+            .then(results => {
+                codInternoJaExiste = results[0];
+                inscricaoJaExiste = results[1];
+
+                if (codInternoJaExiste) {
+                    mostrarMensagem('Já existe um imóvel com este Código Interno.');
+                    podeEnviar = false;
+                }
+
+                if (inscricaoJaExiste) {
+                    mostrarMensagem('Já existe um imóvel com esta Inscrição.');
+                    podeEnviar = false;
+                }
+
+                if (!podeEnviar) {
+                    event.preventDefault(); // Impede o envio do formulário se houver duplicidades
+                }
+            });
+
+        // Impede o envio síncrono inicial do formulário enquanto as verificações acontecem
+        event.preventDefault();
     });
 });
 </script>
