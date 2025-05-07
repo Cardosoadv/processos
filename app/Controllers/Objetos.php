@@ -32,6 +32,8 @@ class Objetos extends BaseController
             $data['objetos'] = $this->objetoModel
                                                     ->orderBy('cidade', 'ASC')
                                                     ->orderBy('bairro', 'ASC')
+                                                    ->orderBy('quadra', 'ASC')
+                                                    ->orderBy('lote', 'ASC')
                                                     ->paginate(25);
         }
 

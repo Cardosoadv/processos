@@ -43,8 +43,9 @@ class Processos extends BaseController
         if (!auth()->user()->can('module.processos') && 
             !auth()->user()->can('module.processos.exclusive'))
         {
-            return redirect()->to(base_url('home/permissao'))->withInput()
-                   ->with('errors', 'Você não tem permissão para acessar Processos.');
+            return redirect()   ->to(base_url('home/permissao'))
+                                ->withInput()
+                                ->with('errors', 'Você não tem permissão para acessar Processos.');
         }
 
         $data = [

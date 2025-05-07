@@ -119,7 +119,11 @@ class ProcessoObjetoModel extends Model
     $builder = $this->db->table($this->table)
         ->select("{$this->table}.*")
         ->join('processos_objeto_processo', "processos_objeto_processo.objeto_id = {$this->table}.id_objeto")
-        ->where('processos_objeto_processo.processo_id', $processoId);
+        ->where('processos_objeto_processo.processo_id', $processoId)
+        ->orderBy('cidade', 'ASC')
+        ->orderBy('bairro', 'ASC')
+        ->orderBy('quadra', 'ASC')
+        ->orderBy('lote', 'ASC');
     
     return $builder->get()->getResultArray();
     }
