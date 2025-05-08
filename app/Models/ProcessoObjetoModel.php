@@ -116,8 +116,8 @@ class ProcessoObjetoModel extends Model
     public function selecionarObjetoPorProcessoId(int $processoId): array
     {
     // Usando a tabela de relação processos_objeto_processo
-    $builder = $this->db->table($this->table)
-        ->select("{$this->table}.*")
+        $this->builder()
+
         ->join('processos_objeto_processo', "processos_objeto_processo.objeto_id = {$this->table}.id_objeto")
         ->where('processos_objeto_processo.processo_id', $processoId)
         ->orderBy('cidade', 'ASC')
@@ -125,7 +125,11 @@ class ProcessoObjetoModel extends Model
         ->orderBy('quadra', 'ASC')
         ->orderBy('lote', 'ASC');
     
-    return $builder->get()->getResultArray();
+    return [
+            'objetos' => $this->paginate(25),
+            'pager' => $this->pager,
+        ];
+
     }
 
     public function getProcessoPorObjeto($objetoId){
@@ -134,7 +138,7 @@ class ProcessoObjetoModel extends Model
             ->where('objeto_id', $objetoId);
         return $builder->get()->getRowArray();
     }
-
+ 
     public function vincularProcessoObjeto($processoId, $objetoId){
         $data = [
             'processo_id' => $processoId,

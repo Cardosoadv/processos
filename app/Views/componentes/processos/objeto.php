@@ -21,26 +21,24 @@
                 </tr>
             </thead>
             <?php if ($objetos ?? null) : ?>
-                <?php foreach ($objetos as $objeto) : ?>
-                    
-                        <tbody>
-                            <tr>
-                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['bairro']) ?></td>
-                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['quadra']) ?></td>
-                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['lote']) ?></td>
-                                <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;">
-                                    <a href="<?= base_url('objetos/editar/' . $objeto['id_objeto']) ?>" >
-                                        <i class="bi bi-pencil-square" style="cursor: pointer;"> </i>
-                                    </a>
-                                    <a href="<?= base_url('processos/desvincularObjeto/'.$processo['id_processo'] .'/'. $objeto['id_objeto']) ?>" >
-                                        <i class="bi bi-trash" style="cursor: pointer;"> </i>
-                                    </a>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    
+                <?php foreach ($objetos['objetos'] as $objeto) : ?>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['bairro']) ?></td>
+                            <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['quadra']) ?></td>
+                            <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;"><?= esc($objeto['lote']) ?></td>
+                            <td style="padding: 0.1rem 0.25rem; font-size: 0.9rem;">
+                                <a href="<?= base_url('objetos/editar/' . $objeto['id_objeto']) ?>">
+                                    <i class="bi bi-pencil-square" style="cursor: pointer;"> </i>
+                                </a>
+                                <a href="<?= base_url('processos/desvincularObjeto/' . $processo['id_processo'] . '/' . $objeto['id_objeto']) ?>">
+                                    <i class="bi bi-trash" style="cursor: pointer;"> </i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
                 <?php endforeach; ?>
+                <?= $objetos['pager']->links() ?>
             <?php endif; ?>
         </table>
     </div>

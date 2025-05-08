@@ -92,8 +92,8 @@ class Processos extends BaseController
         if (!auth()->user()->can('module.processos') && 
             !auth()->user()->can('module.processos.exclusive'))
         {
-            return redirect()->to(base_url('home/permissao'))->withInput()
-                   ->with('errors', 'Você não tem permissão para acessar Processos.');
+            return redirect()   ->to(base_url('home/permissao'))->withInput()
+                                ->with('errors', 'Você não tem permissão para acessar Processos.');
         }
 
         // Se o usuário tem permissão exclusiva, verifica se o cliente solicitado é o mesmo do usuário
@@ -145,14 +145,10 @@ class Processos extends BaseController
         if (!auth()->user()->can('module.processos') && 
             !auth()->user()->can('module.processos.exclusive'))
         {
-            return redirect()->to(base_url('home/permissao'))->withInput()
-                   ->with('errors', 'Você não tem permissão para consultar este Processo.');
+            return redirect()   ->to(base_url('home/permissao'))->withInput()
+                                ->with('errors', 'Você não tem permissão para consultar este Processo.');
         }
         
-        log_message('info', 'Permissão module.processos: ' . auth()->user()->can('module.processos'));
-        log_message('info', 'Permissão module.processos.exclusive: ' . auth()->user()->can('module.processos.exclusive'));
-        log_message('info', 'Permissão combinada: ' . (auth()->user()->can('module.processos') || auth()->user()->can('module.processos.exclusive')));
-
         // Verifica permissão para usuário exclusivo se houver um ID fornecido
         if ($id !== null) {
             $clienteProcesso = $this->processoService->getClienteProcesso($id);
@@ -163,8 +159,8 @@ class Processos extends BaseController
             if (auth()->user()->can('module.processos.exclusive') && 
                 !auth()->user()->can('module.processos') && 
                 $clienteProcesso != $ClienteUsuario) {
-                return redirect()->to(base_url('home/permissao'))->withInput()
-                       ->with('errors', 'Você não tem permissão para consultar este Processo.');
+                return redirect()   ->to(base_url('home/permissao'))->withInput()
+                                    ->with('errors', 'Você não tem permissão para consultar este Processo.');
             }
         }
 
@@ -186,8 +182,8 @@ class Processos extends BaseController
         if (!auth()->user()->can('module.processos') && 
             !auth()->user()->can('module.processos.exclusive'))
         {
-            return redirect()->back()->withInput()
-                   ->with('errors', 'Você não tem permissão para alterar Processos.');
+            return redirect()   ->back()->withInput()
+                                ->with('errors', 'Você não tem permissão para alterar Processos.');
         }
 
         // Verifica permissão para usuário exclusivo
@@ -199,8 +195,8 @@ class Processos extends BaseController
         if (auth()->user()->can('module.processos.exclusive') && 
             !auth()->user()->can('module.processos') && 
             $clienteProcesso != $ClienteUsuario) {
-            return redirect()->back()->withInput()
-                   ->with('errors', 'Você não tem permissão para Salvar ou Editar Processo de outro cliente.');
+            return redirect()   ->back()->withInput()
+                                ->with('errors', 'Você não tem permissão para Salvar ou Editar Processo de outro cliente.');
         }
     
         if (!$this->validarDadosProcesso()) {
@@ -220,14 +216,14 @@ class Processos extends BaseController
             $this->processarPartes('poloAtivo[]', 'A', $idProcesso);
             $this->processarPartes('poloPassivo[]', 'P', $idProcesso);
     
-            return redirect()->to(base_url('processos/consultarprocesso/' . $idProcesso))
-                ->with('success', 'Processo salvo com sucesso');
+            return redirect()   ->to(base_url('processos/consultarprocesso/' . $idProcesso))
+                                ->with('success', 'Processo salvo com sucesso');
 
         } catch (\Exception $e) {
 
-            return redirect()->back()
-                ->withInput()
-                ->with('error', 'Erro ao salvar processo: ' . $e->getMessage());
+            return redirect()   ->back()
+                                ->withInput()
+                                ->with('error', 'Erro ao salvar processo: ' . $e->getMessage());
         }
     }
 
@@ -242,8 +238,8 @@ class Processos extends BaseController
         if (!auth()->user()->can('module.processos') && 
             !auth()->user()->can('module.processos.exclusive'))
         {
-            return redirect()->back()->withInput()
-                   ->with('errors', 'Você não tem permissão para exluir este Processo.');
+            return redirect()   ->back()->withInput()
+                                ->with('errors', 'Você não tem permissão para exluir este Processo.');
         }
 
         // Verifica permissão para usuário exclusivo
@@ -255,8 +251,8 @@ class Processos extends BaseController
         if (auth()->user()->can('module.processos.exclusive') && 
             !auth()->user()->can('module.processos') && 
             $clienteProcesso != $ClienteUsuario) {
-            return redirect()->back()->withInput()
-                   ->with('errors', 'Você não tem permissão para excluir processo de outro cliente.');
+            return redirect()   ->back()->withInput()
+                                ->with('errors', 'Você não tem permissão para excluir processo de outro cliente.');
         }
         
         try {

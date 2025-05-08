@@ -210,7 +210,7 @@ class ProcessosRepository
             'vinculos'          => $this->processosVinculadosModel->getVinculosProcesso($id),
             'objetos'           => $this->processoObjetoModel->selecionarObjetoPorProcessoId($id),
         ];
-    }
+    } 
 
     /**
      * Salva um processo no banco de dados
