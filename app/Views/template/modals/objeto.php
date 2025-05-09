@@ -61,23 +61,23 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
                                         <label for="bairro" class="form-label">Bairro</label>
                                         <input type="text" class="form-control col" id="bairro" name="bairro" list="ListaBairros">
 
-                                                <datalist id="ListaBairros">
-                                                    <?php foreach ($listaBairros as $bairro) : ?>
-                                                        <option value="<?= $bairro['bairro'] ?>"><?= $bairro['bairro'] ?></option>
-                                                    <?php endforeach; ?>
-                                                </datalist>
-                                                
+                                        <datalist id="ListaBairros">
+                                            <?php foreach ($listaBairros as $bairro) : ?>
+                                                <option value="<?= $bairro['bairro'] ?>"><?= $bairro['bairro'] ?></option>
+                                            <?php endforeach; ?>
+                                        </datalist>
+
 
                                     </div>
                                 </div>
                                 <div class="row mb-2">
                                     <div class="form-group col-6">
                                         <label for="quadra" class="form-label">Quadra</label>
-                                        <input type="text" class="form-control col" id="quadra" name="quadra">
+                                        <input type="text" length="4" class="form-control col" id="quadra" name="quadra">
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="lote" class="form-label">Lote</label>
-                                        <input type="text" class="form-control col" id="lote" name="lote">
+                                        <input type="text" length="4" class="form-control col" id="lote" name="lote">
                                     </div>
                                     <div class="form-group col-6">
                                         <label for="cod_interno" class="form-label">Código Interno</label>
@@ -100,19 +100,19 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
                                 </div>
 
                                 <div class="row mb-2">
-        <div class="form-group col-12">
-            <label for="inscricao" class="form-label">Inscrição</label>
-            <input type="text" class="form-control col" id="inscricao" name="inscricao" >
-        </div>
-        <div class="form-group col-6">
-            <label for="cartorio" class="form-label">Cartório</label>
-            <input type="text" class="form-control col" id="cartorio" name="cartorio" >
-        </div>
-        <div class="form-group col-6">
-            <label for="matricula" class="form-label">Matrícula</label>
-            <input type="text" class="form-control col" id="matricula" name="matricula" >
-        </div>
-    </div>
+                                    <div class="form-group col-12">
+                                        <label for="inscricao" class="form-label">Inscrição</label>
+                                        <input type="text" class="form-control col" id="inscricao" name="inscricao">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="cartorio" class="form-label">Cartório</label>
+                                        <input type="text" class="form-control col" id="cartorio" name="cartorio">
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <label for="matricula" class="form-label">Matrícula</label>
+                                        <input type="text" class="form-control col" id="matricula" name="matricula">
+                                    </div>
+                                </div>
 
                                 <div class="row mb-2">
                                     <div class="form-group">
@@ -121,7 +121,7 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
                                         </textarea>
                                     </div>
                                 </div>
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
+                                <button type="submit" class="btn btn-primary">Salvar</button>
                             </form>
                         </div>
                     </div>
@@ -134,85 +134,23 @@ $listaCidades = $objetosModel->select('cidade')->distinct()->orderby('cidade', '
     // Script para gerar o código interno automaticamente
     // com base nos campos Bairro, Quadra e Lote
     document.addEventListener('DOMContentLoaded', function() {
-    const bairroInput = document.getElementById('bairro');
-    const quadraInput = document.getElementById('quadra');
-    const loteInput = document.getElementById('lote');
-    const codInternoInput = document.getElementById('cod_interno');
-    const inscricaoInput = document.getElementById('inscricao');
-    const form = document.querySelector('form'); // Seleciona o formulário
+        const bairroInput = document.getElementById('bairro');
+        const quadraInput = document.getElementById('quadra');
+        const loteInput = document.getElementById('lote');
+        const codInternoInput = document.getElementById('cod_interno');
+        const inscricaoInput = document.getElementById('inscricao');
+        const form = document.querySelector('form'); // Seleciona o formulário
 
-    loteInput.addEventListener('blur', function() {
-        const bairro = bairroInput.value.trim().toUpperCase().slice(0, 3);
-        const quadra = quadraInput.value.trim();
-        const lote = this.value.trim();
+        loteInput.addEventListener('blur', function() {
+            const bairro = bairroInput.value.trim().toUpperCase().slice(0, 3);
+            const quadra = quadraInput.value.trim();
+            const lote = this.value.trim();
 
-        if (bairro && quadra && lote) {
-            codInternoInput.value = `${bairro}${quadra}${lote}`;
-        } else {
-            codInternoInput.value = '';
-        }
+            if (bairro && quadra && lote) {
+                codInternoInput.value = `${bairro}${quadra}${lote}`;
+            } else {
+                codInternoInput.value = '';
+            }
+        });
     });
-
-    form.addEventListener('submit', function(event) {
-        const codInterno = codInternoInput.value.trim();
-        const inscricao = inscricaoInput.value.trim();
-        let codInternoJaExiste = false;
-        let inscricaoJaExiste = false;
-        let podeEnviar = true;
-
-        // Função para verificar a existência do código interno
-        function verificarCodInterno(codigo) {
-            return new Promise((resolve, reject) => {
-                fetch(`<?= base_url("objetos/existeObjetoCodInterno/") ?>${codigo}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        resolve(data.existe); // Assumindo que a resposta JSON tem um campo 'existe'
-                    })
-                    .catch(error => {
-                        console.error("Erro ao verificar Código Interno:", error);
-                        reject(false); // Em caso de erro, considera que não existe para não bloquear o envio
-                    });
-            });
-        }
-
-        // Função para verificar a existência da inscrição
-        function verificarInscricao(inscricao) {
-            return new Promise((resolve, reject) => {
-                fetch(`<?= base_url("objetos/existeObjetoInscricao/") ?>${inscricao}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        resolve(data.existe); // Assumindo que a resposta JSON tem um campo 'existe'
-                    })
-                    .catch(error => {
-                        console.error("Erro ao verificar Inscrição:", error);
-                        reject(false); // Em caso de erro, considera que não existe para não bloquear o envio
-                    });
-            });
-        }
-
-        // Realiza as verificações assíncronas
-        Promise.all([verificarCodInterno(codInterno), verificarInscricao(inscricao)])
-            .then(results => {
-                codInternoJaExiste = results[0];
-                inscricaoJaExiste = results[1];
-
-                if (codInternoJaExiste) {
-                    mostrarMensagem('Já existe um imóvel com este Código Interno.');
-                    podeEnviar = false;
-                }
-
-                if (inscricaoJaExiste) {
-                    mostrarMensagem('Já existe um imóvel com esta Inscrição.');
-                    podeEnviar = false;
-                }
-
-                if (!podeEnviar) {
-                    event.preventDefault(); // Impede o envio do formulário se houver duplicidades
-                }
-            });
-
-        // Impede o envio síncrono inicial do formulário enquanto as verificações acontecem
-        event.preventDefault();
-    });
-});
 </script>

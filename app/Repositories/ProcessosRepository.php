@@ -60,7 +60,7 @@ class ProcessosRepository
                 ->orLike('LOWER(tipoDocumento)', strtolower(trim($search)), 'both')
                 ->orWhereIn('id_processo', $this->partesProcessoModel->getParteProcessoPorNome($search))
                 ->groupEnd();
-        }
+        } 
 
         // Filtro por etiqueta
         if ($etiqueta !== null) {
